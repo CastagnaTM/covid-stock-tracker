@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/covid-stock-tracker / node_modules
 /.pnp
 .pnp.js
 
