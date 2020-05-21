@@ -52,7 +52,6 @@ app.use(
       findStock: (args) => {
         return Stock.findOne({ ticker: args.ticker })
           .then((result) => {
-            console.log(result);
             return result;
           })
           .catch((err) => {
@@ -68,7 +67,6 @@ app.use(
         return stock
           .save()
           .then((result) => {
-            console.log(result);
             return { ...result._doc };
           })
           .catch((err) => {
