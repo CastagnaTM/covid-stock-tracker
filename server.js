@@ -49,6 +49,17 @@ app.use(
             throw err;
           });
       },
+      findStock: (args) => {
+        return Stock.findOne({ ticker: args.ticker })
+          .then((result) => {
+            console.log(result);
+            return result;
+          })
+          .catch((err) => {
+            console.log(err);
+            throw err;
+          });
+      },
       createStock: (args) => {
         const stock = new Stock({
           ticker: args.stockInput.ticker,
