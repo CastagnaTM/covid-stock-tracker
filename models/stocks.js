@@ -10,6 +10,9 @@ const stockSchema = new Schema({
     dates: {
         type: Object
     }
+},
+{
+    timestamps: true
 });
 
 module.exports = mongoose.model('Stock', stockSchema);

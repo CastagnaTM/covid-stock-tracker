@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const Stock = require("./models/stocks");
 const app = express();
 
-
 app.use(
   "/graphql",
   graphqlHTTP({
@@ -17,15 +16,13 @@ app.use(
         }
         
         type StockDate {
-          _id: ID!
           date: String,
           open_price: Float!
         }
 
         input DateInput {
-          _id: ID!
           date: String,
-          open_price: Float!
+          open_price: Float!,
         }
 
         input StockInput {
@@ -75,7 +72,7 @@ app.use(
       createStock: (args) => {
         const stock = new Stock({
           ticker: args.stockInput.ticker,
-          dates: JSON.parse(JSON.stringify(args.stockInput.dates))
+          dates: JSON.parse(JSON.stringify(args.stockInput.dates)),
         });
         return stock
           .save()
@@ -93,7 +90,6 @@ app.use(
         // }
         // // console.log(stocks);
         // return stocks
-
       },
       updateStock: (args) => {
         const stock = new Stock({
