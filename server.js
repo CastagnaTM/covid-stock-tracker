@@ -3,7 +3,6 @@ const graphqlHTTP = require("express-graphql");
 const { buildSchema } = require("graphql");
 const mongoose = require("mongoose");
 const Stock = require("./models/stocks");
-
 const app = express();
 
 
@@ -74,26 +73,27 @@ app.use(
           });
       },
       createStock: (args) => {
-        // const stock = new Stock({
-        //   ticker: args.stockInput.ticker,
-        //   open_price: args.stockInput.open_price,
-        // });
-        // return stock
-        //   .save()
-        //   .then((result) => {
-        //     return { ...result._doc };
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //     throw err;
-        //   });
-        const stocks = {
-          _id: args.stockInput._id,
+        const stock = new Stock({
           ticker: args.stockInput.ticker,
-          dates: args.stockInput.dates
-        }
-        console.log(stocks)
-        return stocks
+          dates: JSON.parse(JSON.stringify(args.stockInput.dates))
+        });
+        return stock
+          .save()
+          .then((result) => {
+            return { ...result._doc };
+          })
+          .catch((err) => {
+            console.log(err);
+            throw err;
+          });
+        // const stocks = {
+        //   _id: args.stockInput._id,
+        //   ticker: args.stockInput.ticker,
+        //   dates: JSON.parse(JSON.stringify(args.stockInput.dates))
+        // }
+        // // console.log(stocks);
+        // return stocks
+
       },
       updateStock: (args) => {
         const stock = new Stock({

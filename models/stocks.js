@@ -7,9 +7,8 @@ const stockSchema = new Schema({
         type: String,
         required:  true
     },
-    open_price: {
-        type: Number,
-        required: true
+    dates: {
+        type: Object
     }
 });
 
