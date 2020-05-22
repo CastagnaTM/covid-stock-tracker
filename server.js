@@ -6,6 +6,7 @@ const Stock = require("./models/stocks");
 
 const app = express();
 
+
 app.use(
   "/graphql",
   graphqlHTTP({
@@ -13,17 +14,30 @@ app.use(
         type Stock {
             _id: ID!,
             ticker: String!,
-            open_price: Float!
+            dates: [StockDate!]!
+        }
+        
+        type StockDate {
+          _id: ID!
+          date: String,
+          open_price: Float!
+        }
+
+        input DateInput {
+          _id: ID!
+          date: String,
+          open_price: Float!
         }
 
         input StockInput {
+            _id: ID!
             ticker: String!,
-            open_price: Float!
+            dates: [DateInput]
         }
 
         type RootQuery {
             stocks: [Stock!]!,
-            findStock(ticker: String): Stock
+            findStock(ticker: String): Stock,
         }
 
         type RootMutation {
@@ -60,19 +74,26 @@ app.use(
           });
       },
       createStock: (args) => {
-        const stock = new Stock({
+        // const stock = new Stock({
+        //   ticker: args.stockInput.ticker,
+        //   open_price: args.stockInput.open_price,
+        // });
+        // return stock
+        //   .save()
+        //   .then((result) => {
+        //     return { ...result._doc };
+        //   })
+        //   .catch((err) => {
+        //     console.log(err);
+        //     throw err;
+        //   });
+        const stocks = {
+          _id: args.stockInput._id,
           ticker: args.stockInput.ticker,
-          open_price: args.stockInput.open_price,
-        });
-        return stock
-          .save()
-          .then((result) => {
-            return { ...result._doc };
-          })
-          .catch((err) => {
-            console.log(err);
-            throw err;
-          });
+          dates: args.stockInput.dates
+        }
+        console.log(stocks)
+        return stocks
       },
       updateStock: (args) => {
         const stock = new Stock({
