@@ -1,7 +1,0 @@
-{
-    "env": {
-        "MONGO_User": "amber",
-        "MONGO_PASSWORD": "vB9xc3yvPQShe1Hs",
-        "MONGO_DB": "covid-stocks"
-    }
-}
