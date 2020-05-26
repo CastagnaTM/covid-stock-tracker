@@ -19,6 +19,14 @@ const fetchData = (ticker: string): any => {
     )
       .then((resp) => resp.json())
       .then(({c,h,l,o,t}) => {
+          const stock = c.map((value: number, index: number) => {
+            let close_price = value;
+            let high_price = h[index];
+            let low_price = l[index];
+            let open_price = o[index];
+            let date = convertToRealTime(t[index]);
+            return { close_price, high_price, low_price, open_price, date }
+          })
         console.log(c,h,l,o,t);
       })
       .catch(error => {
@@ -31,7 +39,6 @@ const getStockData = (): any => {
         fetchData(ticker);
     })
 };
-
 
 const convertToRealTime = (unixTimestamp: number): string => {
     let milliseconds = unixTimestamp * 1000 // 1575909015000
