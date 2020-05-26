@@ -3,7 +3,7 @@ import {finnhubKey, finnhubBase} from './constants';
 
 
 const getStockData = ():any => {
-    fetch(`${finnhubBase}stock/candle?symbol=AAPL&resolution=D&from=1572651390&to=1573776000&token=${finnhubKey}`) 
+    fetch(`${finnhubBase}stock/candle?symbol=AAPL&resolution=D&from=1577750400&to=1590510123&token=${finnhubKey}`) 
     .then(resp => resp.json())
     .then(data => {
         console.log(data);        
