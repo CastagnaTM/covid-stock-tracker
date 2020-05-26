@@ -10,7 +10,6 @@ const getStockData = ():any => {
     });
 
   }
-
 const App: React.FC = () => {
     return (
         <div>

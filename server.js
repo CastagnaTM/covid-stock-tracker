@@ -17,12 +17,18 @@ app.use(
         
         type StockDate {
           date: String,
-          open_price: Float!
+          open_price: Float!,
+          close_price: Float!,
+          high_price: Float!,
+          low_price: Float!,
         }
 
         input DateInput {
           date: String,
           open_price: Float!,
+          close_price: Float!,
+          high_price: Float!,
+          low_price: Float!,
         }
 
         input StockInput {
