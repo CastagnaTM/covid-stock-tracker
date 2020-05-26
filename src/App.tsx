@@ -13,14 +13,23 @@ const tickers: string[] = [
     "HUM", "NOC", "NIKE", "PYPL", "QCOM", "DAL", "KR", "MA", "D", "MU", "NFLX", "HPQ", "SBUX"
 ];
 
+const fetchData = (ticker: string): any => {
+    fetch(
+      `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=1577750400&to=1590510123&token=${finnhubKey}`
+    )
+      .then((resp) => resp.json())
+      .then(({c,h,l,o,t}) => {
+        console.log(c,h,l,o,t);
+      })
+      .catch(error => {
+          throw error;
+      });
+}
+
 const getStockData = (): any => {
-  fetch(
-    `${finnhubBase}stock/candle?symbol=AAPL&resolution=D&from=1577750400&to=1590510123&token=${finnhubKey}`
-  )
-    .then((resp) => resp.json())
-    .then((data) => {
-      console.log(data);
-    });
+    tickers.forEach(ticker => {
+        fetchData(ticker);
+    })
 };
 
 
