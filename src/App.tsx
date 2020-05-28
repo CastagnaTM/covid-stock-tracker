@@ -1,5 +1,6 @@
 import React from "react";
 import { finnhubKey, finnhubBase } from "./constants";
+import StockData from "./Components/StockData";
 
 
 // left off at 285
@@ -31,7 +32,7 @@ const fetchData = (ticker: string): any => {
               "ticker": ticker,
               "dates": stock
           }
-          inputStock(stockData);
+          inputStock({...stockData});
        })
 
       .catch(error => {
@@ -39,12 +40,14 @@ const fetchData = (ticker: string): any => {
       });
 }
 
-const inputStock = (stockData: Object) => {
+const inputStock = ({ticker, dates}:any) => {
 
-    const query = `query {
-        createStock (${stockData}) {
-          ticker, dates  
-        }
+    const query = `mutation {
+      createStock(stockInput: ${ticker}, ${dates})
+      {ticker, dates{ open_price,
+          close_price,
+          high_price,
+          low_price}}  
     }`
     fetch('http://localhost:4000/graphql', {
         method: "POST",

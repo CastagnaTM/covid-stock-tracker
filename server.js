@@ -34,7 +34,6 @@ app.use(
         }
 
         input StockInput {
-            _id: ID!
             ticker: String!,
             dates: [DateInput]
         }
