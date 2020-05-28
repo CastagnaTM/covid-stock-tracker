@@ -2,6 +2,25 @@ import React from "react";
 import { finnhubKey, finnhubBase } from "./constants";
 import StockData from "./Components/StockData";
 
+class DateInput {
+  open_price: number;
+  high_price: number;
+  low_price: number;
+  close_price: number;
+  date: String;
+  constructor(date: String, open_price: number, close_price: number, high_price:number, low_price: number) {
+    this.open_price = open_price;
+    this.close_price = close_price;
+    this.high_price = high_price;
+    this.low_price = low_price;
+    this.date = date;
+  }
+  
+}
+DateInput.prototype.toString = function dogToString() {
+  return `{date: "${this.date}", open_price: ${this.open_price}, close_price: ${this.close_price}, low_price: ${this.low_price}, high_price: ${this.high_price}}`;
+};
+
 
 // left off at 285
 const tickers: string[] = [
@@ -26,13 +45,15 @@ const fetchData = (ticker: string): any => {
             let low_price = l[index];
             let open_price = o[index];
             let date = convertToRealTime(t[index]);
-            return { close_price, high_price, low_price, open_price, date }
+            let dateInput = new DateInput(date, open_price, close_price, high_price, low_price)
+            console.log(dateInput)
+            return dateInput
           })
           const stockData = {
-              "ticker": ticker,
-              "dates": stock
+              ticker: ticker,
+              dates: stock
           }
-          inputStock({...stockData});
+          inputStock(ticker, stock);
        })
 
       .catch(error => {
@@ -40,15 +61,20 @@ const fetchData = (ticker: string): any => {
       });
 }
 
-const inputStock = ({ticker, dates}:any) => {
-
+const inputStock = (ticker: String, stock: []) => {
     const query = `mutation {
-      createStock(stockInput: ${ticker}, ${dates})
-      {ticker, dates{ open_price,
-          close_price,
-          high_price,
-          low_price}}  
-    }`
+      createStock(stockInput: {ticker: "${ticker}", dates: [${stock.toString()}]})
+      {
+        ticker, 
+        dates
+          { open_price,
+            close_price,
+            high_price,
+            low_price
+          }
+        }  
+      }`
+      console.log(query)
     fetch('http://localhost:4000/graphql', {
         method: "POST",
         headers: { 

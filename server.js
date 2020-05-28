@@ -26,7 +26,7 @@ app.use(
         }
 
         input DateInput {
-          date: String,
+          date: String!,
           open_price: Float!,
           close_price: Float!,
           high_price: Float!,
@@ -35,7 +35,7 @@ app.use(
 
         input StockInput {
             ticker: String!,
-            dates: [DateInput]
+            dates: [DateInput!]!
         }
 
         type RootQuery {
