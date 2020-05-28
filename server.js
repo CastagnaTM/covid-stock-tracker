@@ -3,8 +3,10 @@ const graphqlHTTP = require("express-graphql");
 const { buildSchema } = require("graphql");
 const mongoose = require("mongoose");
 const Stock = require("./models/stocks");
+const cors = require('cors')
 const app = express();
 
+app.use(cors())
 app.use(
   "/graphql",
   graphqlHTTP({
