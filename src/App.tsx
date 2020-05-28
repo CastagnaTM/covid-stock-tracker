@@ -27,17 +27,39 @@ const fetchData = (ticker: string): any => {
             let date = convertToRealTime(t[index]);
             return { close_price, high_price, low_price, open_price, date }
           })
-        console.log(c,h,l,o,t);
-      })
+          const stockData = {
+              "ticker": ticker,
+              "dates": stock
+          }
+          inputStock(stockData);
+       })
+
       .catch(error => {
           throw error;
       });
 }
 
-const getStockData = (): any => {
-    tickers.forEach(ticker => {
-        fetchData(ticker);
+const inputStock = (stockData: Object) => {
+
+    const query = `query {
+        createStock (${stockData}) {
+          ticker, dates  
+        }
+    }`
+    fetch('localhost:4000/graphql', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query })
     })
+    .then(resp => resp.json())
+    .then(data => console.log(data))
+}
+
+const getStockData = (): any => {
+    // tickers.forEach(ticker => {
+    //     fetchData(ticker);
+    // })
+    fetchData("JPM");
 };
 
 const convertToRealTime = (unixTimestamp: number): string => {
