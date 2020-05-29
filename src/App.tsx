@@ -3,30 +3,8 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import  {FormControl, InputLabel, Input, FormHelperText, Select, MenuItem} from '@material-ui/core';
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
-
-class DateInput {
-  open_price: number;
-  high_price: number;
-  low_price: number;
-  close_price: number;
-  date: string;
-  constructor(
-    date: string,
-    open_price: number,
-    close_price: number,
-    high_price: number,
-    low_price: number
-  ) {
-    this.open_price = open_price;
-    this.close_price = close_price;
-    this.high_price = high_price;
-    this.low_price = low_price;
-    this.date = date;
-  }
-}
-DateInput.prototype.toString = function dogToString() {
-  return `{date: "${this.date}", open_price: ${this.open_price}, close_price: ${this.close_price}, low_price: ${this.low_price}, high_price: ${this.high_price}}`;
-};
+import DateInput from './Input/DateInput';
+import CompanyInput from './Input/CompanyInput';
 
 // left off at 285
 
@@ -64,8 +42,22 @@ const getCompanyData = (ticker: string):void => {
     `${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`
   )
     .then((resp) => resp.json())
-    .then(({country, currency, exchange, name, ticker, ipo, marketCapitalization, shareOutstanding, logo, phone, weburl, finnhubIndustry}) => {
+    .then(({country, currency, exchange, name, ipo, marketCapitalization, shareOutstanding, logo, phone, weburl, finnhubIndustry}) => {
       // do something with the data
+      let companyInput = new CompanyInput(
+        country,
+        currency,
+        exchange,
+        name,
+        ipo,
+        marketCapitalization,
+        shareOutstanding,
+        logo,
+        phone,
+        weburl,
+        finnhubIndustry
+      );
+      // do something with company input
     })
     .catch((error) => {
       throw error;
