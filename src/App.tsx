@@ -227,7 +227,16 @@ const H4 = styled.h4`
     font-size: large;
     color: ${variables.palette.blue}; 
     margin: 0 auto;
+    padding: 1em;
 `
+
+// const FormContainer = styled(FormControl)`
+//     &.MuiFormControl-root{
+//         flex-direction: row
+//     }
+//     display: flex;
+    
+// `
 
 const Graph = styled.div`
     width: 70%;
@@ -244,6 +253,12 @@ const Footer = styled.footer`
 
 `
 
+// const setMenuItems = (): ReactElement => {
+//     tickers.forEach(ticker => {
+//         return <MenuItem value={ticker}>{ticker}</MenuItem>
+//     })
+// }
+
 const App: React.FC = () => {
 return (
   <div>
@@ -257,6 +272,25 @@ return (
         <ControlPanel>
             <H1>Control Panel</H1>
             {/*  stock options:  h4, ticker search bar + ticker drop down, start and end dates, stock value (open, close, etc) */}
+           
+            <H4>Select Stock Filters</H4>
+            <FormControl>
+            <InputLabel id="demo-simple-select-helper-label">Ticker</InputLabel>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={Stock Ticker}
+                    // onChange={handleChange}
+                    >
+                    {tickers.map((ticker, key) => {
+                        return <MenuItem value={ticker} key={key}>{ticker}</MenuItem> 
+                    })}
+                </Select>
+                <FormHelperText>Select Stock Ticker</FormHelperText>
+            </FormControl>
+            {/* virus options: h4, start and end dates, location */}
+
+            <H4>Select Virus Filters</H4>
             <FormControl>
                 <Select
                     labelId="demo-simple-select-label"
@@ -269,11 +303,6 @@ return (
                     <MenuItem value={30}>Thirty</MenuItem>
                 </Select>
             </FormControl>
-            <H4>Select Stock Filters</H4>
-
-            {/* virus options: h4, start and end dates, location */}
-
-            <H4>Select Virus Filters</H4>
            
         </ControlPanel>
         <Graph>
