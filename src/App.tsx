@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { finnhubKey, finnhubBase, tickers} from "./constants";
 
 class DateInput {
@@ -84,9 +85,22 @@ const convertToRealTime = (unixTimestamp: number): string => {
     return humanDateFormat
 } 
 
+const Navigation = styled.nav`
+    position: fixed;
+    box-sizing: border-box;
+    top: 0;
+    height: 80px;
+    padding: 1em;
+    width: 100%;
+    background-color: ${(props: {backgroundColor: string}) => props.backgroundColor ? props.backgroundColor : "blue"};
+`
+
 const App: React.FC = () => {
 return (
   <div>
+      <Navigation backgroundColor="green">
+
+      </Navigation>
     :D
   </div>
   // <div>{getStockData()}
