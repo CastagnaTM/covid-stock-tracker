@@ -56,11 +56,11 @@ app.use(
         }
 
         input DateInput {
-          date: String,
-          open_price: Float,
-          close_price: Float,
-          high_price: Float,
-          low_price: Float,
+          date: String!,
+          open_price: Float!,
+          close_price: Float!,
+          high_price: Float!,
+          low_price: Float!,
         }
 
         input StockInput {
