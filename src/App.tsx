@@ -121,7 +121,7 @@ const fetchAllStock = () => {
   }
   `;
   fetch(GRAPHQL_API, {
-    method: "POST",
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
       Accept: `application/json`,
@@ -135,11 +135,11 @@ const fetchAllStock = () => {
   return null
 };
 
-
-const fetchSingleStock = () => {
+// 
+const fetchSingleStock = (ticker: string) => {
   const query = `
   query {
-    findStock(ticker: "AAPL"){
+    findStock(ticker: "${ticker}"){
       ticker
       dates{
         open_price,
@@ -152,7 +152,7 @@ const fetchSingleStock = () => {
   }
   `
   fetch(GRAPHQL_API, {
-    method: "POST",
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
       Accept: `application/json`,
