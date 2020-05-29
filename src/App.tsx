@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import  {FormControl, InputLabel, Input, FormHelperText, Select, MenuItem} from '@material-ui/core';
 import { finnhubKey, finnhubBase, tickers} from "./constants";
 
 class DateInput {
@@ -7,8 +9,8 @@ class DateInput {
   high_price: number;
   low_price: number;
   close_price: number;
-  date: String;
-  constructor(date: String, open_price: number, close_price: number, high_price:number, low_price: number) {
+  date: string;
+  constructor(date: string, open_price: number, close_price: number, high_price:number, low_price: number) {
     this.open_price = open_price;
     this.close_price = close_price;
     this.high_price = high_price;
@@ -47,7 +49,7 @@ const fetchData = (ticker: string): any => {
       });
 }
 
-const inputStock = (ticker: String, stock: []) => {
+const inputStock = (ticker: string, stock: []) => {
     const query = `mutation {
       createStock(stockInput: {ticker: "${ticker}", dates: [${stock.toString()}]})
       {
@@ -85,23 +87,121 @@ const convertToRealTime = (unixTimestamp: number): string => {
     return humanDateFormat
 } 
 
+const variables = {
+    palette: {
+        grey: "#222",
+        green: "#1db954",
+        red: "#f45b5b",
+        blue: "#2c8096",
+        darkGrey: "#0a0a0a"
+    },
+    liColor: "white"
+
+};
+
 const Navigation = styled.nav`
-    position: fixed;
-    box-sizing: border-box;
     top: 0;
+    box-sizing: border-box
     height: 80px;
     padding: 1em;
     width: 100%;
-    background-color: ${(props: {backgroundColor: string}) => props.backgroundColor ? props.backgroundColor : "blue"};
+    background-color: ${variables.palette.grey};
+`
+
+const Ul = styled.ul `
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    justify-content: space-evenly;
+`
+
+const Li = styled.li`
+    list-style: none;
+    color: ${variables.liColor};
+`
+
+const Main = styled.div`
+    background-color: ${variables.palette.darkGrey}; 
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+`
+
+const ControlPanel = styled.div`
+    background-color: white;
+    width: 30%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+`
+
+const H1 = styled.h1`
+    font-size: x-large;
+    color: ${variables.palette.blue}; 
+    margin: 0 auto;
+`
+
+const H4 = styled.h4`
+    font-size: large;
+    color: ${variables.palette.blue}; 
+    margin: 0 auto;
+`
+
+const Graph = styled.div`
+    width: 70%;
+    height: 100%;
+`
+
+const Footer = styled.footer`
+   bottom: 0;
+   box-sizing: border-box
+   height: 80px;
+   padding: 1em;
+   width: 100%;
+   background-color: ${variables.palette.grey};
+
 `
 
 const App: React.FC = () => {
 return (
   <div>
-      <Navigation backgroundColor="green">
-
+      <Navigation >
+        <Ul>
+            <Li>Covid Stock Tracker</Li>
+            <Li>About</Li>
+        </Ul>
       </Navigation>
-    :D
+      <Main>
+        <ControlPanel>
+            <H1>Control Panel</H1>
+            {/*  stock options:  h4, ticker search bar + ticker drop down, start and end dates, stock value (open, close, etc) */}
+            <FormControl>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value="Stock Ticker"
+                    // onChange={handleChange}
+                    >
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+            </FormControl>
+            <H4>Select Stock Filters</H4>
+
+            {/* virus options: h4, start and end dates, location */}
+
+            <H4>Select Virus Filters</H4>
+           
+        </ControlPanel>
+        <Graph>
+
+        </Graph>
+      </Main>
+      <Footer>
+
+      </Footer>
   </div>
   // <div>{getStockData()}
   //   <div>{convertToRealTime(10)}</div>
