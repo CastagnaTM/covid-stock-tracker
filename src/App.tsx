@@ -7,9 +7,9 @@ class DateInput {
   high_price: number;
   low_price: number;
   close_price: number;
-  date: String;
+  date: string;
   constructor(
-    date: String,
+    date: string,
     open_price: number,
     close_price: number,
     high_price: number,
@@ -57,7 +57,20 @@ const fetchData = (ticker: string): any => {
     });
 };
 
-const inputStock = (ticker: String, stock: []) => {
+const getCompanyData = (ticker: string):void => {
+  fetch(
+    `${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`
+  )
+    .then((resp) => resp.json())
+    .then(({country, currency, exchange, name, ticker, ipo, marketCapitalization, shareOutstanding, logo, phone, weburl, finnhubIndustry}) => {
+      // do something with the data
+    })
+    .catch((error) => {
+      throw error;
+    });
+}
+
+const inputStock = (ticker: string, stock: []): void => {
   const query = `mutation {
       createStock(stockInput: {ticker: "${ticker}", dates: [${stock.toString()}]})
       {
@@ -82,7 +95,7 @@ const inputStock = (ticker: String, stock: []) => {
     .then((data) => console.log(data));
 };
 
-const getStockData = (): any => {
+const getStockData = (): void => {
   tickers.slice(88, 100).forEach((ticker) => {
     fetchData(ticker);
   });
@@ -105,7 +118,8 @@ const Navigation = styled.nav`
   background-color: ${(props: { backgroundColor: string }) =>
     props.backgroundColor ? props.backgroundColor : "blue"};
 `;
-const fetchAllStock = () => {
+
+const fetchAllStock = (): void => {
   const query = `
   query {
     stocks{
@@ -132,11 +146,10 @@ const fetchAllStock = () => {
   .then(data => {
     console.log(data)
   })
-  return null
 };
 
 // 
-const fetchSingleStock = (ticker: string) => {
+const fetchSingleStock = (ticker: string): void => {
   const query = `
   query {
     findStock(ticker: "${ticker}"){
@@ -163,14 +176,13 @@ const fetchSingleStock = (ticker: string) => {
   .then(data => {
     console.log(data)
   });
-  return null;
 }
 
 const App: React.FC = () => {
   return (
     <div>
       <Navigation backgroundColor="green"></Navigation>
-      :D
+      {/* {getCompanyData("AAPL")} */}
   {/* <div>{fetchAllStock()}{fetchSingleStock()}</div> */}
     </div>
     // <div>{getStockData()}
