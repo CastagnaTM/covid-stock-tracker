@@ -3,30 +3,8 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import  {FormControl, InputLabel, Input, FormHelperText, Select, MenuItem} from '@material-ui/core';
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
-
-class DateInput {
-  open_price: number;
-  high_price: number;
-  low_price: number;
-  close_price: number;
-  date: string;
-  constructor(
-    date: string,
-    open_price: number,
-    close_price: number,
-    high_price: number,
-    low_price: number
-  ) {
-    this.open_price = open_price;
-    this.close_price = close_price;
-    this.high_price = high_price;
-    this.low_price = low_price;
-    this.date = date;
-  }
-}
-DateInput.prototype.toString = function dogToString() {
-  return `{date: "${this.date}", open_price: ${this.open_price}, close_price: ${this.close_price}, low_price: ${this.low_price}, high_price: ${this.high_price}}`;
-};
+import DateInput from './Input/DateInput';
+import CompanyInput from './Input/CompanyInput';
 
 // left off at 285
 
@@ -64,8 +42,22 @@ const getCompanyData = (ticker: string):void => {
     `${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`
   )
     .then((resp) => resp.json())
-    .then(({country, currency, exchange, name, ticker, ipo, marketCapitalization, shareOutstanding, logo, phone, weburl, finnhubIndustry}) => {
+    .then(({country, currency, exchange, name, ipo, marketCapitalization, shareOutstanding, logo, phone, weburl, finnhubIndustry}) => {
       // do something with the data
+      let companyInput = new CompanyInput(
+        country,
+        currency,
+        exchange,
+        name,
+        ipo,
+        marketCapitalization,
+        shareOutstanding,
+        logo,
+        phone,
+        weburl,
+        finnhubIndustry
+      );
+      // do something with company input
     })
     .catch((error) => {
       throw error;
@@ -227,7 +219,16 @@ const H4 = styled.h4`
     font-size: large;
     color: ${variables.palette.blue}; 
     margin: 0 auto;
+    padding: 1em;
 `
+
+// const FormContainer = styled(FormControl)`
+//     &.MuiFormControl-root{
+//         flex-direction: row
+//     }
+//     display: flex;
+    
+// `
 
 const Graph = styled.div`
     width: 70%;
@@ -244,6 +245,12 @@ const Footer = styled.footer`
 
 `
 
+// const setMenuItems = (): ReactElement => {
+//     tickers.forEach(ticker => {
+//         return <MenuItem value={ticker}>{ticker}</MenuItem>
+//     })
+// }
+
 const App: React.FC = () => {
 return (
   <div>
@@ -257,6 +264,25 @@ return (
         <ControlPanel>
             <H1>Control Panel</H1>
             {/*  stock options:  h4, ticker search bar + ticker drop down, start and end dates, stock value (open, close, etc) */}
+           
+            <H4>Select Stock Filters</H4>
+            <FormControl>
+            <InputLabel id="demo-simple-select-helper-label">Ticker</InputLabel>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={Stock Ticker}
+                    // onChange={handleChange}
+                    >
+                    {tickers.map((ticker, key) => {
+                        return <MenuItem value={ticker} key={key}>{ticker}</MenuItem> 
+                    })}
+                </Select>
+                <FormHelperText>Select Stock Ticker</FormHelperText>
+            </FormControl>
+            {/* virus options: h4, start and end dates, location */}
+
+            <H4>Select Virus Filters</H4>
             <FormControl>
                 <Select
                     labelId="demo-simple-select-label"
@@ -269,11 +295,6 @@ return (
                     <MenuItem value={30}>Thirty</MenuItem>
                 </Select>
             </FormControl>
-            <H4>Select Stock Filters</H4>
-
-            {/* virus options: h4, start and end dates, location */}
-
-            <H4>Select Virus Filters</H4>
            
         </ControlPanel>
         <Graph>
