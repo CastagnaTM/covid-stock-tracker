@@ -56,11 +56,11 @@ app.use(
         }
 
         input DateInput {
-          date: String!,
-          open_price: Float!,
-          close_price: Float!,
-          high_price: Float!,
-          low_price: Float!,
+          date: String,
+          open_price: Float,
+          close_price: Float,
+          high_price: Float,
+          low_price: Float,
         }
 
         input StockInput {
@@ -126,7 +126,7 @@ app.use(
       updateCompany: (args) => {
         const query = {ticker: args.ticker}
         const update = {"companyData": args.companyInput}
-        const options = {returnNewDocument: true};
+        const options = {returnNewDocument: true, new: true};
         return Stock.findOneAndUpdate(query, update, options)
         .then(result => {
           return result;
@@ -145,7 +145,11 @@ app.use(
         // }).catch(err => console.log(err)))
       },
       updateDate: (args) => {
-        const query = {ticker: ""}
+        const query = {ticker: args.ticker};
+        const update = {$push: {dates: args.dateInput}};
+        const options = {returnNewDocument: true, new: true};
+        return Stock.findOneAndUpdate(query, update, options)
+        .then(result => result)
       }
     },
     graphiql: true,
