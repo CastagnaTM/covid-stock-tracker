@@ -3,10 +3,10 @@ const graphqlHTTP = require("express-graphql");
 const { buildSchema } = require("graphql");
 const mongoose = require("mongoose");
 const Stock = require("./models/stocks");
-const cors = require('cors')
+const cors = require("cors");
 const app = express();
 
-app.use(cors())
+app.use(cors());
 app.use(
   "/graphql",
   graphqlHTTP({
@@ -14,7 +14,8 @@ app.use(
         type Stock {
             _id: ID!,
             ticker: String!,
-            dates: [StockDate!]!
+            dates: [StockDate!]!,
+            companyData: CompanyData
         }
         
         type StockDate {
@@ -23,6 +24,34 @@ app.use(
           close_price: Float!,
           high_price: Float!,
           low_price: Float!,
+        }
+
+        type CompanyData {
+          country: String,
+          currency: String,
+          exchange: String,
+          industry: String,
+          ipo: String,
+          logo: String,
+          market_capitalization: Float,
+          name: String,
+          phone: String,
+          share_outstanding: Float,
+          web_url: String
+        }
+
+        input CompanyInput {
+          country: String,
+          currency: String,
+          exchange: String,
+          industry: String,
+          ipo: String,
+          logo: String,
+          market_capitalization: Float,
+          name: String,
+          phone: String,
+          share_outstanding: Float,
+          web_url: String
         }
 
         input DateInput {
@@ -35,7 +64,8 @@ app.use(
 
         input StockInput {
             ticker: String!,
-            dates: [DateInput!]!
+            dates: [DateInput!]!,
+            companyData: CompanyInput
         }
 
         type RootQuery {
@@ -90,13 +120,6 @@ app.use(
             console.log(err);
             throw err;
           });
-        // const stocks = {
-        //   _id: args.stockInput._id,
-        //   ticker: args.stockInput.ticker,
-        //   dates: JSON.parse(JSON.stringify(args.stockInput.dates))
-        // }
-        // // console.log(stocks);
-        // return stocks
       },
       updateStock: (args) => {
         const stock = new Stock({
