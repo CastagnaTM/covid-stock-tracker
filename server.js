@@ -7,6 +7,7 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors());
+mongoose.set('useFindAndModify', false);
 app.use(
   "/graphql",
   graphqlHTTP({
@@ -75,7 +76,8 @@ app.use(
 
         type RootMutation {
             createStock(stockInput: StockInput): Stock,
-            updateStock(stockInput: StockInput): Stock 
+            updateCompany(ticker: String, companyInput: CompanyInput): Stock,
+            updateDate(ticker: String, dateInput: DateInput): Stock 
         }
 
         schema {
@@ -121,11 +123,30 @@ app.use(
             throw err;
           });
       },
-      updateStock: (args) => {
-        const stock = new Stock({
-          // needs to find stock
-        });
+      updateCompany: (args) => {
+        const query = {ticker: args.ticker}
+        const update = {"companyData": args.companyInput}
+        const options = {returnNewDocument: true};
+        return Stock.findOneAndUpdate(query, update, options)
+        .then(result => {
+          return result;
+        }).catch(err => {
+          console.log(err)
+          throw err
+        })
+        // return Stock.findOne({ ticker: args.ticker })
+        // .then(result => {
+        //   let current = result
+        //   current['company'] = {ticker: "AAPL"}
+        //   return current
+        // }).save()
+        // .then((result => {
+        //   return {...result._doc}
+        // }).catch(err => console.log(err)))
       },
+      updateDate: (args) => {
+        const query = {ticker: ""}
+      }
     },
     graphiql: true,
   })
