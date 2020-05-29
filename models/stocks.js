@@ -9,6 +9,9 @@ const stockSchema = new Schema({
     },
     dates: {
         type: Object
+    },
+    companyData: {
+        type: Object
     }
 },
 {
