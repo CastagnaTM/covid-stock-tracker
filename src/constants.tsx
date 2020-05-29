@@ -1,5 +1,6 @@
 export const finnhubKey = process.env.REACT_APP_FINNHUB_KEY;
 export const finnhubBase = 'https://finnhub.io/api/v1/';
+export const GRAPHQL_API = "http://localhost:4000/graphql";
 export const tickers: string[] = [
     "JPM", "BRK.A", "BAC", "AAPL", "T", "GOOGL", "MSFT", "XOM", "WFC", "C", "WMT", "VZ", "AMZN", "UNH",         //14
     "CMCSA", "JNJ", "DIS", "INTC", "FB", "CVS", "GS", "MS", "PFE", "IBM", "GE", "CVX", "CI", "PG", "MET",       //15       29
