@@ -1,7 +1,11 @@
 import React from "react";
-import styled from "styled-components";
+import {
+    Navigation, Ul, Li,
+    Main, ControlPanel, H1,
+    Graph, Footer
+} from './Components/Styles';
+import Filters from './Components/Filters'
 import { useForm } from "react-hook-form";
-import  {FormControl, InputLabel, Input, FormHelperText, Select, MenuItem} from '@material-ui/core';
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
 import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
@@ -160,97 +164,6 @@ const fetchAllStock = (): void => {
     });
   };
 
-const variables = {
-    palette: {
-        grey: "#222",
-        green: "#1db954",
-        red: "#f45b5b",
-        blue: "#2c8096",
-        darkGrey: "#0a0a0a"
-    },
-    liColor: "white"
-
-};
-
-const Navigation = styled.nav`
-    top: 0;
-    box-sizing: border-box
-    height: 80px;
-    padding: 1em;
-    width: 100%;
-    background-color: ${variables.palette.grey};
-`
-
-const Ul = styled.ul `
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    justify-content: space-evenly;
-`
-
-const Li = styled.li`
-    list-style: none;
-    color: ${variables.liColor};
-`
-
-const Main = styled.div`
-    background-color: ${variables.palette.darkGrey}; 
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-`
-
-const ControlPanel = styled.div`
-    background-color: white;
-    width: 30%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center
-`
-
-const H1 = styled.h1`
-    font-size: x-large;
-    color: ${variables.palette.blue}; 
-    margin: 0 auto;
-`
-
-const H4 = styled.h4`
-    font-size: large;
-    color: ${variables.palette.blue}; 
-    margin: 0 auto;
-    padding: 1em;
-`
-
-// const FormContainer = styled(FormControl)`
-//     &.MuiFormControl-root{
-//         flex-direction: row
-//     }
-//     display: flex;
-    
-// `
-
-const Graph = styled.div`
-    width: 70%;
-    height: 100%;
-`
-
-const Footer = styled.footer`
-   bottom: 0;
-   box-sizing: border-box
-   height: 80px;
-   padding: 1em;
-   width: 100%;
-   background-color: ${variables.palette.grey};
-
-`
-
-// const setMenuItems = (): ReactElement => {
-//     tickers.forEach(ticker => {
-//         return <MenuItem value={ticker}>{ticker}</MenuItem>
-//     })
-// }
-
 const App: React.FC = () => {
 return (
   <div>
@@ -262,40 +175,8 @@ return (
       </Navigation>
       <Main>
         <ControlPanel>
-            <H1>Control Panel</H1>
-            {/*  stock options:  h4, ticker search bar + ticker drop down, start and end dates, stock value (open, close, etc) */}
-           
-            <H4>Select Stock Filters</H4>
-            <FormControl>
-            <InputLabel id="demo-simple-select-helper-label">Ticker</InputLabel>
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    // value={Stock Ticker}
-                    // onChange={handleChange}
-                    >
-                    {tickers.map((ticker, key) => {
-                        return <MenuItem value={ticker} key={key}>{ticker}</MenuItem> 
-                    })}
-                </Select>
-                <FormHelperText>Select Stock Ticker</FormHelperText>
-            </FormControl>
-            {/* virus options: h4, start and end dates, location */}
-
-            <H4>Select Virus Filters</H4>
-            <FormControl>
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value="Stock Ticker"
-                    // onChange={handleChange}
-                    >
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </FormControl>
-           
+        <H1>Control Panel</H1>
+            <Filters></Filters>
         </ControlPanel>
         <Graph>
 
