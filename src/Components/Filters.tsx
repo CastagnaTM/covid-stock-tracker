@@ -7,12 +7,9 @@ function Filters() {
 
   return (
     <div> 
-      <H4> Select Stock Filters </H4>
+      <H4> Select Stock </H4>
         <Select></Select>
-      <FormContainer> 
-        <DatePicker></DatePicker>
-      </FormContainer>
-      <H4> Select Virus Dates </H4>
+      <H4> Select Dates </H4>
       <FormContainer> 
         <DatePicker></DatePicker>
       </FormContainer>
