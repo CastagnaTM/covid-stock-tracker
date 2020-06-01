@@ -1,11 +1,11 @@
 import React from "react";
 import {
-    Navigation, Ul, Li,
+    Navigation, Ul, Button,
     Main, ControlPanel, H1,
     Graph, Footer
 } from './Components/Styles';
 import Filters from './Components/Filters'
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
 import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
@@ -165,12 +165,17 @@ const fetchAllStock = (): void => {
   };
 
 const App: React.FC = () => {
+
+    const [state, setState] = React.useState({about: false});
+
+
 return (
   <div>
-      <Navigation >
+      <Navigation>
         <Ul>
-            <Li>Covid Stock Tracker</Li>
-            <Li>About</Li>
+            {/* these will be links */}
+            <li> <Button onClick={() => setState({about: false})}> Covid Stock Tracker </Button> </li>
+            <li> <Button onClick={() => setState({about: true})}> About </Button> </li> 
         </Ul>
       </Navigation>
       <Main>

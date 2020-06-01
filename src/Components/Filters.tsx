@@ -4,11 +4,16 @@ import Select from "./Select"
 import DatePicker from './DatePicker'
 
 function Filters() {
+
   return (
-    <div>
-      <H4>Select Stock Filters</H4>
+    <div> 
+      <H4> Select Stock Filters </H4>
         <Select></Select>
-      <FormContainer>
+      <FormContainer> 
+        <DatePicker></DatePicker>
+      </FormContainer>
+      <H4> Select Virus Dates </H4>
+      <FormContainer> 
         <DatePicker></DatePicker>
       </FormContainer>
     </div>

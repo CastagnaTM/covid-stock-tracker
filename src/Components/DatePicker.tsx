@@ -35,7 +35,7 @@ export default function DatePicker() {
           variant="inline"
           format="MM/dd/yyyy"
           margin="normal"
-          id="date-picker-inline"
+          // id="date-picker-start"
           label="Start Date"
           value={startDate}
           onChange={handleStartDateChange}
@@ -48,7 +48,7 @@ export default function DatePicker() {
           variant="inline"
           format="MM/dd/yyyy"
           margin="normal"
-          id="date-picker-inline"
+          // id="date-picker-end"
           label="End Date"
           value={endDate}
           onChange={handleEndDateChange}
