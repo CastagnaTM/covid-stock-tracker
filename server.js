@@ -38,7 +38,7 @@ app.use(
           name: String,
           phone: String,
           share_outstanding: Float,
-          web_url: String
+          web_url: String,
         }
 
         input CompanyInput {
@@ -52,7 +52,7 @@ app.use(
           name: String,
           phone: String,
           share_outstanding: Float,
-          web_url: String
+          web_url: String, 
         }
 
         input DateInput {
@@ -125,7 +125,12 @@ app.use(
       },
       updateCompany: (args) => {
         const query = {ticker: args.ticker}
-        const update = {"companyData": args.companyInput}
+        // const update = {$set: {companyData: {exchange: args.companyInput.exchange, country: args.companyInput.exchange }}};
+        const updateParams = {};
+        for ( const key in args.companyInput) {
+          updateParams[`companyData.${key}`] = args.companyInput[key];
+        }
+        const update = {$set: updateParams};
         const options = {returnNewDocument: true, new: true};
         return Stock.findOneAndUpdate(query, update, options)
         .then(result => {
