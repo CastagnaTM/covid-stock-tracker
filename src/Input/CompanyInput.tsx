@@ -8,7 +8,7 @@ export default class CompanyInput {
     share_outstanding: number;
     logo: string;
     phone: string;
-    weburl: string;
+    web_url: string;
     industry: string;
     constructor(
         country: string,
@@ -20,7 +20,7 @@ export default class CompanyInput {
         share_outstanding: number,
         logo: string,
         phone: string,
-        weburl: string,
+        web_url: string,
         industry: string,
     ) {
         this.country = country;
@@ -32,7 +32,7 @@ export default class CompanyInput {
         this.share_outstanding = share_outstanding;
         this.logo = logo;
         this.phone = phone;
-        this.weburl = weburl;
+        this.web_url = web_url;
         this.industry = industry;
     }
   }
@@ -40,6 +40,6 @@ CompanyInput.prototype.toString = function dogToString() {
     return `{
         country: "${this.country}", currency: "${this.currency}", exchange: "${this.exchange}", 
         name: "${this.name}", ipo: "${this.ipo}", market_capitalization: ${this.market_capitalization}, 
-        share_outstanding: ${this.share_outstanding}, logo: "${this.logo}", phone: "${this.phone}", industry: "${this.industry}", "weburl: ${this.weburl}"
+        share_outstanding: ${this.share_outstanding}, logo: "${this.logo}", phone: "${this.phone}", industry: "${this.industry}", "web_url: ${this.web_url}"
     }`;
 };

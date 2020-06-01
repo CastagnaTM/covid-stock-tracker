@@ -26,7 +26,7 @@
     "typescript": "^3.9.3"
   },
   "scripts": {
-    "startServer": "nodemon server.js",
+    "server": "nodemon server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
