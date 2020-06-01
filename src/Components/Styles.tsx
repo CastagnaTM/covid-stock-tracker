@@ -34,10 +34,6 @@ export const Ul = styled.ul `
     list-style: none;
 `
 
-// export const Li = styled.li`
-//     list-style: none;
-// `
-
 export const Button = styled.button`
     border: none;
     background-color: transparent;
