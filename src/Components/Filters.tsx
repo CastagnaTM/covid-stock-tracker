@@ -52,11 +52,11 @@ export const Filters: React.FC<Props> = (props) => {
   //Date Picker Functions
 
   const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date('2014-08-18T21:11:54'),
+    new Date('2020-01-01'),
   );
 
   const [endDate, setEndDate] = React.useState<Date | null>(
-    new Date('2014-08-18T21:11:54'),
+    new Date('2020-01-02'),
   );
 
   const handleStartDateChange = (date: Date | null) => {
@@ -90,9 +90,11 @@ export const Filters: React.FC<Props> = (props) => {
           <Grid container justify="space-around">
             <KeyboardDatePicker
               disableToolbar
+              autoOk={true}
               variant="inline"
               format="MM/dd/yyyy"
               margin="normal"
+              minDate="2020-01-01"
               // id="date-picker-start"
               label="Start Date"
               value={startDate}
@@ -104,6 +106,7 @@ export const Filters: React.FC<Props> = (props) => {
             <KeyboardDatePicker
               disableToolbar
               variant="inline"
+              autoOk={true}
               format="MM/dd/yyyy"
               margin="normal"
               // id="date-picker-end"
