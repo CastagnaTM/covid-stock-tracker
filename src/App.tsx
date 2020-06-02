@@ -168,6 +168,11 @@ const App: React.FC = () => {
 
     const [state, setState] = React.useState({about: false});
 
+    const getUserData = (ticker: string, startDate: string, endDate: string): number => {
+        console.log(ticker + ' ' + startDate + ' ' + endDate);
+        return 1;
+    }
+
 
 return (
   <div>
@@ -181,8 +186,8 @@ return (
       <Main>
         <ControlPanel>
         <H1>Control Panel</H1>
-            <Filters></Filters>
-        </ControlPanel>
+            <Filters getUserData={getUserData} ></Filters>
+        </ControlPanel> 
         <Graph>
 
         </Graph>

@@ -99,7 +99,8 @@ export const H4 = styled.h3`
 
 export const FormContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
 `
 
 export const Graph = styled.div`
