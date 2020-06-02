@@ -28,10 +28,10 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
-  getUserData(ticker: string, startDate: string, endDate: string): void; 
+  getUserData(ticker: string, beginDate: Date | null, endDate: Date | null): void; 
 }
 
-export const Filters: React.FC<Props> = () => {
+export const Filters: React.FC<Props> = (props) => {
   // select functions
   const classes = useStyles();
   const style = {
@@ -123,7 +123,7 @@ export const Filters: React.FC<Props> = () => {
           className={classes.button}
           startIcon={<SaveIcon />}
           style={style}
-          // onClick={() => Props: {getUserData(stock, startDate, endDate)}}
+          onClick={() => props.getUserData(stock, startDate, endDate)}
         >
         Save
       </Button>

@@ -168,9 +168,8 @@ const App: React.FC = () => {
 
     const [state, setState] = React.useState({about: false});
 
-    const getUserData = (ticker: string, startDate: string, endDate: string): number => {
-        console.log(ticker + ' ' + startDate + ' ' + endDate);
-        return 1;
+    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
+        console.log(ticker + ' ' + beginDate + ' ' + endDate);
     }
 
 
