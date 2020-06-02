@@ -206,7 +206,7 @@ return (
             height={500}
             data={chartData} 
           >
-            <CartesianGrid strokeDasharray = "3 3"/>
+            <CartesianGrid/>
             <XAxis dataKey="date"/>
             <YAxis />
             <Tooltip />
