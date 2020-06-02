@@ -1,14 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import {
     Navigation, Ul, Button,
     Main, ControlPanel, H1,
-    Graph, Footer
+    GraphContainer, Footer
 } from './Components/Styles';
 import Filters from './Components/Filters'
 // import { useForm } from "react-hook-form";
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
 import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 // left off at 285
 
@@ -135,49 +136,61 @@ const fetchAllStock = (): void => {
     })
   };
   
-  const fetchSingleStock = (ticker: string): void => {
-    const query = `
-    query {
-      findStock(ticker: "${ticker}"){
-        ticker
-        dates{
-          open_price,
-          close_price,
-          low_price,
-          high_price,
-          date
-        }
-      }
-    }
-    `
-    fetch(GRAPHQL_API, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: `application/json`,
-      },
-      body: JSON.stringify({ query }),
-    })
-    .then(resp => resp.json())
-    .then(data => {
-      console.log(data)
-    });
-  };
+
 
 const App: React.FC = () => {
 
-    const [state, setState] = React.useState({about: false});
+    const [state, setState] = useState({about: false});
+    const  [chartData, setChartData] = useState({});
+
+    
+    const fetchSingleStock = (ticker: string): void => {
+      const query = `
+      query {
+        findStock(ticker: "${ticker}"){
+          ticker
+          dates{
+            open_price,
+            close_price,
+            low_price,
+            high_price,
+            date
+          }
+        }
+      }
+      `
+      fetch(GRAPHQL_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: `application/json`,
+        },
+        body: JSON.stringify({ query }),
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        // console.log(data.data.findStock.dates)
+        // let object = {};
+        // data.data.findStock.dates.forEach(curDate => {
+        //   object[curDate.date] = curDate.open_price
+        // })
+        // console.log(object)
+        setChartData(data.data.findStock.dates)
+      });
+    };
 
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
-        console.log(ticker + ' ' + beginDate + ' ' + endDate);
-    }
+      console.log(ticker + ' ' + beginDate + ' ' + endDate);
+      fetchSingleStock(ticker);
+  }
+
 
 
 return (
   <div>
       <Navigation>
         <Ul>
-            {/* these will be links */}
+            {/* {console.log(chartData)} */}
             <li> <Button onClick={() => setState({about: false})}> Covid Stock Tracker </Button> </li>
             <li> <Button onClick={() => setState({about: true})}> About </Button> </li> 
         </Ul>
@@ -187,9 +200,22 @@ return (
         <H1>Control Panel</H1>
             <Filters getUserData={getUserData} ></Filters>
         </ControlPanel> 
-        <Graph>
-
-        </Graph>
+          <GraphContainer> 
+          <LineChart
+            width = {800}
+            height={500}
+            data={chartData} 
+          >
+            <CartesianGrid strokeDasharray = "3 3"/>
+            <XAxis dataKey="date"/>
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey ='open_price' stroke = "#8804d8"  />
+            <Line type="monotone" dataKey ='close_price' stroke = "#8084d8"  />
+            <Line type="monotone" dataKey ='low_price' stroke = "#8885d8"  />
+            <Line type="monotone" dataKey ='high_price' stroke = "#8884d0"  />
+          </LineChart>
+          </GraphContainer>
       </Main>
       <Footer>
 

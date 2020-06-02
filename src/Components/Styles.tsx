@@ -67,7 +67,8 @@ export const Button = styled.button`
 `
 
 export const Main = styled.div`
-    background-color: ${variables.palette.darkGrey}; 
+    // background-color: ${variables.palette.darkGrey}; 
+    
     display: flex;
     flex-direction: row;
     height: 100vh;
@@ -103,7 +104,7 @@ export const FormContainer = styled.div`
     align-items: center;
 `
 
-export const Graph = styled.div`
+export const GraphContainer = styled.div`
     width: 70%;
     height: 100%;
 `
