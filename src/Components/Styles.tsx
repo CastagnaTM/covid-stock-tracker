@@ -67,8 +67,7 @@ export const Button = styled.button`
 `
 
 export const Main = styled.div`
-    // background-color: ${variables.palette.darkGrey}; 
-    
+    background-color: ${variables.palette.darkGrey}; 
     display: flex;
     flex-direction: row;
     height: 100vh;
