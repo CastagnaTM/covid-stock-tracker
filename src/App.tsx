@@ -9,7 +9,7 @@ import Filters from './Components/Filters'
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
 import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
 // left off at 285
@@ -145,12 +145,12 @@ const App: React.FC = () => {
     const  [chartData, setChartData] = useState([]);
 
     
-    const fetchSingleStock = (ticker: string): void => {
+    const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
       const query = `
       query {
         findStock(ticker: "${ticker}"){
           ticker
-          dates{
+          dates {
             open_price,
             close_price,
             low_price,
@@ -176,22 +176,39 @@ const App: React.FC = () => {
         //   object[curDate.date] = curDate.open_price
         // })
         // console.log(object)
+
+        //database object iterator
+
+        for (const obj of data.data.findStock.dates){
+          // console.log(obj.date.slice(0,10).replace(",", ""))
+          obj.date = obj.date.slice(0,10).replace(",", "");
+        }
+        // console.log(data.data.findStock.dates[0]) // gotta slice this from startDate to endDate + 1
         setChartData(data.data.findStock.dates)
-      });
+      }); 
     };
 
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
-      console.log(ticker + ' ' + beginDate + ' ' + endDate);
-      fetchSingleStock(ticker);
-  }
+      // console.log(ticker + ' ' + beginDate?.toLocaleDateString('en-US') + ' ' + endDate?.toLocaleDateString('en-US'));
+      fetchSingleStock(ticker, beginDate, endDate);
+    }
 
+    // testing tick formatter function to only return ticks for maybe 5 values
+    // const chartDataTickFormatter = (chartData) => {
+    //   let returnData = [];
+    //   returnData[0] = chartData[0];
+      
+    // }
+
+    const legendStyle = {
+      color: '#5e5e5e'
+    }
 
 
 return (
   <div>
       <Navigation>
         <Ul>
-            {/* {console.log(chartData)} */}
             <li> <Button onClick={() => setState({about: false})}> Covid Stock Tracker </Button> </li>
             <li> <Button onClick={() => setState({about: true})}> About </Button> </li> 
         </Ul>
@@ -203,21 +220,25 @@ return (
         </ControlPanel>
           {chartData.length > 0 &&  
             <GraphContainer> 
-            <LineChart
-              width = {800}
-              height={500}
-              data={chartData} 
-            >
-              <CartesianGrid/>
-              <XAxis dataKey="date"/>
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey ='open_price' stroke = "#8804d8"  />
-              <Line type="monotone" dataKey ='close_price' stroke = "#8084d8"  />
-              <Line type="monotone" dataKey ='low_price' stroke = "#8885d8"  />
-              <Line type="monotone" dataKey ='high_price' stroke = "#8884d0"  />
-            </LineChart>
+              <ResponsiveContainer >
+                <LineChart
+                  width = {800}
+                  height={500}
+                  data={chartData}
+                
+                >
+                  <CartesianGrid/>
+                  <XAxis  /> 
+                  <YAxis />
+                  <Tooltip />
+                  <Legend wrapperStyle={legendStyle}/>
+                  
+                  <Line type="monotone" dataKey ='open_price' stroke = "#8804d8" dot={false} />
+                  <Line type="monotone" dataKey ='close_price' stroke = "#8084d8" dot={false} />
+                  <Line type="monotone" dataKey ='low_price' stroke = "#f45b5b" dot={false} />
+                  <Line type="monotone" dataKey ='high_price' stroke = "#1db954" dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
             </GraphContainer>
           }
       </Main>
