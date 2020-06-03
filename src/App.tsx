@@ -11,6 +11,7 @@ import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
+
 // left off at 285
 
 const fetchData = (ticker: string): any => {
@@ -141,7 +142,7 @@ const fetchAllStock = (): void => {
 const App: React.FC = () => {
 
     const [state, setState] = useState({about: false});
-    const  [chartData, setChartData] = useState({});
+    const  [chartData, setChartData] = useState([]);
 
     
     const fetchSingleStock = (ticker: string): void => {
@@ -199,24 +200,26 @@ return (
         <ControlPanel>
         <H1>Control Panel</H1>
             <Filters getUserData={getUserData} ></Filters>
-        </ControlPanel> 
-          <GraphContainer> 
-          <LineChart
-            width = {800}
-            height={500}
-            data={chartData} 
-          >
-            <CartesianGrid/>
-            <XAxis dataKey="date"/>
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey ='open_price' stroke = "#8804d8"  />
-            <Line type="monotone" dataKey ='close_price' stroke = "#8084d8"  />
-            <Line type="monotone" dataKey ='low_price' stroke = "#8885d8"  />
-            <Line type="monotone" dataKey ='high_price' stroke = "#8884d0"  />
-          </LineChart>
-          </GraphContainer>
+        </ControlPanel>
+          {chartData.length > 0 &&  
+            <GraphContainer> 
+            <LineChart
+              width = {800}
+              height={500}
+              data={chartData} 
+            >
+              <CartesianGrid/>
+              <XAxis dataKey="date"/>
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey ='open_price' stroke = "#8804d8"  />
+              <Line type="monotone" dataKey ='close_price' stroke = "#8084d8"  />
+              <Line type="monotone" dataKey ='low_price' stroke = "#8885d8"  />
+              <Line type="monotone" dataKey ='high_price' stroke = "#8884d0"  />
+            </LineChart>
+            </GraphContainer>
+          }
       </Main>
       <Footer>
 
