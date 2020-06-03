@@ -72,6 +72,7 @@ app.use(
         type RootQuery {
             stocks: [Stock!]!,
             findStock(ticker: String): Stock,
+            findDates(ticker: String, endDate: String, startDate: String): Stock,
         }
 
         type RootMutation {
@@ -155,6 +156,12 @@ app.use(
         const options = {returnNewDocument: true, new: true};
         return Stock.findOneAndUpdate(query, update, options)
         .then(result => result)
+      },
+      findDates: (args) => {
+        const query = {ticker: args.ticker}
+        const conditions = {dates: {$slice: [{$indexOfArray: ["$dates", args.startDate]}, 4]}}
+        return Stock.findOne(query, conditions)
+
       }
     },
     graphiql: true,
