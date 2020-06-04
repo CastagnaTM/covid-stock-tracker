@@ -80,7 +80,9 @@ const inputStock = (ticker: string, stock: []): void => {
       {
         ticker, 
         dates
-          { open_price,
+          { 
+            date,
+            open_price,
             close_price,
             high_price,
             low_price
@@ -126,7 +128,7 @@ const getStockData = (): void => {
 const convertToRealTime = (unixTimestamp: number): string => {
   let milliseconds = unixTimestamp * 1000; // 1575909015000
   let dateObject = new Date(milliseconds);
-  let humanDateFormat = dateObject.toLocaleString();
+  let humanDateFormat = dateObject.toLocaleString().split(",")[0];
   return humanDateFormat;
 };
 
