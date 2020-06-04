@@ -230,7 +230,7 @@ return (
       </Navigation>
       <Main>
         <ControlPanel>
-          {getStockData()}
+          {/* {getStockData()} */}
         <H1>Control Panel</H1>
             <Filters getUserData={getUserData} ></Filters>
         </ControlPanel>
