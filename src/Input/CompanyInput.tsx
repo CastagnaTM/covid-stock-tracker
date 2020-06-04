@@ -40,6 +40,6 @@ CompanyInput.prototype.toString = function dogToString() {
     return `{
         country: "${this.country}", currency: "${this.currency}", exchange: "${this.exchange}", 
         name: "${this.name}", ipo: "${this.ipo}", market_capitalization: ${this.market_capitalization}, 
-        share_outstanding: ${this.share_outstanding}, logo: "${this.logo}", phone: "${this.phone}", industry: "${this.industry}", "web_url: ${this.web_url}"
+        share_outstanding: ${this.share_outstanding}, logo: "${this.logo}", phone: "${this.phone}", industry: "${this.industry}", web_url: "${this.web_url}"
     }`;
 };

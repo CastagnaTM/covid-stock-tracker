@@ -67,11 +67,58 @@ const getCompanyData = (ticker: string):void => {
         weburl,
         finnhubIndustry
       );
-      // do something with company input
+      inputCompanyData(ticker, companyInput)
     })
     .catch((error) => {
       throw error;
     });
+}
+
+const inputCompanyData = (ticker: string, companyInput: CompanyInput) => {
+  const query = 
+  `
+  mutation {
+    updateCompany(ticker: "${ticker}" companyInput: ${companyInput.toString()}){
+      ticker,
+      dates {
+        date
+      },
+      companyData {
+        country
+        currency
+        exchange
+        industry
+        ipo
+        logo
+        market_capitalization
+        name
+        phone
+        share_outstanding
+        web_url
+      }
+    }
+  }
+  `
+  console.log(query)
+  fetch(GRAPHQL_API, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: `application/json`,
+    },
+    body: JSON.stringify({ query }),
+  })
+    .then((resp) => resp.json())
+    .then((data) => {
+      if (tickers[counter]) {
+        console.log(data);
+        setTimeout(() => getCompanyData(tickers[++counter]),2000);
+      }
+      else {
+        clearTimeout();
+      }
+    });
+
 }
 
 const inputStock = (ticker: string, stock: []): void => {
@@ -106,20 +153,12 @@ const inputStock = (ticker: string, stock: []): void => {
       else {
         clearTimeout();
       }
-
-      // if (tickers[counter]) {
-      //   counter++;
-      //   console.log(data);
-      // }
-      // else {
-      //   clearInterval();
-      // }
     });
 };
 
 const getStockData = (): void => {
-  fetchData(tickers[counter])
-
+  // fetchData(tickers[counter])
+  getCompanyData(tickers[counter])
   // tickers.slice(88, 100).forEach((ticker) => {
   //   fetchData(ticker);
   // });
