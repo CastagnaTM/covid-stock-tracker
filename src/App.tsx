@@ -11,12 +11,16 @@ import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-
+// let timer = setTimeout(callAPI, 2000);
+let counter = 0;
 // left off at 285
 
+// function callAPI () {
+//   fetchData(tickers[counter]);
+// }
 const fetchData = (ticker: string): any => {
   fetch(
-    `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=1577750400&to=1590510123&token=${finnhubKey}`
+    `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=1577750400&to=1591290500&token=${finnhubKey}`
   )
     .then((resp) => resp.json())
     .then(({ c, h, l, o, t }) => {
@@ -92,13 +96,31 @@ const inputStock = (ticker: string, stock: []): void => {
     body: JSON.stringify({ query }),
   })
     .then((resp) => resp.json())
-    .then((data) => console.log(data));
+    .then((data) => {
+      if (tickers[counter]) {
+        console.log(data);
+        setTimeout(() => fetchData(tickers[++counter]),2000);
+      }
+      else {
+        clearTimeout();
+      }
+
+      // if (tickers[counter]) {
+      //   counter++;
+      //   console.log(data);
+      // }
+      // else {
+      //   clearInterval();
+      // }
+    });
 };
 
 const getStockData = (): void => {
-  tickers.slice(88, 100).forEach((ticker) => {
-    fetchData(ticker);
-  });
+  fetchData(tickers[counter])
+
+  // tickers.slice(88, 100).forEach((ticker) => {
+  //   fetchData(ticker);
+  // });
 };
 
 const convertToRealTime = (unixTimestamp: number): string => {
@@ -176,7 +198,6 @@ const App: React.FC = () => {
         if(data.data.findDates !== null){
           setChartData(data.data.findDates.dates)
         }
-        
       });
     };
 
@@ -207,6 +228,7 @@ return (
       </Navigation>
       <Main>
         <ControlPanel>
+          {getStockData()}
         <H1>Control Panel</H1>
             <Filters getUserData={getUserData} ></Filters>
         </ControlPanel>
