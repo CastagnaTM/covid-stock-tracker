@@ -44,9 +44,10 @@ export const Filters: React.FC<Props> = (props) => {
   }
 
   const mapTickers = () => {
-    return tickers.sort((a,b) => a.localeCompare(b)).map((ticker, key) => {
-         return <MenuItem value={ticker} key={key}>{ticker}</MenuItem> 
-    })
+    // return tickers.sort((a,b) => a.localeCompare(b)).map((ticker, key) => {
+    //      return <MenuItem value={ticker} key={key}>{ticker}</MenuItem> 
+    // })
+    return <MenuItem value={tickers[0]} key={1}>{tickers[0]}</MenuItem> 
   }
 
   //Date Picker Functions
