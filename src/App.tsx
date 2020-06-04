@@ -228,7 +228,7 @@ return (
                 
                 >
                   <CartesianGrid/>
-                  <XAxis  /> 
+                  <XAxis /> 
                   <YAxis />
                   <Tooltip />
                   <Legend wrapperStyle={legendStyle}/>
