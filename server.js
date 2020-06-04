@@ -9,7 +9,6 @@ const app = express();
 app.use(cors());
 mongoose.set("useFindAndModify", false);
 app.use(
-
   "/graphql",
   graphqlHTTP({
     schema: buildSchema(`
@@ -54,11 +53,6 @@ app.use(
           phone: String,
           share_outstanding: Float,
           web_url: String, 
-        }
-        
-        type Stock {
-            ticker: String!,
-            dates: [StockDate!]
         }
 
         input DateInput {
