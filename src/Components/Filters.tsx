@@ -12,6 +12,7 @@ import {
 } from '@material-ui/pickers';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
+
 // import Select from "./Select"
 // import DatePicker from './DatePicker'
 
@@ -20,6 +21,13 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
       margin: theme.spacing(1),
+      background: "#1db954",
+      marginTop: "1em",
+      fontSize: "1.2rem",
+      '&:hover': {
+        background: "#059ac1",
+        color: "#0a0a0a"
+      }
     },
     formControl: {
       margin: theme.spacing(1),
@@ -35,7 +43,12 @@ export const Filters: React.FC<Props> = (props) => {
   // select functions
   const classes = useStyles();
   const style = {
-    backgroundColor: "#1db954"
+    background: "#1db954",
+    marginTop: "1em",
+    fontSize: "1.2rem",
+    '&:hover': {
+      background: "#2c8096",
+    }
   }
   const [stock, setStock] = React.useState(''); 
 
@@ -125,7 +138,7 @@ export const Filters: React.FC<Props> = (props) => {
           size="large"
           className={classes.button}
           startIcon={<SaveIcon />}
-          style={style}
+          // style={style}
           onClick={() => props.getUserData(stock, startDate, endDate)}
         >
         Save
