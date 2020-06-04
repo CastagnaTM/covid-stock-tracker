@@ -169,13 +169,10 @@ const App: React.FC = () => {
       })
       .then(resp => resp.json())
       .then(data => {
-        // console.log(data.data.findStock.dates)
-        // let object = {};
-        // data.data.findStock.dates.forEach(curDate => {
-        //   object[curDate.date] = curDate.open_price
-        // })
-        // console.log(object)
-        setChartData(data.data.findStock.dates)
+        if(!data.data){
+          setChartData(data.data.findStock.dates)
+        }
+        
       });
     };
 

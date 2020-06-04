@@ -7,7 +7,7 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors());
-mongoose.set('useFindAndModify', false);
+mongoose.set("useFindAndModify", false);
 app.use(
   "/graphql",
   graphqlHTTP({
@@ -125,21 +125,22 @@ app.use(
           });
       },
       updateCompany: (args) => {
-        const query = {ticker: args.ticker}
+        const query = { ticker: args.ticker };
         // const update = {$set: {companyData: {exchange: args.companyInput.exchange, country: args.companyInput.exchange }}};
         const updateParams = {};
-        for ( const key in args.companyInput) {
+        for (const key in args.companyInput) {
           updateParams[`companyData.${key}`] = args.companyInput[key];
         }
-        const update = {$set: updateParams};
-        const options = {returnNewDocument: true, new: true};
+        const update = { $set: updateParams };
+        const options = { returnNewDocument: true, new: true };
         return Stock.findOneAndUpdate(query, update, options)
-        .then(result => {
-          return result;
-        }).catch(err => {
-          console.log(err)
-          throw err
-        })
+          .then((result) => {
+            return result;
+          })
+          .catch((err) => {
+            console.log(err);
+            throw err;
+          });
         // return Stock.findOne({ ticker: args.ticker })
         // .then(result => {
         //   let current = result
@@ -151,18 +152,25 @@ app.use(
         // }).catch(err => console.log(err)))
       },
       updateDate: (args) => {
-        const query = {ticker: args.ticker};
-        const update = {$push: {dates: args.dateInput}};
-        const options = {returnNewDocument: true, new: true};
-        return Stock.findOneAndUpdate(query, update, options)
-        .then(result => result)
+        const query = { ticker: args.ticker };
+        const update = { $push: { dates: args.dateInput } };
+        const options = { returnNewDocument: true, new: true };
+        return Stock.findOneAndUpdate(query, update, options).then(
+          (result) => result
+        );
       },
       findDates: (args) => {
-        const query = {ticker: args.ticker}
-        const conditions = {dates: {$slice: [{$indexOfArray: ["$dates", args.startDate]}, 4]}}
-        return Stock.findOne(query, conditions)
-
-      }
+        return Stock.findOne({ ticker: args.ticker }) 
+          .then((result) => {
+            let data = result.dates
+            let startIndex = data.findIndex(element => element.date === args.startDate) 
+            let endIndex = data.findIndex(element => element.date === args.endDate) + 1;
+            let slicedData = data.slice(startIndex, endIndex);
+            result.dates = slicedData;
+          console.log(result);            
+          return result;
+          })
+        },
     },
     graphiql: true,
   })
@@ -170,7 +178,8 @@ app.use(
 
 mongoose
   .connect(
-    `mongodb+srv://amber:${process.env.MONGO_PASSWORD}@cluster0-adymw.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`, { useNewUrlParser: true,useUnifiedTopology: true }
+    `mongodb+srv://amber:${process.env.MONGO_PASSWORD}@cluster0-adymw.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
+    { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(app.listen(4000))
   .catch((err) => console.log(err));
