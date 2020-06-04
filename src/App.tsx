@@ -170,22 +170,11 @@ const App: React.FC = () => {
       })
       .then(resp => resp.json())
       .then(data => {
-        // console.log(data.data.findStock.dates)
-        // let object = {};
-        // data.data.findStock.dates.forEach(curDate => {
-        //   object[curDate.date] = curDate.open_price
-        // })
-        // console.log(object)
-
-        //database object iterator
-
-        for (const obj of data.data.findStock.dates){
-          // console.log(obj.date.slice(0,10).replace(",", ""))
-          obj.date = obj.date.slice(0,10).replace(",", "");
+        if(!data.data){
+          setChartData(data.data.findStock.dates)
         }
-        // console.log(data.data.findStock.dates[0]) // gotta slice this from startDate to endDate + 1
-        setChartData(data.data.findStock.dates)
-      }); 
+        
+      });
     };
 
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
