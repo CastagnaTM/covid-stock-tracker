@@ -148,18 +148,20 @@ const App: React.FC = () => {
     const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
       const query = `
       query {
-        findStock(ticker: "${ticker}"){
-          ticker
-          dates {
-            open_price,
-            close_price,
-            low_price,
-            high_price,
-            date
-          }
+        findDates(ticker: "${ticker}", startDate: "${beginDate?.toLocaleDateString('en-US')}", endDate: "${endDate?.toLocaleDateString('en-US')}"){
+        ticker,
+        dates {
+          date,
+          low_price,
+          high_price,
+          open_price,
+          close_price
         }
       }
+    
+    }
       `
+      console.log(query)
       fetch(GRAPHQL_API, {
         method: "POST",
         headers: {
@@ -170,15 +172,16 @@ const App: React.FC = () => {
       })
       .then(resp => resp.json())
       .then(data => {
-        if(!data.data){
-          setChartData(data.data.findStock.dates)
+        console.log(data.data)
+        if(data.data.findDates !== null){
+          setChartData(data.data.findDates.dates)
         }
         
       });
     };
 
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
-      // console.log(ticker + ' ' + beginDate?.toLocaleDateString('en-US') + ' ' + endDate?.toLocaleDateString('en-US'));
+      console.log(ticker + ' ' + beginDate?.toLocaleDateString('en-US') + ' ' + endDate?.toLocaleDateString('en-US'));
       fetchSingleStock(ticker, beginDate, endDate);
     }
 
