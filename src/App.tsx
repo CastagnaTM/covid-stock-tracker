@@ -206,7 +206,7 @@ const fetchAllStock = (): void => {
 const App: React.FC = () => {
 
     const [state, setState] = useState({about: false});
-    const  [chartData, setChartData] = useState([]);
+    const  [chartData, setChartData] =  useState(null);
 
     
     const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => { 
@@ -236,10 +236,12 @@ const App: React.FC = () => {
       })
       .then(resp => resp.json())
       .then(data => {
-        console.log(data.data.findDates)
-        if(data.data.findDates !== null){
-          setChartData(data.data.findDates.dates)
+        let datesArr = [];
+        let arr = data.data.findDates.dates;
+        for (let i = 0; i < arr.length; ++i) {
+          arr[i]["name"] =  i+1;
         }
+          setChartData(arr);
       });
     };
 
@@ -272,7 +274,6 @@ const App: React.FC = () => {
 
 return (
   <div>
-    {console.log(chartData)}
       <Navigation>
         <Ul>
             <li> <NavButton onClick={() => setState({about: false})}> Covid Stock Tracker </NavButton> </li>
