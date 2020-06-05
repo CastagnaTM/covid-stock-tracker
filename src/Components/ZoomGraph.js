@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import {
-  Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea,
+  Label, Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea,
 } from 'recharts';
 
 export default class ZoomGraph extends PureComponent {
-  static jsfiddleUrl = 'https://jsfiddle.net/alidingling/nhpemhgs/';
 
   constructor(props) {
     super(props);
@@ -92,6 +91,10 @@ export default class ZoomGraph extends PureComponent {
       data, barIndex, left, right, refAreaLeft, refAreaRight, top, bottom, top2, bottom2,
     } = this.state;
 
+    const legendStyle = {
+      color: '#5e5e5e'
+    }
+
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
         <button
@@ -107,17 +110,20 @@ export default class ZoomGraph extends PureComponent {
                 width={800}
                 height={400}
                 data={this.state.data}
-                onMouseDown = { (e) => this.setState({refAreaLeft:e.activeLabel}) }
-                onMouseMove = { (e) => this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
+                onMouseDown = { (e) => {
+                console.log(e.activePayload[0].payload.name) 
+                this.setState({refAreaLeft:e.activePayload[0].payload.name})
+              } }
+                onMouseMove = { (e) => this.state.refAreaLeft && this.setState({refAreaRight:e.activePayload[0].payload.name}) }
                 onMouseUp = { this.zoom.bind( this ) }
               >
                 <CartesianGrid strokeDasharray="3 3"/>
                 {console.log(this.state.data)}
                 <XAxis 
                   allowDataOverflow={true}
-                  dataKey="name"
+                  dataKey="date"
                   domain={[this.state.left, this.state.right]}
-                  type="number"
+                  // type="number"
                 />
                 <YAxis 
                   allowDataOverflow={true}
@@ -132,7 +138,8 @@ export default class ZoomGraph extends PureComponent {
                   type="number"
                   yAxisId="2"
                  />  */}
-                <Tooltip/>
+                {/* <Tooltip/> */}
+                <Legend wrapperStyle={legendStyle}/>
                 <Line yAxisId="1" type='natural' dataKey='open_price' stroke='#8804d8' animationDuration={300} dot={false}/>
                 <Line yAxisId="1" type='natural' dataKey='close_price' stroke='#8084d8' animationDuration={300} dot={false}/>   
                 <Line yAxisId="1" type='natural' dataKey='low_price' stroke='#f45b5b' animationDuration={300} dot={false}/>   

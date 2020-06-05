@@ -265,9 +265,7 @@ const App: React.FC = () => {
       
     // }
 
-    const legendStyle = {
-      color: '#5e5e5e'
-    }
+    
     
     
 
