@@ -33,8 +33,8 @@ import { Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Reference
         right : 'dataMax',
         refAreaLeft : '',
         refAreaRight : '',
-        top : 'dataMax+1',
-        bottom : 'dataMin-1',
+        top : dataMax => (Math.floor(dataMax)+1),
+        bottom : dataMin => (Math.floor(dataMin)-1),
         top2 : 'dataMax+20',
         bottom2 : 'dataMin-20',
         animation : true
@@ -75,8 +75,8 @@ import { Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Reference
               [ refAreaLeft, refAreaRight ] = [ refAreaRight, refAreaLeft ];
   
           // yAxis domain
-      const [ bottom, top ] = this.getAxisYDomain( refAreaLeft, refAreaRight, 'cost', 1 );
-      const [ bottom2, top2 ] = this.getAxisYDomain( refAreaLeft, refAreaRight, 'impression', 50 );
+      const [ bottom, top ] = this.getAxisYDomain( refAreaLeft, refAreaRight, 'open_price', 1 );
+      const [ bottom2, top2 ] = this.getAxisYDomain( refAreaLeft, refAreaRight, 'close_price', 50 );
       
       this.setState( () => ({
         refAreaLeft : '',
@@ -110,6 +110,7 @@ import { Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Reference
 
         return (
           <div className="highlight-bar-charts">
+            {console.log(this.state.bottom)}
             <a
               href="javascript: void(0);"
               className="btn update"
@@ -150,10 +151,10 @@ import { Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Reference
                   yAxisId="2"
                  />  */}
                 <Tooltip/>
-                <Line yAxisId="1" type='natural' dataKey='open_price' stroke='#8884d8' animationDuration={300}/>
-                <Line yAxisId="1" type='natural' dataKey='close_price' stroke='#82ca9d' animationDuration={300}/>   
-                <Line yAxisId="1" type='natural' dataKey='low_price' stroke='#82ca9d' animationDuration={300}/>   
-                <Line yAxisId="1" type='natural' dataKey='high_price' stroke='#82ca9d' animationDuration={300}/>       
+                <Line yAxisId="1" type='natural' dataKey='open_price' stroke='#8804d8' animationDuration={300} dot={false}/>
+                <Line yAxisId="1" type='natural' dataKey='close_price' stroke='#8084d8' animationDuration={300} dot={false}/>   
+                <Line yAxisId="1" type='natural' dataKey='low_price' stroke='#f45b5b' animationDuration={300} dot={false}/>   
+                <Line yAxisId="1" type='natural' dataKey='high_price' stroke='#82ca9d' animationDuration={300} dot={false}/>       
      
                 
                 {
