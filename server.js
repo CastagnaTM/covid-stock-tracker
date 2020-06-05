@@ -72,7 +72,7 @@ app.use(
         type RootQuery {
             stocks: [Stock!]!,
             findStock(ticker: String): Stock,
-            findDates(ticker: String, endDate: String, startDate: String): Stock,
+            findDates(ticker: String, startDate: String, endDate: String): Stock,
         }
 
         type RootMutation {

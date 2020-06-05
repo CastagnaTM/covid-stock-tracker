@@ -209,10 +209,10 @@ const App: React.FC = () => {
     const  [chartData, setChartData] = useState([]);
 
     
-    const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
+    const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => { 
       const query = `
       query {
-        findDates(ticker: "${ticker}", startDate: "${beginDate?.toLocaleDateString('en-US')}", endDate: "${endDate?.toLocaleDateString('en-US')}"){
+        findDates(ticker: "${ticker}", startDate: "${beginDate?.toLocaleDateString('en')}", endDate: "${endDate?.toLocaleDateString('en')}"){ 
         ticker,
         dates {
           date,
@@ -236,7 +236,7 @@ const App: React.FC = () => {
       })
       .then(resp => resp.json())
       .then(data => {
-        console.log(data.data)
+        // console.log(data.data.findDates)
         if(data.data.findDates !== null){
           setChartData(data.data.findDates.dates)
         }
@@ -245,7 +245,15 @@ const App: React.FC = () => {
 
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
       // console.log(ticker + ' ' + beginDate?.toLocaleDateString('en-US') + ' ' + endDate?.toLocaleDateString('en-US'));
-      fetchSingleStock(ticker, beginDate, endDate);
+      // const dateTimeFormat = new Intl.DateTimeFormat('en', { month: '2-digit', day: '2-digit', year: 'numeric' }) 
+      // if (beginDate && endDate) {
+      //   const [{ value: startMonth },,{ value: startDay },,{ value: startYear }] = dateTimeFormat.formatToParts(beginDate);
+      //   const formattedStartDate = `${startMonth}/${startDay}/${startYear}`
+      //   const [{ value: endMonth },,{ value: endDay },,{ value: endYear }] = dateTimeFormat.formatToParts(endDate);
+      //   const formattedEndDate = `${endMonth}/${endDay}/${endYear}`
+      //   fetchSingleStock(ticker, formattedStartDate, formattedEndDate); 
+      // }
+      fetchSingleStock(ticker, beginDate, endDate); 
     }
 
     // testing tick formatter function to only return ticks for maybe 5 values
@@ -281,7 +289,7 @@ return (
               <GraphBox1>
 
                 <ResponsiveContainer >
-                  <ZoomGraph></ZoomGraph>
+                  <ZoomGraph data={chartData}></ZoomGraph>
                   {/* <LineChart
                     width = {800}
                     height={500}
