@@ -80,7 +80,7 @@ import { Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Reference
    }
 
    getAxisYDomain = (from, to, ref, offset) => {
-    const refData = this.props.data.slice(from-1, to);
+    const refData = this.state.data.slice(from-1, to);
     let [ bottom, top ] = [ refData[0][ref], refData[0][ref] ];
     refData.forEach( d => {
         if ( d[ref] > top ) top = d[ref];
@@ -134,61 +134,66 @@ import { Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Reference
     }
     
     render() {
-  
-      return (
-        <div className="highlight-bar-charts">
-          <a
-            href="javascript: void(0);"
-            className="btn update"
-            onClick={this.zoomOut.bind( this )}
-          >
-            Zoom Out
-          </a>
-  
-  
-          <p>Highlight / Zoom - able Line Chart</p>
-            <LineChart
-              width={800}
-              height={400}
-              data={this.state.data}
-              onMouseDown = { (e) => this.setState({refAreaLeft:e.activeLabel}) }
-              onMouseMove = { (e) => this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
-              onMouseUp = { this.zoom.bind( this ) }
+      if(!this.state){
+        return null
+      } else {
+
+        return (
+          <div className="highlight-bar-charts">
+            <a
+              href="javascript: void(0);"
+              className="btn update"
+              onClick={this.zoomOut.bind( this )}
             >
-              <CartesianGrid strokeDasharray="3 3"/>
-              <XAxis 
-                allowDataOverflow={true}
-                dataKey="name"
-                domain={[this.state.left, this.state.right]}
-                type="number"
-              />
-              <YAxis 
-                allowDataOverflow={true}
-                domain={[this.state.bottom, this.state.top]}
-                type="number"
-                yAxisId="1"
-               />
-              <YAxis 
-                orientation="right"
-                allowDataOverflow={true}
-                domain={[this.state.bottom2, this.state.top2]}
-                type="number"
-                yAxisId="2"
-               /> 
-              <Tooltip/>
-              <Line yAxisId="1" type='natural' dataKey='cost' stroke='#8884d8' animationDuration={300}/>
-              <Line yAxisId="2" type='natural' dataKey='impression' stroke='#82ca9d' animationDuration={300}/>
-              
-              {
-                  (this.state.refAreaLeft && this.state.refAreaRight) ? (
-                <ReferenceArea yAxisId="1" x1={this.state.refAreaLeft} x2={this.state.refAreaRight}  strokeOpacity={0.3} /> ) : null
-              
-              }
-              
-            </LineChart> 
+              Zoom Out
+            </a>
+    
+    
+            <p>Highlight / Zoom - able Line Chart</p>
+              <LineChart
+                width={800}
+                height={400}
+                data={this.state.data}
+                onMouseDown = { (e) => this.setState({refAreaLeft:e.activeLabel}) }
+                onMouseMove = { (e) => this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
+                onMouseUp = { this.zoom.bind( this ) }
+              >
+                <CartesianGrid strokeDasharray="3 3"/>
+                <XAxis 
+                  allowDataOverflow={true}
+                  dataKey="name"
+                  domain={[this.state.left, this.state.right]}
+                  type="number"
+                />
+                <YAxis 
+                  allowDataOverflow={true}
+                  domain={[this.state.bottom, this.state.top]}
+                  type="number"
+                  yAxisId="1"
+                 />
+                <YAxis 
+                  orientation="right"
+                  allowDataOverflow={true}
+                  domain={[this.state.bottom2, this.state.top2]}
+                  type="number"
+                  yAxisId="2"
+                 /> 
+                <Tooltip/>
+                <Line yAxisId="1" type='natural' dataKey='cost' stroke='#8884d8' animationDuration={300}/>
+                <Line yAxisId="2" type='natural' dataKey='impression' stroke='#82ca9d' animationDuration={300}/>
+                
+                {
+                    (this.state.refAreaLeft && this.state.refAreaRight) ? (
+                  <ReferenceArea yAxisId="1" x1={this.state.refAreaLeft} x2={this.state.refAreaRight}  strokeOpacity={0.3} /> ) : null
+                
+                }
+                
+              </LineChart> 
+    
+          </div>
+        );
+      }
   
-        </div>
-      );
     }
   }
   
