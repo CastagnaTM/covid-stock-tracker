@@ -236,7 +236,7 @@ const App: React.FC = () => {
       })
       .then(resp => resp.json())
       .then(data => {
-        // console.log(data.data.findDates)
+        console.log(data.data.findDates)
         if(data.data.findDates !== null){
           setChartData(data.data.findDates.dates)
         }
@@ -272,6 +272,7 @@ const App: React.FC = () => {
 
 return (
   <div>
+    {console.log(chartData)}
       <Navigation>
         <Ul>
             <li> <NavButton onClick={() => setState({about: false})}> Covid Stock Tracker </NavButton> </li>
