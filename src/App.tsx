@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {
-    Navigation, Ul, Button,
+    Navigation, Ul, NavButton,
     Main, ControlPanel, H1,
-    GraphContainer, Footer
+    GraphContainer, GraphBox1, GraphBox2, Footer
 } from './Components/Styles';
 import Filters from './Components/Filters'
 // import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
 import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import ZoomGraph from './Components/ZoomGraph';
 
 // let timer = setTimeout(callAPI, 2000);
 let counter = 0;
@@ -243,7 +244,7 @@ const App: React.FC = () => {
     };
 
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
-      console.log(ticker + ' ' + beginDate?.toLocaleDateString('en-US') + ' ' + endDate?.toLocaleDateString('en-US'));
+      // console.log(ticker + ' ' + beginDate?.toLocaleDateString('en-US') + ' ' + endDate?.toLocaleDateString('en-US'));
       fetchSingleStock(ticker, beginDate, endDate);
     }
 
@@ -257,14 +258,16 @@ const App: React.FC = () => {
     const legendStyle = {
       color: '#5e5e5e'
     }
+    
+    
 
 
 return (
   <div>
       <Navigation>
         <Ul>
-            <li> <Button onClick={() => setState({about: false})}> Covid Stock Tracker </Button> </li>
-            <li> <Button onClick={() => setState({about: true})}> About </Button> </li> 
+            <li> <NavButton onClick={() => setState({about: false})}> Covid Stock Tracker </NavButton> </li>
+            <li> <NavButton onClick={() => setState({about: true})}> About </NavButton> </li> 
         </Ul>
       </Navigation>
       <Main>
@@ -273,29 +276,35 @@ return (
         <H1>Control Panel</H1>
             <Filters getUserData={getUserData} ></Filters>
         </ControlPanel>
-          {chartData.length > 0 &&  
+          {/* {chartData.length > 0 &&   */}
             <GraphContainer> 
-              <ResponsiveContainer >
-                <LineChart
-                  width = {800}
-                  height={500}
-                  data={chartData}
-                
-                >
-                  <CartesianGrid/>
-                  <XAxis /> 
-                  <YAxis />
-                  <Tooltip />
-                  <Legend wrapperStyle={legendStyle}/>
-                  
-                  <Line type="monotone" dataKey ='open_price' stroke = "#8804d8" dot={false} />
-                  <Line type="monotone" dataKey ='close_price' stroke = "#8084d8" dot={false} />
-                  <Line type="monotone" dataKey ='low_price' stroke = "#f45b5b" dot={false} />
-                  <Line type="monotone" dataKey ='high_price' stroke = "#1db954" dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
+              <GraphBox1>
+
+                <ResponsiveContainer >
+                  <ZoomGraph></ZoomGraph>
+                  {/* <LineChart
+                    width = {800}
+                    height={500}
+                    data={chartData}
+                  >
+                    <CartesianGrid/>
+                    <XAxis /> 
+                    <YAxis />
+                    <Tooltip />
+                    <Legend wrapperStyle={legendStyle}/>
+                    
+                    <Line type="monotone" dataKey ='open_price' stroke = "#8804d8" dot={false} />
+                    <Line type="monotone" dataKey ='close_price' stroke = "#8084d8" dot={false} />
+                    <Line type="monotone" dataKey ='low_price' stroke = "#f45b5b" dot={false} />
+                    <Line type="monotone" dataKey ='high_price' stroke = "#1db954" dot={false} />
+                  </LineChart> */}
+                </ResponsiveContainer>
+              </GraphBox1>
+              <GraphBox2>
+                More Info
+              </GraphBox2>
             </GraphContainer>
-          }
+          {/* } */}
       </Main>
       <Footer>
 

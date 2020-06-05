@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+
 const variables = {
     palette: {
         grey: "#222",
@@ -34,7 +35,7 @@ export const Ul = styled.ul `
     list-style: none;
 `
 
-export const Button = styled.button`
+export const NavButton = styled.button`
     border: none;
     background-color: transparent;
     color: ${variables.liColor};
@@ -70,7 +71,7 @@ export const Main = styled.div`
     background-color: ${variables.palette.darkGrey}; 
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    height: 90vh;
 `
 
 export const ControlPanel = styled.div`
@@ -80,20 +81,28 @@ export const ControlPanel = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-evenly;
     box-sizing: border-box;
-    padding: 0.5em;
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        height: 500px;
+    }
 `
 
 export const H1 = styled.h1`
     font-size: xx-large;
     color: ${variables.palette.blue}; 
     margin: 0 auto;
+    // padding-top: 1em;
 `
 
 export const H4 = styled.h3`
     font-size: x-large;
     color: #2c8096; 
-    margin-bottom: 0;
+    margin: 0 auto;
     text-align: center;
 `
 
@@ -106,6 +115,24 @@ export const FormContainer = styled.div`
 export const GraphContainer = styled.div`
     width: 70%;
     height: 100%;
+    display: grid;
+    overflow: scroll;
+    grid-template-rows: 3fr 1fr;
+    grid-template-columns: 1fr 5fr 1fr;
+    grid-template-areas: 
+        " .   box1  . "
+        "box2 box2 box2";
+`
+
+export const GraphBox1 = styled.div`
+    grid-area: box1;
+    padding: 1em;
+`
+
+export const GraphBox2 = styled.div`
+    grid-area: box2;
+    text-align: center;
+    color: '#5e5e5e';
 `
 
 export const Footer = styled.footer`
