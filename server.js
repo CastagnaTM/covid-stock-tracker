@@ -163,8 +163,21 @@ app.use(
         return Stock.findOne({ ticker: args.ticker }) 
           .then((result) => {
             let data = result.dates
+            let endDate = new Date(args.endDate);
             let startIndex = data.findIndex(element => element.date === args.startDate) 
-            let endIndex = data.findIndex(element => element.date === args.endDate) + 1;
+            let endIndex = 0;
+            for (let i = 0; i < data.length; ++i) {
+              let date = new Date(data[i].date);
+              if (date > endDate) {
+                endIndex = i;
+                break;
+              }
+              else if (date === args.endDate) {
+                endIndex = i + 1;
+                break;
+              }              
+            }
+
             let slicedData = data.slice(startIndex, endIndex);
             result.dates = slicedData;
           console.log(result);            
