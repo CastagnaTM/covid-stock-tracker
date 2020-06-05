@@ -5,7 +5,6 @@ import { Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Reference
   
    componentDidMount = () => {
        this.setState({
-        data: this.props.data
         // [
         //   { name: 1, cost: 4.11, impression: 100 },
         //   { name: 2, cost: 2.39, impression: 120 },
@@ -28,7 +27,7 @@ import { Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Reference
         //   { name: 19, cost: 3, impression: 100 },
         //   { name: 20, cost: 7, impression: 100 }
         // ]
-        ,
+        
         left : 'dataMin',
         right : 'dataMax',
         refAreaLeft : '',
@@ -39,11 +38,23 @@ import { Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Reference
         bottom2 : 'dataMin-20',
         animation : true
       })
-      console.log("hello")
    }
 
+  //  componentDidUpdate = (prevProps) => {
+  //    if(this.props.data !== prevProps.data){
+  //      this.setState({ 
+  //        data: this.props.data 
+  //      })
+  //    }
+  //   this.showData();
+  //  }
+
+  //  showData = () => {
+  //    console.log(this.state.data ? this.state.data : "no" ) 
+  //  }
+
    getAxisYDomain = (from, to, ref, offset) => {
-    const refData = this.state.data.slice(from-1, to);
+    const refData = this.props.data.slice(from-1, to);
     let [ bottom, top ] = [ refData[0][ref], refData[0][ref] ];
     refData.forEach( d => {
         if ( d[ref] > top ) top = d[ref];
@@ -74,7 +85,7 @@ import { Label, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Reference
       this.setState( () => ({
         refAreaLeft : '',
         refAreaRight : '',
-          data : data.slice(),
+        data : data.slice(),
         left : refAreaLeft,
         right : refAreaRight,
         bottom, top, bottom2, top2
