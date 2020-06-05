@@ -10,15 +10,15 @@ export default class ZoomGraph extends PureComponent {
     super(props);
     this.state = {
       data: [],
-      left: 'dataMin',
-      right: 'dataMax',
-      refAreaLeft: '',
-      refAreaRight: '',
-      top: 'dataMax+1',
-      bottom: 'dataMin-1',
-      top2: 'dataMax+20',
-      bottom2: 'dataMin-20',
-      animation: true,
+      left : 'dataMin',
+      right : 'dataMax',
+      refAreaLeft : '',
+      refAreaRight : '',
+      top : dataMax => (Math.floor(dataMax)+1),
+      bottom : dataMin => (Math.floor(dataMin)-1),
+      top2 : dataMax => (Math.floor(dataMax)+20),
+      bottom2 : dataMin => (Math.floor(dataMin)-20),
+      animation : true
     };
   }
   static getDerivedStateFromProps(nextProps) {    
@@ -56,8 +56,8 @@ export default class ZoomGraph extends PureComponent {
     if (refAreaLeft > refAreaRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
 
     // yAxis domain
-    const [bottom, top] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'low_price', 1);
-    const [bottom2, top2] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'high_price', 50);
+    // const [bottom, top] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'low_price', 1);
+    // const [bottom2, top2] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'high_price', 50);
 
     this.setState(() => ({
       refAreaLeft: '',
@@ -65,10 +65,10 @@ export default class ZoomGraph extends PureComponent {
       data: data.slice(),
       left: refAreaLeft,
       right: refAreaRight,
-      bottom,
-      top,
-      bottom2,
-      top2,
+      // bottom,
+      // top,
+      // bottom2,
+      // top2,
     }));
   }
 
@@ -80,10 +80,10 @@ export default class ZoomGraph extends PureComponent {
       refAreaRight: '',
       left: 'dataMin',
       right: 'dataMax',
-      top: 'dataMax+1',
-      bottom: 'dataMin',
-      top2: 'dataMax+50',
-      bottom2: 'dataMin+50',
+      top : dataMax => (Math.floor(dataMax)+1),
+      bottom : dataMin => (Math.floor(dataMin)-1),
+      top2 : dataMax => (Math.floor(dataMax)+20),
+      bottom2 : dataMin => (Math.floor(dataMin)-20)
     }));
   }
 
@@ -133,11 +133,10 @@ export default class ZoomGraph extends PureComponent {
                   yAxisId="2"
                  />  */}
                 <Tooltip/>
-                <Line yAxisId="1" type='natural' dataKey='open_price' stroke='#8884d8' animationDuration={300}/>
-                <Line yAxisId="1" type='natural' dataKey='close_price' stroke='#82ca9d' animationDuration={300}/>
-                <Line yAxisId="1" type='natural' dataKey='low_price' stroke='#82ca9d' animationDuration={300}/>
-                <Line yAxisId="1" type='natural' dataKey='high_price' stroke='#82ca9d' animationDuration={300}/>
-
+                <Line yAxisId="1" type='natural' dataKey='open_price' stroke='#8804d8' animationDuration={300} dot={false}/>
+                <Line yAxisId="1" type='natural' dataKey='close_price' stroke='#8084d8' animationDuration={300} dot={false}/>   
+                <Line yAxisId="1" type='natural' dataKey='low_price' stroke='#f45b5b' animationDuration={300} dot={false}/>   
+                <Line yAxisId="1" type='natural' dataKey='high_price' stroke='#82ca9d' animationDuration={300} dot={false}/>     
 
                 {
                     (this.state.refAreaLeft && this.state.refAreaRight) ? (
