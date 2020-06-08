@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import {
   Label, Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea,
 } from 'recharts';
+import { mockComponent } from 'react-dom/test-utils';
 
 export default class ZoomGraph extends PureComponent {
 
@@ -39,6 +40,15 @@ export default class ZoomGraph extends PureComponent {
   
     return [(bottom | 0) - offset, (top | 0) + offset];
   };
+
+  convertToRealTime = (unixTimestamp)=> {
+    let milliseconds = unixTimestamp * 1000; // 1575909015000
+    let dateObject = new Date(milliseconds);
+    let humanDateFormat = dateObject.toLocaleString().split(",")[0];
+    return humanDateFormat;
+  };
+  
+ 
   
   zoom() {
     let { refAreaLeft, refAreaRight, data } = this.state;
@@ -111,19 +121,21 @@ export default class ZoomGraph extends PureComponent {
                 height={400}
                 data={this.state.data}
                 onMouseDown = { (e) => {
-                console.log(e.activePayload[0].payload.name) 
-                this.setState({refAreaLeft:e.activePayload[0].payload.name})
+                // console.log(e.activePayload[0].payload.name) 
+                this.setState({refAreaLeft:e.activeLabel})
               } }
-                onMouseMove = { (e) => this.state.refAreaLeft && this.setState({refAreaRight:e.activePayload[0].payload.name}) }
+                onMouseMove = { (e) => this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
                 onMouseUp = { this.zoom.bind( this ) }
               >
                 <CartesianGrid strokeDasharray="3 3"/>
                 {console.log(this.state.data)}
                 <XAxis 
                   allowDataOverflow={true}
-                  dataKey="date"
+                  dataKey="date_number"
+                  tickFormatter={(tick) => this.convertToRealTime(tick)}
+                  // tickFormatter= {(tick)=> "hello"}
                   domain={[this.state.left, this.state.right]}
-                  // type="number"
+                  type="number"
                 />
                 <YAxis 
                   allowDataOverflow={true}

@@ -240,7 +240,9 @@ const App: React.FC = () => {
         let arr = data.data.findDates.dates;
         for (let i = 0; i < arr.length; ++i) {
           arr[i]["name"] =  i+1;
+          arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() /1000
         }
+        console.log(arr)
           setChartData(arr);
       });
     };
