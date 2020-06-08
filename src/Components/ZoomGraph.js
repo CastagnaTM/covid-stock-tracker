@@ -112,8 +112,8 @@ export default class ZoomGraph extends PureComponent {
                 width={800}
                 height={400}
                 data={this.state.data}
-                onMouseDown = { (e) => this.setState({refAreaLeft:e.activeLabel})}
-                onMouseMove = { (e) => this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
+                onMouseDown = { (e) => e && this.setState({refAreaLeft:e.activeLabel})}
+                onMouseMove = { (e) => e && this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
                 onMouseUp = { this.zoom.bind( this ) }
               >
                 <CartesianGrid strokeDasharray="3 3"/>
