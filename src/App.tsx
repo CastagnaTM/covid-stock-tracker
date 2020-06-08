@@ -11,7 +11,7 @@ import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ZoomGraph from './Components/ZoomGraph';
-
+import { convertToRealTime } from './functions';
 // let timer = setTimeout(callAPI, 2000);
 let counter = 0;
 // left off at 285
@@ -165,13 +165,6 @@ const getStockData = (): void => {
   // });
 };
 
-const convertToRealTime = (unixTimestamp: number): string => {
-  let milliseconds = unixTimestamp * 1000; // 1575909015000
-  let dateObject = new Date(milliseconds);
-  let humanDateFormat = dateObject.toLocaleString().split(",")[0];
-  return humanDateFormat;
-};
-
 const fetchAllStock = (): void => {
     const query = `
     query {
@@ -236,13 +229,11 @@ const App: React.FC = () => {
       })
       .then(resp => resp.json())
       .then(data => {
-        let datesArr = [];
         let arr = data.data.findDates.dates;
         for (let i = 0; i < arr.length; ++i) {
           arr[i]["name"] =  i+1;
-          arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() /1000
+          arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
         }
-        console.log(arr)
           setChartData(arr);
       });
     };
