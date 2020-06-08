@@ -120,7 +120,7 @@ export default class ZoomGraph extends PureComponent {
                 <XAxis 
                   allowDataOverflow={true}
                   dataKey="date_number"
-                  tickFormatter={(tick) => convertToRealTime(tick)}
+                  tickFormatter={(tick) => convertToRealTime(tick, true)}
                   domain={[this.state.left, this.state.right]}
                   type="number"
                 />
