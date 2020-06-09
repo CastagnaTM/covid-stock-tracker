@@ -212,7 +212,7 @@ const fetchAllStock = (): void => {
 const App: React.FC = () => {
 
     const [state, setState] = useState({about: false});
-    const  [chartData, setChartData] =  useState(null);
+    const  [chartData, setChartData] =  useState([]);
     const [companyData,  setCompanyData] = useState(initialCompanyData);
 
     
@@ -284,28 +284,12 @@ return (
         <H1>Control Panel</H1>
             <Filters getUserData={getUserData} ></Filters>
         </ControlPanel>
-          {/* {chartData.length > 0 &&   */}
+          {chartData.length > 0 &&  
             <GraphContainer> 
               <GraphBox1>
 
                 <ResponsiveContainer >
                   <ZoomGraph data={chartData}></ZoomGraph>
-                  {/* <LineChart
-                    width = {800}
-                    height={500}
-                    data={chartData}
-                  >
-                    <CartesianGrid/>
-                    <XAxis /> 
-                    <YAxis />
-                    <Tooltip />
-                    <Legend wrapperStyle={legendStyle}/>
-                    
-                    <Line type="monotone" dataKey ='open_price' stroke = "#8804d8" dot={false} />
-                    <Line type="monotone" dataKey ='close_price' stroke = "#8084d8" dot={false} />
-                    <Line type="monotone" dataKey ='low_price' stroke = "#f45b5b" dot={false} />
-                    <Line type="monotone" dataKey ='high_price' stroke = "#1db954" dot={false} />
-                  </LineChart> */}
                 </ResponsiveContainer>
               </GraphBox1>
               <GraphBox2>
@@ -315,17 +299,13 @@ return (
                 <p>{companyData.phone}</p>
               </GraphBox2>
             </GraphContainer>
-          {/* } */}
+          }
       </Main>
       <Footer>
 
       </Footer>
   </div>
-  // <div>{getStockData()}
-  //   <div>{convertToRealTime(10)}</div>
-  //   <p>{tickers.length}</p>
-  // </div>
-    );
+  );
 };
 
 export default App;

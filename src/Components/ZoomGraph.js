@@ -3,7 +3,7 @@ import {
   Label, Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea,
 } from 'recharts';
 import { convertToRealTime } from '../functions';
-
+import { Ul } from './Styles';
 export default class ZoomGraph extends PureComponent {
 
   constructor(props) {
@@ -93,8 +93,9 @@ export default class ZoomGraph extends PureComponent {
     } = this.state;
 
     const legendStyle = {
-      color: '#5e5e5e'
+      color: '#FFFFFF'
     }
+    //recharts-default-legend
 
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
@@ -132,12 +133,34 @@ export default class ZoomGraph extends PureComponent {
                   yAxisId="1"
                   padding={{bottom: 8}}
                  />
-                <Tooltip  labelFormatter={(label) => convertToRealTime(label, true)}/>
-                <Legend wrapperStyle={legendStyle}/>
-                <Line yAxisId="1" type='natural' dataKey='open_price' stroke='#8804d8' animationDuration={300} />
-                <Line yAxisId="1" type='natural' dataKey='close_price' stroke='#8084d8' animationDuration={300} dot={false}/>   
-                <Line yAxisId="1" type='natural' dataKey='low_price' stroke='#f45b5b' animationDuration={300} dot={false}/>   
-                <Line yAxisId="1" type='natural' dataKey='high_price' stroke='#82ca9d' animationDuration={300} dot={false}/>     
+                <Tooltip labelFormatter={(label) => convertToRealTime(label, true)}/>
+                <Legend
+                  content ={(props)=> {
+                    const { payload } = props;
+                    return (
+                      <Ul>
+                        {
+                          payload.map((entry, index) => (
+
+                            <div style={{display: 'flex', flexDirection:'row', marginTop: '1rem'}}>
+                              <svg class="recharts-surface" width="20" height="20" style={{marginRight: '0.5rem', marginTop:'0.2rem'}} viewBox="0 0 32 32" version="1.1">
+                                <path fill={entry.color} class="recharts-symbols" transform="translate(16, 16)" d="M5.856406460551019,3.381197846482995L5.856406460551019,15.094010767585033L-5.856406460551019,15.094010767585033L-5.856406460551019,3.3811978464829937L-16,-2.475208614068025L-10.143593539448982,-12.618802153517008L4.440892098500626e-16,-6.762395692965988L10.143593539448982,-12.618802153517008L16,-2.475208614068025Z"></path>
+                              </svg>
+                              <li type="wfe"key={`item-${index}`}>{entry.value}</li>
+                            </div>
+                          ))
+                        }
+                      </Ul>
+                    );
+                  }} 
+                  iconSize={20} 
+                  iconType='wye' 
+                  wrapperStyle={legendStyle}
+                />
+                <Line yAxisId="1" type='natural' dataKey='open_price' name="Open Price" stroke='#8804d8' animationDuration={300} dot={false}/>
+                <Line yAxisId="1" type='natural' dataKey='close_price' name="Close Price" stroke='#8084d8' animationDuration={300} dot={false}/>   
+                <Line yAxisId="1" type='natural' dataKey='low_price' name="Low Price" stroke='#f45b5b' animationDuration={300} dot={false}/>   
+                <Line yAxisId="1" type='natural' dataKey='high_price' name="High Price" stroke='#82ca9d' animationDuration={300} dot={false}/>     
                 {
                     (this.state.refAreaLeft && this.state.refAreaRight) ? (
                   <ReferenceArea yAxisId="1" x1={this.state.refAreaLeft} x2={this.state.refAreaRight}  strokeOpacity={0.3} /> ) : null
