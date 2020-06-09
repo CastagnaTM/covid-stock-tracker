@@ -12,6 +12,7 @@ import CompanyInput from './Input/CompanyInput';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ZoomGraph from './Components/ZoomGraph';
 import { convertToRealTime } from './functions';
+import CovidDates from './Components/CovidDates'
 // let timer = setTimeout(callAPI, 2000);
 let counter = 0;
 // left off at 285
@@ -261,7 +262,7 @@ const App: React.FC = () => {
             arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
           }
             setChartData(arr);
-            setCompanyData(data.data.findDates.companyData);
+            // setCompanyData(data.data.findDates.companyData);
         });
       }
     };
@@ -293,10 +294,10 @@ return (
                 </ResponsiveContainer>
               </GraphBox1>
               <GraphBox2>
-                <p>Company: {companyData.name}</p>
+                {/* <p>Company: {companyData.name}</p>
                 <p>{companyData.country}</p>
                 <p>{companyData.ipo}</p>
-                <p>{companyData.phone}</p>
+                <p>{companyData.phone}</p> */}
               </GraphBox2>
             </GraphContainer>
           }
