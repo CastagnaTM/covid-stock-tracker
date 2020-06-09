@@ -195,7 +195,17 @@ const fetchAllStock = (): void => {
   };
   
   const initialCompanyData = {
-    name: ''
+    country: '',
+    currency: '',
+    exchange: '',
+    industry: '',
+    ipo: '',
+    market_capitalization: '',
+    logo: '',
+    name: '',
+    phone: '',
+    share_outstanding: '',
+    web_url: ''
   }
 
 
@@ -321,7 +331,10 @@ return (
                 </ResponsiveContainer>
               </GraphBox1>
               <GraphBox2>
-                <p>{companyData.name && companyData.name}</p>
+                <p>Company: {companyData.name}</p>
+                <p>{companyData.country}</p>
+                <p>{companyData.ipo}</p>
+                <p>{companyData.phone}</p>
               </GraphBox2>
             </GraphContainer>
           {/* } */}
