@@ -301,6 +301,7 @@ return (
               </GraphBox2>
             </GraphContainer>
           }
+          <CovidDates data={chartData}/>
       </Main>
       <Footer>
 
