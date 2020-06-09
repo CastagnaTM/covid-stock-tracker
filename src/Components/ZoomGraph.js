@@ -109,7 +109,7 @@ export default class ZoomGraph extends PureComponent {
         </button>
 
         <LineChart
-                width={800}
+                width={900}
                 height={400}
                 data={this.state.data}
                 onMouseDown = { (e) => e && this.setState({refAreaLeft:e.activeLabel})}
@@ -123,12 +123,15 @@ export default class ZoomGraph extends PureComponent {
                   tickFormatter={(tick) => convertToRealTime(tick, true)}
                   domain={[this.state.left, this.state.right]}
                   type="number"
+                  tickCount="7"
+                  
                 />
                 <YAxis 
                   allowDataOverflow={true}
                   domain={[this.state.bottom, this.state.top]}
                   type="number"
                   yAxisId="1"
+                  padding={{bottom: 8}}
                  />
                 {/* <YAxis 
                   orientation="right"
@@ -137,9 +140,9 @@ export default class ZoomGraph extends PureComponent {
                   type="number"
                   yAxisId="2"
                  />  */}
-                {/* <Tooltip/> */}
+                <Tooltip  labelFormatter={(label) => convertToRealTime(label, true)}/>
                 <Legend wrapperStyle={legendStyle}/>
-                <Line yAxisId="1" type='natural' dataKey='open_price' stroke='#8804d8' animationDuration={300} dot={false}/>
+                <Line yAxisId="1" type='natural' dataKey='open_price' stroke='#8804d8' animationDuration={300} />
                 <Line yAxisId="1" type='natural' dataKey='close_price' stroke='#8084d8' animationDuration={300} dot={false}/>   
                 <Line yAxisId="1" type='natural' dataKey='low_price' stroke='#f45b5b' animationDuration={300} dot={false}/>   
                 <Line yAxisId="1" type='natural' dataKey='high_price' stroke='#82ca9d' animationDuration={300} dot={false}/>     

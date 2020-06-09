@@ -4,7 +4,7 @@ import {
     Main, ControlPanel, H1,
     GraphContainer, GraphBox1, GraphBox2, Footer
 } from './Components/Styles';
-import Filters from './Components/Filters'
+import Filters from './Components/Filters';
 // import { useForm } from "react-hook-form";
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
 import DateInput from './Input/DateInput';
@@ -194,12 +194,16 @@ const fetchAllStock = (): void => {
     })
   };
   
+  const initialCompanyData = {
+    name: ''
+  }
 
 
 const App: React.FC = () => {
 
     const [state, setState] = useState({about: false});
     const  [chartData, setChartData] =  useState(null);
+    const [companyData,  setCompanyData] = useState(initialCompanyData);
 
     
     const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => { 
@@ -213,6 +217,19 @@ const App: React.FC = () => {
           high_price,
           open_price,
           close_price
+        },
+        companyData {
+          country,
+          currency,
+          exchange,
+          industry,
+          ipo,
+          market_capitalization,
+          logo,
+          name,
+          phone,
+          share_outstanding,
+          web_url
         }
       }
     
@@ -235,6 +252,8 @@ const App: React.FC = () => {
           arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
         }
           setChartData(arr);
+          console.log(data.data.findDates.companyData)
+          setCompanyData(data.data.findDates.companyData);
       });
     };
 
@@ -302,7 +321,7 @@ return (
                 </ResponsiveContainer>
               </GraphBox1>
               <GraphBox2>
-                More Info
+                <p>{companyData.name && companyData.name}</p>
               </GraphBox2>
             </GraphContainer>
           {/* } */}

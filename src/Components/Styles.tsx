@@ -132,7 +132,10 @@ export const GraphBox1 = styled.div`
 export const GraphBox2 = styled.div`
     grid-area: box2;
     text-align: center;
-    color: '#5e5e5e';
+    > p {
+        // color: '#5e5e5e';
+        color: white;
+    }
 `
 
 export const Footer = styled.footer`
