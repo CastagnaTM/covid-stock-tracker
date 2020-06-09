@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import {
   Label, Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea,
 } from 'recharts';
-import { mockComponent } from 'react-dom/test-utils';
 import { convertToRealTime } from '../functions';
 
 export default class ZoomGraph extends PureComponent {

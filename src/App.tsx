@@ -12,6 +12,7 @@ import CompanyInput from './Input/CompanyInput';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ZoomGraph from './Components/ZoomGraph';
 import { convertToRealTime } from './functions';
+import CovidDates from './Components/CovidDates'
 // let timer = setTimeout(callAPI, 2000);
 let counter = 0;
 // left off at 285
@@ -199,7 +200,7 @@ const fetchAllStock = (): void => {
 const App: React.FC = () => {
 
     const [state, setState] = useState({about: false});
-    const  [chartData, setChartData] =  useState(null);
+    const  [chartData, setChartData] =  useState([]);
 
     
     const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => { 
@@ -306,6 +307,7 @@ return (
               </GraphBox2>
             </GraphContainer>
           {/* } */}
+          <CovidDates data={chartData}/>
       </Main>
       <Footer>
 
