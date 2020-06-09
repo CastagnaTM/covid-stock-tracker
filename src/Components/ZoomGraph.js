@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import {
   Label, Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea,
 } from 'recharts';
-import { mockComponent } from 'react-dom/test-utils';
 import { convertToRealTime } from '../functions';
 
 export default class ZoomGraph extends PureComponent {
@@ -133,28 +132,18 @@ export default class ZoomGraph extends PureComponent {
                   yAxisId="1"
                   padding={{bottom: 8}}
                  />
-                {/* <YAxis 
-                  orientation="right"
-                  allowDataOverflow={true}
-                  domain={[this.state.bottom2, this.state.top2]}
-                  type="number"
-                  yAxisId="2"
-                 />  */}
                 <Tooltip  labelFormatter={(label) => convertToRealTime(label, true)}/>
                 <Legend wrapperStyle={legendStyle}/>
                 <Line yAxisId="1" type='natural' dataKey='open_price' stroke='#8804d8' animationDuration={300} />
                 <Line yAxisId="1" type='natural' dataKey='close_price' stroke='#8084d8' animationDuration={300} dot={false}/>   
                 <Line yAxisId="1" type='natural' dataKey='low_price' stroke='#f45b5b' animationDuration={300} dot={false}/>   
                 <Line yAxisId="1" type='natural' dataKey='high_price' stroke='#82ca9d' animationDuration={300} dot={false}/>     
-
                 {
                     (this.state.refAreaLeft && this.state.refAreaRight) ? (
                   <ReferenceArea yAxisId="1" x1={this.state.refAreaLeft} x2={this.state.refAreaRight}  strokeOpacity={0.3} /> ) : null
 
                 }
-
               </LineChart>
-
       </div>
     );
   }

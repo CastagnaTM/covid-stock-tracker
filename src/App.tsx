@@ -217,80 +217,58 @@ const App: React.FC = () => {
 
     
     const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => { 
-      const query = `
-      query {
-        findDates(ticker: "${ticker}", startDate: "${beginDate?.toLocaleDateString('en')}", endDate: "${endDate?.toLocaleDateString('en')}"){ 
-        ticker,
-        dates {
-          date,
-          low_price,
-          high_price,
-          open_price,
-          close_price
-        },
-        companyData {
-          country,
-          currency,
-          exchange,
-          industry,
-          ipo,
-          market_capitalization,
-          logo,
-          name,
-          phone,
-          share_outstanding,
-          web_url
+      if (ticker) {
+        const query = `
+        query {
+          findDates(ticker: "${ticker}", startDate: "${beginDate?.toLocaleDateString('en')}", endDate: "${endDate?.toLocaleDateString('en')}"){ 
+          ticker,
+          dates {
+            date,
+            low_price,
+            high_price,
+            open_price,
+            close_price
+          },
+          companyData {
+            country,
+            currency,
+            exchange,
+            industry,
+            ipo,
+            market_capitalization,
+            logo,
+            name,
+            phone,
+            share_outstanding,
+            web_url
+          }
         }
+      
+      }`
+        fetch(GRAPHQL_API, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: `application/json`,
+          },
+          body: JSON.stringify({ query }),
+        })
+        .then(resp => resp.json())
+        .then(data => {
+          let arr = data.data.findDates.dates;
+          for (let i = 0; i < arr.length; ++i) {
+            arr[i]["name"] =  i+1;
+            arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
+          }
+            setChartData(arr);
+            setCompanyData(data.data.findDates.companyData);
+        });
       }
-    
-    }
-      `
-      console.log(query)
-      fetch(GRAPHQL_API, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: `application/json`,
-        },
-        body: JSON.stringify({ query }),
-      })
-      .then(resp => resp.json())
-      .then(data => {
-        let arr = data.data.findDates.dates;
-        for (let i = 0; i < arr.length; ++i) {
-          arr[i]["name"] =  i+1;
-          arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
-        }
-          setChartData(arr);
-          console.log(data.data.findDates.companyData)
-          setCompanyData(data.data.findDates.companyData);
-      });
     };
 
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
-      // console.log(ticker + ' ' + beginDate?.toLocaleDateString('en-US') + ' ' + endDate?.toLocaleDateString('en-US'));
-      // const dateTimeFormat = new Intl.DateTimeFormat('en', { month: '2-digit', day: '2-digit', year: 'numeric' }) 
-      // if (beginDate && endDate) {
-      //   const [{ value: startMonth },,{ value: startDay },,{ value: startYear }] = dateTimeFormat.formatToParts(beginDate);
-      //   const formattedStartDate = `${startMonth}/${startDay}/${startYear}`
-      //   const [{ value: endMonth },,{ value: endDay },,{ value: endYear }] = dateTimeFormat.formatToParts(endDate);
-      //   const formattedEndDate = `${endMonth}/${endDay}/${endYear}`
-      //   fetchSingleStock(ticker, formattedStartDate, formattedEndDate); 
-      // }
       fetchSingleStock(ticker, beginDate, endDate); 
     }
-
-    // testing tick formatter function to only return ticks for maybe 5 values
-    // const chartDataTickFormatter = (chartData) => {
-    //   let returnData = [];
-    //   returnData[0] = chartData[0];
-      
-    // }
-
-    
-    
-    
-
 
 return (
   <div>
