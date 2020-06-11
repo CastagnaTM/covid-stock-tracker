@@ -133,6 +133,24 @@ export const GraphBox1 = styled.div`
     padding: 1em;
 `
 
+export const ZoomOutButton = styled.button`
+    width: 8em;
+    padding: 0.5em;
+    color: ${variables.palette.blue};
+    background-color: transparent;
+    border: solid 2px ${variables.palette.blue};
+    border-radius: 4px;
+    transition: all 500ms ease-in-out;
+
+    &:hover {
+        color: ${variables.palette.darkGrey};
+        background-color: ${variables.palette.blue};
+        border: solid 2px white;
+        transition: all 500ms ease-in-out;
+    }
+
+`
+
 export const GraphBox2 = styled.div`
     grid-area: box2;
     text-align: center;

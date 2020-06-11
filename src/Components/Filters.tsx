@@ -24,9 +24,11 @@ const useStyles = makeStyles((theme: Theme) =>
       background: "#1db954",
       marginTop: "1em",
       fontSize: "1.2rem",
+      transition: 'all 500ms ease-in-out',
       '&:hover': {
         background: "#059ac1",
-        color: "#0a0a0a"
+        color: "#0a0a0a",
+        transition: 'all 500ms ease-in-out'
       }
     },
     formControl: {
@@ -142,7 +144,7 @@ export const Filters: React.FC<Props> = (props) => {
           // style={style}
           onClick={() => props.getUserData(stock, startDate, endDate)}
         >
-        Save
+        Submit
       </Button>
       </FormContainer>
     </div>

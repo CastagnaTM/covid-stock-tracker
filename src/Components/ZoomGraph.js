@@ -3,7 +3,8 @@ import {
   Label, Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea,
 } from 'recharts';
 import { convertToRealTime } from '../functions';
-import { Ul } from './Styles';
+import { Ul, ZoomOutButton } from './Styles';
+
 export default class ZoomGraph extends PureComponent {
 
   constructor(props) {
@@ -99,14 +100,14 @@ export default class ZoomGraph extends PureComponent {
 
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
-        <button
+        <ZoomOutButton
           // href="javascript: void(0);"
-          className="btn update"
+          
           onClick={this.zoomOut.bind(this)}
         >
           Zoom Out
 
-        </button>
+        </ZoomOutButton>
 
         <LineChart
                 width={900}
