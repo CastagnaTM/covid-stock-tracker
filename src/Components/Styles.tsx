@@ -110,6 +110,10 @@ export const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    > div {
+        flex-direction: column;
+    }
 `
 
 export const GraphContainer = styled.div`
@@ -132,6 +136,7 @@ export const GraphBox1 = styled.div`
 export const GraphBox2 = styled.div`
     grid-area: box2;
     text-align: center;
+    font-size: large;
     > p {
         // color: '#5e5e5e';
         color: white;

@@ -262,13 +262,18 @@ const App: React.FC = () => {
             arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
           }
             setChartData(arr);
-            // setCompanyData(data.data.findDates.companyData);
+            setCompanyData(data.data.findDates.companyData);
         });
       }
     };
 
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
       fetchSingleStock(ticker, beginDate, endDate); 
+    }
+
+    const formatPhoneNumber = (phoneNumber: string) => {
+      return phoneNumber.charAt(0) + '+(' + phoneNumber.slice(1,4) + ')-('
+					+ phoneNumber.slice(4,7) + ')-(' + phoneNumber.slice(7) + ')'; 
     }
 
 return (
@@ -294,10 +299,10 @@ return (
                 </ResponsiveContainer>
               </GraphBox1>
               <GraphBox2>
-                {/* <p>Company: {companyData.name}</p>
-                <p>{companyData.country}</p>
-                <p>{companyData.ipo}</p>
-                <p>{companyData.phone}</p> */}
+                <p>Company: {companyData.name}</p>
+                <p>Country: {companyData.country}</p>
+                <p>IPO: {companyData.ipo}</p>
+                <p>Phone Number: {companyData.phone.length > 0 && formatPhoneNumber(companyData.phone)}</p>
               </GraphBox2>
             </GraphContainer>
           }
