@@ -182,8 +182,11 @@ export default class ZoomGraph extends PureComponent {
                         {
                           payload.map((entry, index) => (
                             <div style={{display: 'flex', flexDirection:'row', marginTop: '1rem'}}>
-                              <svg className="recharts-surface" width="20" height="20" style={{marginRight: '0.5rem', marginTop:'0.2rem'}} viewBox="0 0 32 32" version="1.1">
+                              {/* <svg className="recharts-surface" width="20" height="20" style={{marginRight: '0.5rem', marginTop:'0.2rem'}} viewBox="0 0 32 32" version="1.1">
                                 <path fill={entry.color} className="recharts-symbols" transform="translate(16, 16)" d="M5.856406460551019,3.381197846482995L5.856406460551019,15.094010767585033L-5.856406460551019,15.094010767585033L-5.856406460551019,3.3811978464829937L-16,-2.475208614068025L-10.143593539448982,-12.618802153517008L4.440892098500626e-16,-6.762395692965988L10.143593539448982,-12.618802153517008L16,-2.475208614068025Z"></path>
+                              </svg> */}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill={entry.color} d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                               </svg>
                               <li onClick={() => this.toggleLine(index)} type="wfe"key={`item-${index}`}>{entry.value}</li>
                             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { H4, FormContainer, FormDiv } from './Styles';
+import { H4, FormContainer, FormDiv, ErrorMessage } from './Styles';
 import { FormControl, InputLabel, FormHelperText, Select, MenuItem } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { tickers } from "../constants";
@@ -44,15 +44,8 @@ interface Props {
 export const Filters: React.FC<Props> = (props) => {
   // select functions
   const classes = useStyles();
-  const style = {
-    background: "#1db954",
-    marginTop: "1em",
-    fontSize: "1.2rem",
-    '&:hover': {
-      background: "#2c8096",
-    }
-  }
-  const [stock, setStock] = React.useState(''); 
+
+  const [stock, setStock] = React.useState<String | null>(null);  
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setStock(event.target.value as string);
@@ -62,7 +55,6 @@ export const Filters: React.FC<Props> = (props) => {
     return tickers.sort((a,b) => a.localeCompare(b)).map((ticker, key) => {
          return <MenuItem value={ticker} key={key}>{ticker}</MenuItem> 
     })
-    // return <MenuItem value={tickers[0]} key={1}>{tickers[0]}</MenuItem> 
   }
 
   //Date Picker Functions
@@ -75,16 +67,29 @@ export const Filters: React.FC<Props> = (props) => {
     new Date('2020-01-02'),
   );
 
+  const [errorMessage, setErrorMessage] = React.useState<String>('');
+
   const handleStartDateChange = (date: Date | null) => {
     setStartDate(date);
   };
 
   const handleEndDateChange = (date: Date | null) => {
     setEndDate(date);
-  };
+  }; 
+
+  const validateSubmit = (stock, startDate, endDate) => {
+    if(stock != null){
+      props.getUserData(stock, startDate, endDate)
+    } else {
+      // setErrorMessage('Please select a valid start and end date')
+      setErrorMessage('Please select a valid stock ticker')
+      console.log(startDate > endDate) 
+    }
+  }
 
   return (
-    <div> 
+    <div>
+      <ErrorMessage>{errorMessage}</ErrorMessage>  
       <H4> Select Stock </H4>
       <FormDiv>
         <FormControl className={classes.formControl}>
@@ -125,6 +130,7 @@ export const Filters: React.FC<Props> = (props) => {
               autoOk={true}
               format="MM/dd/yyyy"
               margin="normal"
+              minDate="2020-01-02"
               // id="date-picker-end"
               label="End Date"
               value={endDate}
@@ -141,8 +147,10 @@ export const Filters: React.FC<Props> = (props) => {
           size="large"
           className={classes.button}
           startIcon={<SaveIcon />}
-          // style={style}
-          onClick={() => props.getUserData(stock, startDate, endDate)}
+          onClick={() => 
+            // props.getUserData(stock, startDate, endDate) : setErrorMessage('Please select a valid start and end date')
+            validateSubmit(stock, startDate, endDate)
+          }
         >
         Submit
       </Button>

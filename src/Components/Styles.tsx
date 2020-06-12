@@ -1,16 +1,12 @@
 import styled from "styled-components";
 import { datePickerDefaultProps } from "@material-ui/pickers/constants/prop-types";
 
-const variables = {
-    palette: {
-        grey: "#222",
-        green: "#1db954",
-        red: "#f45b5b",
-        blue: "#2c8096",
-        darkGrey: "#0a0a0a"
-    },
-    liColor: "white"
-
+const palette = {
+    grey: "#222",
+    green: "#1db954",
+    red: "#f45b5b",
+    blue: "#2c8096",
+    darkGrey: "#0a0a0a"
 };
 
 export const Navigation = styled.nav`
@@ -19,7 +15,7 @@ export const Navigation = styled.nav`
     height: 80px;
     padding: 1em;
     width: 100%;
-    background-color: ${variables.palette.grey};
+    background-color: ${palette.grey};
     // display: flex;
     align-items: center;
 `
@@ -38,7 +34,7 @@ export const Ul = styled.ul `
 export const NavButton = styled.button`
     border: none;
     background-color: transparent;
-    color: ${variables.liColor};
+    color: white;
     padding: 0;
     font-size: large;
     letter-spacing: 0.12em;
@@ -54,13 +50,13 @@ export const NavButton = styled.button`
         height: 2px;
         bottom: 0;
         left: 0;
-        background-color: ${variables.palette.green};
+        background-color: ${palette.green};
         visibility: hidden;
         transition: all 0.3s ease-in-out;
     }
 
     &:hover:before, &:hover {
-        color: ${variables.palette.green};
+        color: ${palette.green};
         visibility: visible;
         width: 100%;
     }
@@ -68,7 +64,7 @@ export const NavButton = styled.button`
 `
 
 export const Main = styled.div`
-    background-color: ${variables.palette.darkGrey}; 
+    background-color: ${palette.darkGrey}; 
     display: flex;
     flex-direction: row;
     height: 90vh;
@@ -94,7 +90,7 @@ export const ControlPanel = styled.div`
 
 export const H1 = styled.h1`
     font-size: xx-large;
-    color: ${variables.palette.blue}; 
+    color: ${palette.blue}; 
     margin: 0 auto;
     // padding-top: 1em;
 `
@@ -106,10 +102,19 @@ export const H4 = styled.h3`
     text-align: center;
 `
 
+export const ErrorMessage = styled.p`
+    margin: 0 auto;
+    color: ${palette.red};
+    font-size: medium;
+    text-align: center;
+`
+
 export const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 90%;
+    margin: 0 auto; 
 
     > div {
         flex-direction: column;
@@ -136,15 +141,16 @@ export const GraphBox1 = styled.div`
 export const ZoomOutButton = styled.button`
     width: 8em;
     padding: 0.5em;
-    color: ${variables.palette.blue};
+    color: ${palette.blue};
     background-color: transparent;
-    border: solid 2px ${variables.palette.blue};
+    border: solid 2px ${palette.blue};
     border-radius: 4px;
+    margin-bottom: 4px;
     transition: all 500ms ease-in-out;
 
     &:hover {
-        color: ${variables.palette.darkGrey};
-        background-color: ${variables.palette.blue};
+        color: ${palette.darkGrey};
+        background-color: ${palette.blue};
         border: solid 2px white;
         transition: all 500ms ease-in-out;
     }
@@ -167,7 +173,7 @@ export const Footer = styled.footer`
    height: 80px;
    padding: 1em;
    width: 100%;
-   background-color: ${variables.palette.grey};
+   background-color: ${palette.grey};
 `
 
 export const FormDiv = styled.div`
