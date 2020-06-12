@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
-import {
-  Label, Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea,
-} from 'recharts';
+import { Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea } from 'recharts';
 import { convertToRealTime } from '../functions';
 import { Ul, ZoomOutButton, SVGDiv } from './Styles';
-
+import { significantDates } from '../constants';
 export default class ZoomGraph extends PureComponent {
 
   constructor(props) {
@@ -76,6 +74,19 @@ export default class ZoomGraph extends PureComponent {
       // top2,
     }));
   }
+  filterDates = () => {
+    // console.log(this.state.data);
+    // console.log(significantDates);
+    let filteredDates = significantDates.filter((date) => {
+      let unix = new Date(date.date).getTime() / 1000;
+      if (this.state.data.length > 1) {
+        if (unix <= this.state.data[this.state.data.length-1].date_number && unix >= this.state.data[0].date_number) {
+            return date;
+        }
+      }
+    });
+    return filteredDates;
+  };
 
   zoomOut() {
     const { data } = this.state;
@@ -126,9 +137,9 @@ export default class ZoomGraph extends PureComponent {
   }
 
   render() {
-    const {
-      data, barIndex, left, right, refAreaLeft, refAreaRight, top, bottom, top2, bottom2,
-    } = this.state;
+    // const {
+    //   data, barIndex, left, right, refAreaLeft, refAreaRight, top, bottom, top2, bottom2,
+    // } = this.state;
 
     const legendStyle = {
       color: '#FFFFFF'
@@ -165,11 +176,16 @@ export default class ZoomGraph extends PureComponent {
                   tickCount="7"convertToRealTime
                   onClick={(e)=> {
                     let time = convertToRealTime(e.value);
-                    // if (significantDates.contains(time) ) {
-                    //   console.log("popup modal");
-                    // }
+                    let filterDates = this.filterDates();
+                    debugger;
+                    if(filterDates){
+                      filterDates.forEach(filterDate => {
+                        if (filterDate.date === time) {
+                          console.log(filterDate.info);
+                        }
+                      })
                     }
-                  }
+                  }}
                 />
                 <YAxis 
                   allowDataOverflow={true}
@@ -215,7 +231,6 @@ export default class ZoomGraph extends PureComponent {
                 {
                     (this.state.refAreaLeft && this.state.refAreaRight) ? (
                   <ReferenceArea yAxisId="1" x1={this.state.refAreaLeft} x2={this.state.refAreaRight}  strokeOpacity={0.3} /> ) : null
-
                 }
               </LineChart>
       </div>
