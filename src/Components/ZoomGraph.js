@@ -167,7 +167,28 @@ export default class ZoomGraph extends PureComponent {
             tickFormatter={(tick) => convertToRealTime(tick, true)}
             domain={[this.state.left, this.state.right]}
             type="number"
-            tick={{fontSize: '1rem', fill: '#FFFFFF'}}
+            tick={props => {
+              const { payload } = props;
+              console.log(payload)
+              let something = convertToRealTime(payload.value,true)
+
+              return (
+                <text 
+                    width="830"
+                    height="30" 
+                    x= {payload.coordinate} 
+                    y="327.6666717529297" 
+                    stroke="none" 
+                    fill={significantDates[something] ? "yellow" : "white"} 
+                    font-size="1rem"  
+                    text-anchor="middle"
+                    >
+                    <tspan x={payload.coordinate} dy="0.71em">
+                            {something}
+                    </tspan>
+                    </text>
+              )
+            }}
             tickCount={7}
             onClick={(e)=> {
               let time = convertToRealTime(e.value);
