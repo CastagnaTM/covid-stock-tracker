@@ -162,8 +162,14 @@ export default class ZoomGraph extends PureComponent {
                   domain={[this.state.left, this.state.right]}
                   type="number"
                   tick={{fontSize: '1rem', fill: '#FFFFFF'}}
-                  tickCount="7"
-                  
+                  tickCount="7"convertToRealTime
+                  onClick={(e)=> {
+                    let time = convertToRealTime(e.value);
+                    // if (significantDates.contains(time) ) {
+                    //   console.log("popup modal");
+                    // }
+                    }
+                  }
                 />
                 <YAxis 
                   allowDataOverflow={true}
@@ -173,7 +179,10 @@ export default class ZoomGraph extends PureComponent {
                   tick={{fontSize: '1rem', fill: '#FFFFFF'}}
                   padding={{bottom: 8}}
                  />
-                <Tooltip labelFormatter={(label) => convertToRealTime(label, true)}/>
+                <Tooltip 
+                  labelFormatter={(label) => convertToRealTime(label, true)}
+                  // contentStyle={{fontSize: '1.2rem'}}
+                />
                 <Legend
                   content ={(props)=> {
                     const { payload } = props;
