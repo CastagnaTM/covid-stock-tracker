@@ -123,17 +123,6 @@ export default class ZoomGraph extends PureComponent {
     }
   }
 
-  filterDates = () => {
-    let returnObj = {}
-    Object.keys(significantDates).map(key =>{
-      let curUnix = new Date(key).getTime() / 1000;
-      if(curUnix <= this.props.data[this.props.data.length-1].date_number && curUnix >= this.props.data[0].date_number ){
-        returnObj[key] = significantDates[key]
-      }
-    })
-    return returnObj;
-  }
-
   render() {
     // const {
     //   data, barIndex, left, right, refAreaLeft, refAreaRight, top, bottom, top2, bottom2,
@@ -191,11 +180,10 @@ export default class ZoomGraph extends PureComponent {
             }}
             tickCount={7}
             onClick={(e)=> {
-              let time = convertToRealTime(e.value);
-              let filterDates = this.filterDates();
-              let content = filterDates[time];
-              if(content){  // also have to check if the content has multiple events
-                console.log(content);
+              let time = convertToRealTime(e.value, true);
+              
+              if(significantDates[time]){  // also have to check if the content has multiple events
+                console.log(significantDates[time]);
                 // pop up modal with the content 
               }
             }}
