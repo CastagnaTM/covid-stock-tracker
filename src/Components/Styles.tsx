@@ -157,6 +157,15 @@ export const ZoomOutButton = styled.button`
 
 `
 
+export const SVGDiv = styled.div`
+    display: flex; 
+    flex-direction: row;
+    margin-top: 1rem;
+    &:hover {
+        cursor: pointer
+    }
+`
+
 export const GraphBox2 = styled.div`
     grid-area: box2;
     text-align: center;

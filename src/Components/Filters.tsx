@@ -45,7 +45,7 @@ export const Filters: React.FC<Props> = (props) => {
   // select functions
   const classes = useStyles();
 
-  const [stock, setStock] = React.useState<String | null>(null);  
+  const [stock, setStock] = React.useState<String>('');  
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setStock(event.target.value as string);
@@ -78,12 +78,10 @@ export const Filters: React.FC<Props> = (props) => {
   }; 
 
   const validateSubmit = (stock, startDate, endDate) => {
-    if(stock != null){
+    if(stock.length > 0){
       props.getUserData(stock, startDate, endDate)
     } else {
-      // setErrorMessage('Please select a valid start and end date')
       setErrorMessage('Please select a valid stock ticker')
-      console.log(startDate > endDate) 
     }
   }
 
