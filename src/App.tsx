@@ -290,7 +290,7 @@ return (
         <H1>Control Panel</H1>
             <Filters getUserData={getUserData} ></Filters>
         </ControlPanel>
-          {chartData.length > 0 &&  
+          {/* {chartData.length > 0 &&   */}
             <GraphContainer> 
               <GraphBox1>
 
@@ -305,7 +305,7 @@ return (
                 <p>Phone Number: {companyData.phone.length > 0 && formatPhoneNumber(companyData.phone)}</p>
               </GraphBox2>
             </GraphContainer>
-          }
+          {/* } */}
           <CovidDates data={chartData}/>
       </Main>
       <Footer>

@@ -19,7 +19,11 @@ export default class ZoomGraph extends PureComponent {
       bottom : dataMin => (Math.floor(dataMin)-1),
       top2 : dataMax => (Math.floor(dataMax)+20),
       bottom2 : dataMin => (Math.floor(dataMin)-20),
-      animation : true
+      animation : true,
+      open: true,
+      close: true,
+      high: true,
+      low: true
     };
   }
   static getDerivedStateFromProps(nextProps) {    
@@ -88,6 +92,39 @@ export default class ZoomGraph extends PureComponent {
     }));
   }
 
+  toggleLine = (index) => {
+    switch (index) {
+      case 0:
+        this.setState({
+          open: !this.state.open
+        });
+        break;
+      case 1:
+        this.setState({
+          close: !this.state.close
+        });
+        break;
+      case 2:
+        this.setState({
+          low: !this.state.low
+        });
+        break;
+      case 3:
+        this.setState({
+          high: !this.state.high
+        });
+        break;
+      default:
+        this.setState({
+          open: true,
+          close: true,
+          low: true,
+          high: true
+        })
+        break;
+    }
+  }
+
   render() {
     const {
       data, barIndex, left, right, refAreaLeft, refAreaRight, top, bottom, top2, bottom2,
@@ -148,7 +185,7 @@ export default class ZoomGraph extends PureComponent {
                               <svg className="recharts-surface" width="20" height="20" style={{marginRight: '0.5rem', marginTop:'0.2rem'}} viewBox="0 0 32 32" version="1.1">
                                 <path fill={entry.color} className="recharts-symbols" transform="translate(16, 16)" d="M5.856406460551019,3.381197846482995L5.856406460551019,15.094010767585033L-5.856406460551019,15.094010767585033L-5.856406460551019,3.3811978464829937L-16,-2.475208614068025L-10.143593539448982,-12.618802153517008L4.440892098500626e-16,-6.762395692965988L10.143593539448982,-12.618802153517008L16,-2.475208614068025Z"></path>
                               </svg>
-                              <li type="wfe"key={`item-${index}`}>{entry.value}</li>
+                              <li onClick={() => this.toggleLine(index)} type="wfe"key={`item-${index}`}>{entry.value}</li>
                             </div>
                           ))
                         }
@@ -159,10 +196,10 @@ export default class ZoomGraph extends PureComponent {
                   iconType='wye' 
                   wrapperStyle={legendStyle}
                 />
-                <Line yAxisId="1" type='natural' dataKey='open_price' name="Open Price" stroke='#8804d8' animationDuration={300} dot={false}/>
-                <Line yAxisId="1" type='natural' dataKey='close_price' name="Close Price" stroke='#8084d8' animationDuration={300} dot={false}/>   
-                <Line yAxisId="1" type='natural' dataKey='low_price' name="Low Price" stroke='#f45b5b' animationDuration={300} dot={false}/>   
-                <Line yAxisId="1" type='natural' dataKey='high_price' name="High Price" stroke='#82ca9d' animationDuration={300} dot={false}/>     
+                <Line yAxisId="1" type='natural' dataKey='open_price' name="Open Price" stroke={this.state.open ? '#8804d8': 'transparent'} animationDuration={300} dot={false}/>
+                <Line yAxisId="1" type='natural' dataKey='close_price' name="Close Price" stroke={this.state.close ? '#8084d8' : 'transparent'} animationDuration={300} dot={false}/>   
+                <Line yAxisId="1" type='natural' dataKey='low_price' name="Low Price" stroke= {this.state.low ? '#f45b5b' : 'transparent'} animationDuration={300} dot={false}/>   
+                <Line yAxisId="1" type='natural' dataKey='high_price' name="High Price" stroke={this.state.high ? '#82ca9d' : 'transparent'} animationDuration={300} dot={false}/>     
                 {
                     (this.state.refAreaLeft && this.state.refAreaRight) ? (
                   <ReferenceArea yAxisId="1" x1={this.state.refAreaLeft} x2={this.state.refAreaRight}  strokeOpacity={0.3} /> ) : null
