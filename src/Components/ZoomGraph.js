@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea } from 'recharts';
 import { convertToRealTime } from '../functions';
-import { Ul, ZoomOutButton, SVGDiv } from './Styles';
+import { Ul, ZoomOutButton, SVGDiv, Modal } from './Styles';
 import { significantDates } from '../constants';
 export default class ZoomGraph extends PureComponent {
 
@@ -21,7 +21,8 @@ export default class ZoomGraph extends PureComponent {
       open: true,
       close: true,
       high: true,
-      low: true
+      low: true,
+      modal: false
     };
   }
   static getDerivedStateFromProps(nextProps) {    
@@ -123,6 +124,14 @@ export default class ZoomGraph extends PureComponent {
     }
   }
 
+  displayModal = () => {
+    return (
+      <Modal style={{position: "fixed", top: this.state.modalY, left: this.state.modalX}}>
+        {this.state.modalContent}
+      </Modal>
+    )
+  }
+
   render() {
     // const {
     //   data, barIndex, left, right, refAreaLeft, refAreaRight, top, bottom, top2, bottom2,
@@ -135,6 +144,7 @@ export default class ZoomGraph extends PureComponent {
 
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
+        {this.state.modal ? this.displayModal() : null}
         <ZoomOutButton
           onClick={this.zoomOut.bind(this)}
         >
@@ -158,7 +168,6 @@ export default class ZoomGraph extends PureComponent {
             type="number"
             tick={props => {
               const { payload } = props;
-              console.log(payload)
               let something = convertToRealTime(payload.value,true)
 
               return (
@@ -172,21 +181,40 @@ export default class ZoomGraph extends PureComponent {
                     font-size="1rem"  
                     text-anchor="middle"
                     >
-                    <tspan x={payload.coordinate} dy="0.71em">
+                    <tspan x={payload.coordinate} dy="0.71em"
+                      onMouseOver={(e)=> {
+          
+                        let time = convertToRealTime(e.value, true);
+                        
+                        if(significantDates[time]){  
+                          // also have to check if the content has multiple events
+                          console.log(significantDates[time]);
+                          this.setState({
+                            modal: true,
+                            modalY: "327.6666717529297",
+                            modalX: e.coordinate,
+                            modalContent: significantDates[time]
+                          })
+                          // pop up modal with the content 
+                        }
+                      }}
+                      onMouseLeave={ () => {
+                        this.state.modal &&
+                        this.setState({
+                          modal: false
+                        })
+                      }
+                      }
+                    >
                             {something}
                     </tspan>
                     </text>
               )
             }}
             tickCount={7}
-            onClick={(e)=> {
-              let time = convertToRealTime(e.value, true);
-              
-              if(significantDates[time]){  // also have to check if the content has multiple events
-                console.log(significantDates[time]);
-                // pop up modal with the content 
-              }
-            }}
+            
+
+            
           />
           <YAxis 
             allowDataOverflow={true}

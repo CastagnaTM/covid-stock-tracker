@@ -166,6 +166,11 @@ export const SVGDiv = styled.div`
     }
 `
 
+export const Modal = styled.div`
+    background-color: white;
+    text-align: center;
+`
+
 export const GraphBox2 = styled.div`
     grid-area: box2;
     text-align: center;
