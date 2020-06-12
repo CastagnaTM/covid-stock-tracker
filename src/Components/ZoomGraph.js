@@ -4,6 +4,7 @@ import {
 } from 'recharts';
 import { convertToRealTime } from '../functions';
 import { Ul, ZoomOutButton, SVGDiv } from './Styles';
+import {significantDates} from '../constants'
 
 export default class ZoomGraph extends PureComponent {
 
@@ -125,6 +126,18 @@ export default class ZoomGraph extends PureComponent {
     }
   }
 
+  filterDate = () => {
+    let returnObj = {}
+    Object.keys(significantDates).map(key =>{
+      let curUnix = new Date(key).getTime() / 1000;
+      if(curUnix <= this.props.data[this.props.data.length-1].date_number && curUnix >= this.props.data[0].date_number ){
+        returnObj[key] = significantDates[key]
+      }
+    })
+    console.log(returnObj)
+    return null;
+  }
+
   render() {
     const {
       data, barIndex, left, right, refAreaLeft, refAreaRight, top, bottom, top2, bottom2,
@@ -209,6 +222,7 @@ export default class ZoomGraph extends PureComponent {
 
                 }
               </LineChart>
+              {this.filterDate()}
       </div>
     );
   }

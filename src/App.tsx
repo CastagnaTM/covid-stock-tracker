@@ -12,7 +12,6 @@ import CompanyInput from './Input/CompanyInput';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ZoomGraph from './Components/ZoomGraph';
 import { convertToRealTime } from './functions';
-import CovidDates from './Components/CovidDates'
 // let timer = setTimeout(callAPI, 2000);
 let counter = 0;
 // left off at 285
@@ -276,21 +275,6 @@ const App: React.FC = () => {
 					+ phoneNumber.slice(4,7) + ')-(' + phoneNumber.slice(7) + ')'; 
     }
 
-    const filterDates = (data: any): any => {
-      // console.log(data);
-      // console.log(significantDates);
-      let filteredDates = significantDates.filter((date) => {
-        let unix = new Date(date.date).getTime() / 1000;
-        if (data.length > 1) {
-          if (unix <= data[data.length-1].date_number && unix >= data[0].date_number) {
-              return date;
-          }
-        }
-        
-      });
-      console.log(filteredDates)
-      return filterDates
-    };
 
 
 
@@ -325,7 +309,6 @@ return (
               </GraphBox2>
             </GraphContainer>
           }
-          {filterDates(chartData)}
       </Main>
       <Footer>
 
