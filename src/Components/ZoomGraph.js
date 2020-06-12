@@ -166,6 +166,27 @@ export default class ZoomGraph extends PureComponent {
             tickFormatter={(tick) => convertToRealTime(tick, true)}
             domain={[this.state.left, this.state.right]}
             type="number"
+            onMouseEnter={(e)=> {
+              let time = convertToRealTime(e.value, true);
+              if(significantDates[time]){  
+                // also have to check if the content has multiple events
+                console.log(significantDates[time]);
+                this.setState({
+                  modal: true,
+                  modalY: "327.6666717529297",
+                  modalX: e.coordinate,
+                  modalContent: significantDates[time]
+                })
+                // pop up modal with the content 
+              }
+            }}
+            onMouseLeave={ () => {
+              this.state.modal &&
+              this.setState({
+                modal: false
+              })
+            }
+            }
             tick={props => {
               const { payload } = props;
               let something = convertToRealTime(payload.value,true)
@@ -182,29 +203,7 @@ export default class ZoomGraph extends PureComponent {
                     text-anchor="middle"
                     >
                     <tspan x={payload.coordinate} dy="0.71em"
-                      onMouseOver={(e)=> {
           
-                        let time = convertToRealTime(e.value, true);
-                        
-                        if(significantDates[time]){  
-                          // also have to check if the content has multiple events
-                          console.log(significantDates[time]);
-                          this.setState({
-                            modal: true,
-                            modalY: "327.6666717529297",
-                            modalX: e.coordinate,
-                            modalContent: significantDates[time]
-                          })
-                          // pop up modal with the content 
-                        }
-                      }}
-                      onMouseLeave={ () => {
-                        this.state.modal &&
-                        this.setState({
-                          modal: false
-                        })
-                      }
-                      }
                     >
                             {something}
                     </tspan>
