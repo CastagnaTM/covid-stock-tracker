@@ -275,8 +275,6 @@ const App: React.FC = () => {
 					+ phoneNumber.slice(4,7) + ')-(' + phoneNumber.slice(7) + ')'; 
     }
 
-
-
 return (
   <div>
       <Navigation>

@@ -74,19 +74,6 @@ export default class ZoomGraph extends PureComponent {
       // top2,
     }));
   }
-  filterDates = () => {
-    // console.log(this.state.data);
-    // console.log(significantDates);
-    let filteredDates = significantDates.filter((date) => {
-      let unix = new Date(date.date).getTime() / 1000;
-      if (this.state.data.length > 1) {
-        if (unix <= this.state.data[this.state.data.length-1].date_number && unix >= this.state.data[0].date_number) {
-            return date;
-        }
-      }
-    });
-    return filteredDates;
-  };
 
   zoomOut() {
     const { data } = this.state;
@@ -136,6 +123,17 @@ export default class ZoomGraph extends PureComponent {
     }
   }
 
+  filterDates = () => {
+    let returnObj = {}
+    Object.keys(significantDates).map(key =>{
+      let curUnix = new Date(key).getTime() / 1000;
+      if(curUnix <= this.props.data[this.props.data.length-1].date_number && curUnix >= this.props.data[0].date_number ){
+        returnObj[key] = significantDates[key]
+      }
+    })
+    return returnObj;
+  }
+
   render() {
     // const {
     //   data, barIndex, left, right, refAreaLeft, refAreaRight, top, bottom, top2, bottom2,
@@ -149,90 +147,84 @@ export default class ZoomGraph extends PureComponent {
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
         <ZoomOutButton
-          // href="javascript: void(0);"
-          
           onClick={this.zoomOut.bind(this)}
         >
           Zoom Out
-
         </ZoomOutButton>
 
         <LineChart
-                width={900}
-                height={400}
-                data={this.state.data}
-                onMouseDown = { (e) => e && this.setState({refAreaLeft:e.activeLabel})}
-                onMouseMove = { (e) => e && this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
-                onMouseUp = { this.zoom.bind( this ) }
-              >
-                <CartesianGrid strokeDasharray="3 3"/>
-                <XAxis 
-                  allowDataOverflow={true}
-                  dataKey="date_number"
-                  tickFormatter={(tick) => convertToRealTime(tick, true)}
-                  domain={[this.state.left, this.state.right]}
-                  type="number"
-                  tick={{fontSize: '1rem', fill: '#FFFFFF'}}
-                  tickCount={7}
-                  onClick={(e)=> {
-                    let time = convertToRealTime(e.value);
-                    let filterDates = this.filterDates();
-                    debugger;
-                    if(filterDates){
-                      filterDates.forEach(filterDate => {
-                        if (filterDate.date === time) {
-                          console.log(filterDate.info);
-                        }
-                      })
-                    }
-                  }}
-                />
-                <YAxis 
-                  allowDataOverflow={true}
-                  domain={[this.state.bottom, this.state.top]}
-                  type="number"
-                  yAxisId="1"
-                  tick={{fontSize: '1rem', fill: '#FFFFFF'}}
-                  padding={{bottom: 8}}
-                 />
-                <Tooltip 
-                  labelFormatter={(label) => convertToRealTime(label, true)}
-                  // contentStyle={{fontSize: '1.2rem'}}
-                />
-                <Legend
-                  content ={(props)=> {
-                    const { payload } = props;
-                    return (
-                      <Ul>
-                        {
-                          payload.map((entry, index) => (
-                            <SVGDiv key={index} onClick={() => this.toggleLine(index)}>
-                              {/* <svg className="recharts-surface" width="20" height="20" style={{marginRight: '0.5rem', marginTop:'0.2rem'}} viewBox="0 0 32 32" version="1.1">
-                                <path fill={entry.color} className="recharts-symbols" transform="translate(16, 16)" d="M5.856406460551019,3.381197846482995L5.856406460551019,15.094010767585033L-5.856406460551019,15.094010767585033L-5.856406460551019,3.3811978464829937L-16,-2.475208614068025L-10.143593539448982,-12.618802153517008L4.440892098500626e-16,-6.762395692965988L10.143593539448982,-12.618802153517008L16,-2.475208614068025Z"></path>
-                              </svg> */}
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                <path fill={entry.color} d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
-                              </svg>
-                              <li key={`item-${index}`}>{entry.value}</li>
-                            </SVGDiv>
-                          ))
-                        }
-                      </Ul>
-                    );
-                  }} 
-                  iconSize={20} 
-                  iconType='wye' 
-                  wrapperStyle={legendStyle}
-                />
-                <Line yAxisId="1" type='natural' dataKey='open_price' name="Open Price" stroke={this.state.open ? '#8804d8': 'transparent'} animationDuration={300} dot={false}/>
-                <Line yAxisId="1" type='natural' dataKey='close_price' name="Close Price" stroke={this.state.close ? '#8084d8' : 'transparent'} animationDuration={300} dot={false}/>   
-                <Line yAxisId="1" type='natural' dataKey='low_price' name="Low Price" stroke= {this.state.low ? '#f45b5b' : 'transparent'} animationDuration={300} dot={false}/>   
-                <Line yAxisId="1" type='natural' dataKey='high_price' name="High Price" stroke={this.state.high ? '#82ca9d' : 'transparent'} animationDuration={300} dot={false}/>     
-                {
-                    (this.state.refAreaLeft && this.state.refAreaRight) ? (
-                  <ReferenceArea yAxisId="1" x1={this.state.refAreaLeft} x2={this.state.refAreaRight}  strokeOpacity={0.3} /> ) : null
-                }
-              </LineChart>
+          width={900}
+          height={400}
+          data={this.state.data}
+          onMouseDown = { (e) => e && this.setState({refAreaLeft:e.activeLabel})}
+          onMouseMove = { (e) => e && this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
+          onMouseUp = { this.zoom.bind( this ) }
+        >
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis 
+            allowDataOverflow={true}
+            dataKey="date_number"
+            tickFormatter={(tick) => convertToRealTime(tick, true)}
+            domain={[this.state.left, this.state.right]}
+            type="number"
+            tick={{fontSize: '1rem', fill: '#FFFFFF'}}
+            tickCount={7}
+            onClick={(e)=> {
+              let time = convertToRealTime(e.value);
+              let filterDates = this.filterDates();
+              let content = filterDates[time];
+              if(content){  // also have to check if the content has multiple events
+                console.log(content);
+                // pop up modal with the content 
+              }
+            }}
+          />
+          <YAxis 
+            allowDataOverflow={true}
+            domain={[this.state.bottom, this.state.top]}
+            type="number"
+            yAxisId="1"
+            tick={{fontSize: '1rem', fill: '#FFFFFF'}}
+            padding={{bottom: 8}}
+            />
+          <Tooltip 
+            labelFormatter={(label) => convertToRealTime(label, true)}
+            // contentStyle={{fontSize: '1.2rem'}}
+          />
+          <Legend
+            content ={(props)=> {
+              const { payload } = props;
+              return (
+                <Ul>
+                  {
+                    payload.map((entry, index) => (
+                      <SVGDiv key={index} onClick={() => this.toggleLine(index)}>
+                        {/* <svg className="recharts-surface" width="20" height="20" style={{marginRight: '0.5rem', marginTop:'0.2rem'}} viewBox="0 0 32 32" version="1.1">
+                          <path fill={entry.color} className="recharts-symbols" transform="translate(16, 16)" d="M5.856406460551019,3.381197846482995L5.856406460551019,15.094010767585033L-5.856406460551019,15.094010767585033L-5.856406460551019,3.3811978464829937L-16,-2.475208614068025L-10.143593539448982,-12.618802153517008L4.440892098500626e-16,-6.762395692965988L10.143593539448982,-12.618802153517008L16,-2.475208614068025Z"></path>
+                        </svg> */}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <path fill={entry.color} d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
+                        </svg>
+                        <li key={`item-${index}`}>{entry.value}</li>
+                      </SVGDiv>
+                    ))
+                  }
+                </Ul>
+              );
+            }} 
+            iconSize={20} 
+            iconType='wye' 
+            wrapperStyle={legendStyle}
+          />
+          <Line yAxisId="1" type='natural' dataKey='open_price' name="Open Price" stroke={this.state.open ? '#8804d8': 'transparent'} animationDuration={300} dot={false}/>
+          <Line yAxisId="1" type='natural' dataKey='close_price' name="Close Price" stroke={this.state.close ? '#8084d8' : 'transparent'} animationDuration={300} dot={false}/>   
+          <Line yAxisId="1" type='natural' dataKey='low_price' name="Low Price" stroke= {this.state.low ? '#f45b5b' : 'transparent'} animationDuration={300} dot={false}/>   
+          <Line yAxisId="1" type='natural' dataKey='high_price' name="High Price" stroke={this.state.high ? '#82ca9d' : 'transparent'} animationDuration={300} dot={false}/>     
+          {
+              (this.state.refAreaLeft && this.state.refAreaRight) ? (
+            <ReferenceArea yAxisId="1" x1={this.state.refAreaLeft} x2={this.state.refAreaRight}  strokeOpacity={0.3} /> ) : null
+          }
+        </LineChart>
       </div>
     );
   }
