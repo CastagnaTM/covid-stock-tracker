@@ -271,8 +271,8 @@ const App: React.FC = () => {
     }
 
     const formatPhoneNumber = (phoneNumber: string) => {
-      return phoneNumber.charAt(0) + '+(' + phoneNumber.slice(1,4) + ')-('
-					+ phoneNumber.slice(4,7) + ')-(' + phoneNumber.slice(7) + ')'; 
+      return "+" + phoneNumber.charAt(0) + '-(' + phoneNumber.slice(1,4) + ')-'
+					+ phoneNumber.slice(4,7) + "-" + phoneNumber.slice(7); 
     }
 
 return (
