@@ -173,7 +173,7 @@ export default class ZoomGraph extends PureComponent {
                   domain={[this.state.left, this.state.right]}
                   type="number"
                   tick={{fontSize: '1rem', fill: '#FFFFFF'}}
-                  tickCount="7"convertToRealTime
+                  tickCount={7}
                   onClick={(e)=> {
                     let time = convertToRealTime(e.value);
                     let filterDates = this.filterDates();
