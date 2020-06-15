@@ -154,12 +154,13 @@ export default class ZoomGraph extends PureComponent {
         <LineChart
           width={900}
           height={400}
+          margin={{right: 35, left: 25}}
           data={this.state.data}
           onMouseDown = { (e) => e && this.setState({refAreaLeft:e.activeLabel})}
           onMouseMove = { (e) => e && this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
           onMouseUp = { this.zoom.bind( this ) }
         >
-          <CartesianGrid strokeDasharray="3 3"/>
+          <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
             allowDataOverflow={true}
             dataKey="date_number"
@@ -188,25 +189,21 @@ export default class ZoomGraph extends PureComponent {
             }
             }
             tick={props => {
-              const { payload } = props;
+              const { payload,x,y } = props;
               let something = convertToRealTime(payload.value,true)
 
               return (
                 <text 
                     width="830"
                     height="30" 
-                    x= {payload.coordinate} 
-                    y="327.6666717529297" 
+                    x= {x} 
+                    y={y+10}
                     stroke="none" 
                     fill={significantDates[something] ? "yellow" : "white"} 
                     font-size="1rem"  
                     text-anchor="middle"
                     >
-                    <tspan x={payload.coordinate} dy="0.71em"
-          
-                    >
                             {something}
-                    </tspan>
                     </text>
               )
             }}
