@@ -126,7 +126,7 @@ export default class ZoomGraph extends PureComponent {
 
   displayModal = () => {
     return (
-      <Modal style={{position: "fixed", top: this.state.modalY, left: this.state.modalX}}>
+      <Modal style={{position: "fixed", top: this.state.modalY, left: this.state.modalX > 375 ? this.state.modalX : this.state.modalX+ 480}}>
         {this.state.modalContent}
       </Modal>
     )
@@ -168,10 +168,11 @@ export default class ZoomGraph extends PureComponent {
             domain={[this.state.left, this.state.right]}
             type="number"
             onMouseEnter={(e)=> {
+              console.log(e)
               let time = convertToRealTime(e.value, true);
               if(significantDates[time]){  
                 // also have to check if the content has multiple events
-                console.log(significantDates[time]);
+                // console.log(significantDates[time]);
                 this.setState({
                   modal: true,
                   modalY: "327.6666717529297",

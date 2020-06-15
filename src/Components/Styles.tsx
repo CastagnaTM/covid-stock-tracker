@@ -169,6 +169,8 @@ export const SVGDiv = styled.div`
 export const Modal = styled.div`
     background-color: white;
     text-align: center;
+    width: 500px;
+    height: auto;
 `
 
 export const GraphBox2 = styled.div`
