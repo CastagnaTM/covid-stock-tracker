@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea } from 'recharts';
 import { convertToRealTime } from '../functions';
-import { Ul, ZoomOutButton, SVGDiv, Modal } from './Styles';
+import { Ul, ZoomOutButton, SVGDiv, Modal, ModalHeader } from './Styles';
 import { significantDates } from '../constants';
+import DescriptionIcon from '@material-ui/icons/Description';
 export default class ZoomGraph extends PureComponent {
 
   constructor(props) {
@@ -127,7 +128,16 @@ export default class ZoomGraph extends PureComponent {
   displayModal = () => {
     return (
       <Modal style={{position: "fixed", top: this.state.modalY, left: this.state.modalX > 375 ? this.state.modalX : this.state.modalX+ 480}}>
-        {this.state.modalContent}
+        <div>
+          <ModalHeader>
+            <DescriptionIcon fontSize="large" style={{color: "#2c99b5"}}/> 
+            {this.state.modalDate}
+          </ModalHeader>
+          <p>On This Date:</p> 
+        </div>
+        <div className="article">
+          <article>{this.state.modalContent}</article>
+        </div>
       </Modal>
     )
   }
@@ -177,7 +187,8 @@ export default class ZoomGraph extends PureComponent {
                   modal: true,
                   modalY: "327.6666717529297",
                   modalX: e.coordinate,
-                  modalContent: significantDates[time]
+                  modalContent: significantDates[time],
+                  modalDate: time
                 })
                 // pop up modal with the content 
               }

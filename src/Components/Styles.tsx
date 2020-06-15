@@ -5,7 +5,7 @@ const palette = {
     grey: "#222",
     green: "#1db954",
     red: "#f45b5b",
-    blue: "#2c8096",
+    blue: "#2c99b5",
     darkGrey: "#0a0a0a"
 };
 
@@ -171,6 +171,38 @@ export const Modal = styled.div`
     text-align: center;
     width: 500px;
     height: auto;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   
+
+   > div {
+       padding: .2em;
+       width: 100%;
+       box-sizing: border-box;
+
+       > p { 
+           font-size: small;
+           text-align: left;
+           margin: 0;
+           margin-left: 2.4em; 
+        }
+
+       &.article {
+        background-color: #b9b9b9c9;
+    }
+   }
+`
+
+export const ModalHeader = styled.header`
+    display: flex;
+    // flex-direction: column;
+    align-items: center;
+    justify-content: left;
+    margin-left: 1em;
+
+   
 `
 
 export const GraphBox2 = styled.div`
@@ -178,7 +210,6 @@ export const GraphBox2 = styled.div`
     text-align: center;
     font-size: large;
     > p {
-        // color: '#5e5e5e';
         color: white;
     }
 `
