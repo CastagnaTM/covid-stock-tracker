@@ -223,3 +223,13 @@ export const FormDiv = styled.div`
     flex-direction: column;
     align-items: center;
 `
+
+export const DataColumn = styled.div`
+    float: left;
+    width: 50%;
+`
+
+export const CompanyStyle = styled.div`
+    // float: left;
+`
+

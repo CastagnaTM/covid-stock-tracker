@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {
     Navigation, Ul, NavButton,
     Main, ControlPanel, H1,
-    GraphContainer, GraphBox1, GraphBox2, Footer
+    GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn
 } from './Components/Styles';
 import Filters from './Components/Filters';
 // import { useForm } from "react-hook-form";
@@ -101,7 +101,6 @@ const inputCompanyData = (ticker: string, companyInput: CompanyInput) => {
     }
   }
   `
-  console.log(query)
   fetch(GRAPHQL_API, {
     method: "POST",
     headers: {
@@ -113,7 +112,6 @@ const inputCompanyData = (ticker: string, companyInput: CompanyInput) => {
     .then((resp) => resp.json())
     .then((data) => {
       if (tickers[counter]) {
-        console.log(data);
         setTimeout(() => getCompanyData(tickers[++counter]),2000);
       }
       else {
@@ -194,27 +192,13 @@ const fetchAllStock = (): void => {
       console.log(data)
     })
   };
-  
-  const initialCompanyData = {
-    country: '',
-    currency: '',
-    exchange: '',
-    industry: '',
-    ipo: '',
-    market_capitalization: '',
-    logo: '',
-    name: '',
-    phone: '',
-    share_outstanding: '',
-    web_url: ''
-  }
 
 
 const App: React.FC = () => {
 
     const [state, setState] = useState({about: false});
     const  [chartData, setChartData] =  useState([]);
-    const [companyData,  setCompanyData] = useState(initialCompanyData);
+    const [companyData,  setCompanyData] = useState({});
 
     
     const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => { 
@@ -290,13 +274,17 @@ return (
           {chartData.length > 0 &&  
             <GraphContainer> 
               <GraphBox1>
-
                 <ResponsiveContainer >
                   <ZoomGraph data={chartData}></ZoomGraph>
                 </ResponsiveContainer>
               </GraphBox1>
               <GraphBox2>
+                <DataColumn>
                 <CompanyData companyData={companyData}/>
+                </DataColumn>
+                <DataColumn>
+                  <p>this consist of more data :D</p>
+                </DataColumn>
               </GraphBox2>
             </GraphContainer>
           }

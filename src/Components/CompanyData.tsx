@@ -1,5 +1,6 @@
 
 import React from 'react';
+import {CompanyStyle} from './Styles'
 
 interface Props {
   companyData: Object
@@ -13,12 +14,16 @@ const formatPhoneNumber = (phoneNumber: string) => {
 function printingCompany(companyData): any{
   if(companyData){
     return (
-      <div>
-        <p>Company: {companyData.name}</p>
+      <CompanyStyle>
+        <p>Company: <a href={companyData.web_url}>{companyData.name}</a></p>
+        <p>Industry: {companyData.industry}</p>
+        <p>Currency: {companyData.currency}</p>
+        <p>Market Capitalization: {companyData.market_capitalization}</p>
+        <p>Share Outstanding: {companyData.share_outstanding}</p>
         <p>Country: {companyData.country}</p>
         <p>IPO: {companyData.ipo}</p>
-        <p>Phone Number: {companyData.phone.length > 0 && formatPhoneNumber(companyData.phone)}</p>
-      </div>
+        <p>Phone Number: {companyData.phone && formatPhoneNumber(companyData.phone)}</p>
+      </CompanyStyle>
     )
   }
 }
@@ -28,8 +33,6 @@ function CompanyData({companyData}: Props) {
   return (
     <div>
       {printingCompany(companyData)}
-        
-    
     </div>
   );
 }
