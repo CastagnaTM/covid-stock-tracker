@@ -19,14 +19,14 @@ import {
 
 
 interface Props {
-  getUserData(ticker: string, beginDate: Date | null, endDate: Date | null): void;
+  getUserData(ticker: string, beginDate: Date | null, endDate: Date | null, from: string): void;
   findStock(ticker: string): Promise<string>;
 }
 
 export const Filters: React.FC<Props> = (props) => {
   // select functions
  
-  const [stock, setStock] = useState<String>('');  
+  
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setStock(event.target.value as string);
@@ -44,6 +44,7 @@ export const Filters: React.FC<Props> = (props) => {
   const [endDate, setEndDate] = useState<Date | null>( new Date('2020-01-02'));
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [validTicker, setValidTicker] = useState<string>('default');
+  const [stock, setStock] = useState<String>('');  
   const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
@@ -82,7 +83,7 @@ export const Filters: React.FC<Props> = (props) => {
       if (endDate <= startDate){
         setErrorMessage('The End Date must be greater than the Start Date')
       } else {
-        props.getUserData(stock, startDate, endDate)
+        props.getUserData(stock, startDate, endDate, validTicker) 
         setErrorMessage('')
       }
     } else {
@@ -135,7 +136,7 @@ export const Filters: React.FC<Props> = (props) => {
               variant="inline"
               format="MM/dd/yyyy"
               margin="normal"
-              minDate="2020-01-01"
+              minDate="2019-01-01"
               // id="date-picker-start"
               label="Start Date"
               value={startDate}
@@ -165,7 +166,7 @@ export const Filters: React.FC<Props> = (props) => {
           variant="contained"
           color="primary"
           size="large"
-          // className={classes.button}
+          className={classes.button}
           startIcon={<SaveIcon />}
           onClick={() => 
             validateSubmit(stock, startDate, endDate)

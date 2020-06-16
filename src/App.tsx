@@ -256,8 +256,73 @@ const App: React.FC = () => {
       }
     };
 
-    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
-      fetchSingleStock(ticker, beginDate, endDate); 
+    const fetchFromFinnhub = (ticker, beginDate, endDate) => {
+      console.log(`before: ${beginDate}`)
+        beginDate = new Date(beginDate).getTime()/1000 - 3600;
+        endDate = new Date(endDate).getTime()/1000;
+        console.log(`after: ${beginDate}`)
+        fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate}&to=${endDate}&token=${finnhubKey}`)
+        .then((resp) => resp.json())
+        .then(({ c, h, l, o, t }) => {
+          const stock = c.map((value: number, index: number) => {
+            // let close_price = value;
+            // let high_price = h[index];
+            // let low_price = l[index];
+            // let open_price = o[index];
+            // let date = convertToRealTime(t[index]);
+            let dateObj = {};
+            dateObj["close_price"] = value;
+            dateObj["high_price"] = h[index];
+            dateObj["low_price"] = l[index];
+            dateObj["open_price"] = o[index];
+            dateObj["date_number"] = t[index];
+
+            // let dateInput = new DateInput(
+            //   date,
+            //   open_price,
+            //   close_price,
+            //   high_price,
+            //   low_price
+            // );
+            return dateObj;
+          });
+          setChartData(stock)
+        })
+    
+        .catch((error) => {
+          throw error;
+        });
+    };
+    //   beginDate = new Date(beginDate).getTime()/1000;
+    //   endDate = new Date(endDate).getTime()/1000;
+    //   fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate}&to=${endDate}&token=${finnhubKey}`)
+    //   .then(resp => resp.json())
+    //   .then(({ c, h, l, o, t }) => {
+    //     const stock = c.map((value: number, index: number) => {
+    //       let close_price = value;
+    //       let high_price = h[index];
+    //       let low_price = l[index];
+    //       let open_price = o[index];
+    //       let date = convertToRealTime(t[index]);
+    //       let dateInput = new DateInput(
+    //         date,
+    //         open_price,
+    //         close_price,
+    //         high_price,
+    //         low_price
+    //       );
+    //       return dateInput;
+    //     })
+
+    // }
+
+    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => {
+      if(from){
+        fetchFromFinnhub(ticker, beginDate, endDate)
+      }
+      else {
+        fetchSingleStock(ticker, beginDate, endDate);  
+      }
     }
 
     
