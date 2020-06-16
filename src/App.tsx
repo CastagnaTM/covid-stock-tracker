@@ -12,6 +12,7 @@ import CompanyInput from './Input/CompanyInput';
 import { ResponsiveContainer } from 'recharts';
 import ZoomGraph from './Components/ZoomGraph';
 import { convertToRealTime } from './functions';
+import CompanyData from './Components/CompanyData'
 // let timer = setTimeout(callAPI, 2000);
 let counter = 0;
 // left off at 285
@@ -270,10 +271,7 @@ const App: React.FC = () => {
       fetchSingleStock(ticker, beginDate, endDate); 
     }
 
-    const formatPhoneNumber = (phoneNumber: string) => {
-      return "+" + phoneNumber.charAt(0) + '-(' + phoneNumber.slice(1,4) + ')-'
-					+ phoneNumber.slice(4,7) + "-" + phoneNumber.slice(7); 
-    }
+    
 
 return (
   <div>
@@ -298,10 +296,7 @@ return (
                 </ResponsiveContainer>
               </GraphBox1>
               <GraphBox2>
-                <p>Company: {companyData.name}</p>
-                <p>Country: {companyData.country}</p>
-                <p>IPO: {companyData.ipo}</p>
-                <p>Phone Number: {companyData.phone.length > 0 && formatPhoneNumber(companyData.phone)}</p>
+                <CompanyData companyData={companyData}/>
               </GraphBox2>
             </GraphContainer>
           }

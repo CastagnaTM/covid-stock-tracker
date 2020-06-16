@@ -211,7 +211,7 @@ export const GraphBox2 = styled.div`
     grid-area: box2;
     text-align: center;
     font-size: large;
-    > p {
+    > div p {
         color: white;
     }
 `

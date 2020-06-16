@@ -4,7 +4,7 @@ import { convertToRealTime } from '../functions';
 import { Ul, ZoomOutButton, SVGDiv, Modal, ModalHeader } from './Styles';
 import { significantDates } from '../constants';
 import DescriptionIcon from '@material-ui/icons/Description';
-// import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@material-ui/icons/Info';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 export default class ZoomGraph extends PureComponent {
 
@@ -132,7 +132,7 @@ export default class ZoomGraph extends PureComponent {
       <Modal style={{position: "fixed", top: this.state.modalY, left: this.state.modalX > 375 ? this.state.modalX : this.state.modalX+ 480}}>
         <div>
           <ModalHeader>
-            <DescriptionIcon fontSize="large" style={{color: "#2c99b5"}}/> 
+            <InfoIcon fontSize="large" style={{color: "#2c99b5"}}/> 
             {this.state.modalDate}
           </ModalHeader>
           <p>On This Date:</p> 
