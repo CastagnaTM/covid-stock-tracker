@@ -141,7 +141,8 @@ export const GraphBox1 = styled.div`
 export const ZoomOutButton = styled.button`
     display: flex;
     align-items: center;
-    width: 8em;
+    min-height: 42px;
+    min-width: 108px;
     padding: 0.5em;
     color: ${palette.blue};
     background-color: transparent;
@@ -184,13 +185,6 @@ export const Modal = styled.div`
        width: 100%;
        box-sizing: border-box;
 
-       > p { 
-           font-size: small;
-           text-align: left;
-           margin: 0;
-           margin-left: 2.4em; 
-        }
-
        &.article {
         background-color: #b9b9b9c9;
     }
@@ -203,8 +197,7 @@ export const ModalHeader = styled.header`
     align-items: center;
     justify-content: left;
     margin-left: 1em;
-
-   
+   font-size: medium;
 `
 
 export const GraphBox2 = styled.div`
