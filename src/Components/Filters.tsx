@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { H4, FormContainer, FormDiv, ErrorMessage } from './Styles';
 import { FormControl, InputLabel, FormHelperText, Select, MenuItem } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -6,46 +6,27 @@ import { tickers } from "../constants";
 import 'date-fns';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
+import Button from '@material-ui/core/Button';
+import SaveIcon from '@material-ui/icons/Save';
+import TextField from '@material-ui/core/TextField';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import Button from '@material-ui/core/Button';
-import SaveIcon from '@material-ui/icons/Save';
 
 // import Select from "./Select"
 // import DatePicker from './DatePicker'
 
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      margin: theme.spacing(1),
-      background: "#1db954",
-      marginTop: "1em",
-      fontSize: "1.2rem",
-      transition: 'all 500ms ease-in-out',
-      '&:hover': {
-        background: "#059ac1",
-        color: "#0a0a0a",
-        transition: 'all 500ms ease-in-out'
-      }
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120    
-    }})
-)
-
 interface Props {
-  getUserData(ticker: string, beginDate: Date | null, endDate: Date | null): void; 
+  getUserData(ticker: string, beginDate: Date | null, endDate: Date | null): void;
+  findStock(ticker: string): Promise<string>;
 }
 
 export const Filters: React.FC<Props> = (props) => {
   // select functions
-  const classes = useStyles();
-
-  const [stock, setStock] = React.useState<String>('');  
+ 
+  const [stock, setStock] = useState<String>('');  
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setStock(event.target.value as string);
@@ -59,16 +40,35 @@ export const Filters: React.FC<Props> = (props) => {
 
   //Date Picker Functions
 
-  const [startDate, setStartDate] = React.useState<Date | null>(
-    new Date('2020-01-01'),
-  );
-
-  const [endDate, setEndDate] = React.useState<Date | null>(
-    new Date('2020-01-02'),
-  );
-
-  const [errorMessage, setErrorMessage] = React.useState<String>('');
-
+  const [startDate, setStartDate] = useState<Date | null>( new Date('2020-01-01'));
+  const [endDate, setEndDate] = useState<Date | null>( new Date('2020-01-02'));
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [validTicker, setValidTicker] = useState<string>('default');
+  const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    button: {
+      margin: theme.spacing(1),
+      background: "#1db954",
+      marginTop: "1em",
+      fontSize: "1.2rem",
+      transition: 'all 500ms ease-in-out',
+      '&:hover': {
+        background: "#059ac1",
+        color: "#0a0a0a",
+        transition: 'all 500ms ease-in-out'
+      }
+    },
+    root: {
+      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+        borderColor: validTicker === 'default'? 'pink' : (validTicker ? "green" : "red")
+      }
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120    
+    }})
+  )
+  const classes = useStyles();
   const handleStartDateChange = (date: Date | null) => {
     setStartDate(date);
   };
@@ -92,6 +92,23 @@ export const Filters: React.FC<Props> = (props) => {
 
   return (
     <div>
+      <TextField 
+        id="outlined-search" 
+        label="Search Ticker" 
+        type="search" 
+        variant="outlined" 
+        className={classes.root}
+        onChange={(e) => {
+          if (e.target.value.length === 0) setValidTicker('default');
+          if (e.target.value.length > 0 && e.target.value.length <= 5) {
+            props.findStock(e.target.value).then(ticker => {
+              setValidTicker(ticker);
+              setStock(ticker);
+            });
+
+          } 
+        }}
+      />
       <ErrorMessage>{errorMessage}</ErrorMessage>  
       <H4> Select Stock </H4>
       <FormDiv>
@@ -144,14 +161,13 @@ export const Filters: React.FC<Props> = (props) => {
             />
           </Grid>
         </MuiPickersUtilsProvider>
-        <Button
+        <Button // condition make sure that stock exists error handling
           variant="contained"
           color="primary"
           size="large"
-          className={classes.button}
+          // className={classes.button}
           startIcon={<SaveIcon />}
           onClick={() => 
-            // props.getUserData(stock, startDate, endDate) : setErrorMessage('Please select a valid start and end date')
             validateSubmit(stock, startDate, endDate)
           }
         >
@@ -161,7 +177,5 @@ export const Filters: React.FC<Props> = (props) => {
     </div>
   );
 }
-
-// onClick={() => Props.getUserData(stock, startDate, endDate)}
 
 export default Filters;
