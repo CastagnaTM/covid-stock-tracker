@@ -4,6 +4,8 @@ import { convertToRealTime } from '../functions';
 import { Ul, ZoomOutButton, SVGDiv, Modal, ModalHeader } from './Styles';
 import { significantDates } from '../constants';
 import DescriptionIcon from '@material-ui/icons/Description';
+// import InfoIcon from '@material-ui/icons/Info';
+import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 export default class ZoomGraph extends PureComponent {
 
   constructor(props) {
@@ -54,10 +56,10 @@ export default class ZoomGraph extends PureComponent {
         refAreaLeft: '',
         refAreaRight: '',
       }));
-      return;
     }
 
     // xAxis domain
+    // this line specifically allows the highlight to work right to left
     if (refAreaLeft > refAreaRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
 
     // yAxis domain
@@ -158,8 +160,10 @@ export default class ZoomGraph extends PureComponent {
         <ZoomOutButton
           onClick={this.zoomOut.bind(this)}
         >
+          <ZoomOutIcon/>
           Zoom Out
         </ZoomOutButton>
+     
 
         <LineChart
           width={900}
@@ -178,7 +182,7 @@ export default class ZoomGraph extends PureComponent {
             domain={[this.state.left, this.state.right]}
             type="number"
             onMouseEnter={(e)=> {
-              console.log(e)
+              
               let time = convertToRealTime(e.value, true);
               if(significantDates[time]){  
                 // also have to check if the content has multiple events

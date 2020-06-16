@@ -139,6 +139,8 @@ export const GraphBox1 = styled.div`
 `
 
 export const ZoomOutButton = styled.button`
+    display: flex;
+    align-items: center;
     width: 8em;
     padding: 0.5em;
     color: ${palette.blue};
