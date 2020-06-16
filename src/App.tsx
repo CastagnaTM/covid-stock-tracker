@@ -193,7 +193,12 @@ const fetchAllStock = (): void => {
       console.log(data)
     })
   };
-  
+  const findStock = async (ticker: string): Promise<string> => {
+    let data = await fetch(`${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`)
+    .then(resp => resp.json())
+    .then(data => Object.keys(data).length > 0 ? ticker: "")
+    return data;
+  }   
   const initialCompanyData = {
     country: '',
     currency: '',
@@ -285,9 +290,8 @@ return (
       </Navigation>
       <Main>
         <ControlPanel>
-          {/* {getStockData()} */}
         <H1>Control Panel</H1>
-            <Filters getUserData={getUserData} ></Filters>
+            <Filters findStock={findStock} getUserData={getUserData} ></Filters>
         </ControlPanel>
           {chartData.length > 0 &&  
             <GraphContainer> 
