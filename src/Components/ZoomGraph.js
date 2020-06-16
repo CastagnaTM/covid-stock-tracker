@@ -3,8 +3,8 @@ import { Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Referenc
 import { convertToRealTime } from '../functions';
 import { Ul, ZoomOutButton, SVGDiv, Modal, ModalHeader } from './Styles';
 import { significantDates } from '../constants';
-import DescriptionIcon from '@material-ui/icons/Description';
-// import InfoIcon from '@material-ui/icons/Info';
+// import DescriptionIcon from '@material-ui/icons/Description';
+import InfoIcon from '@material-ui/icons/Info';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 export default class ZoomGraph extends PureComponent {
 
@@ -126,16 +126,16 @@ export default class ZoomGraph extends PureComponent {
         break;
     }
   }
-
+  //  top: this.state.modalY
   displayModal = () => {
     return (
-      <Modal style={{position: "fixed", top: this.state.modalY, left: this.state.modalX > 375 ? this.state.modalX : this.state.modalX+ 480}}>
+      <Modal style={{position: "fixed", top: 510, left: this.state.modalX > 375 ? this.state.modalX : this.state.modalX+ 480}}>
         <div>
           <ModalHeader>
-            <DescriptionIcon fontSize="large" style={{color: "#2c99b5"}}/> 
-            {this.state.modalDate}
+            <InfoIcon fontSize="large" style={{color: "#2c99b5"}}/> 
+            <p>On This Date,&nbsp;</p> 
+            {this.state.modalDate + ':'}
           </ModalHeader>
-          <p>On This Date:</p> 
         </div>
         <div className="article">
           <article>{this.state.modalContent}</article>
@@ -157,12 +157,18 @@ export default class ZoomGraph extends PureComponent {
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
         {this.state.modal ? this.displayModal() : null}
-        <ZoomOutButton
-          onClick={this.zoomOut.bind(this)}
-        >
+        {this.state.left === 'dataMin' && this.state.right === 'dataMax' 
+        ? 
+          <ZoomOutButton style={{opacity: '0'}}></ZoomOutButton>
+        : 
+          <ZoomOutButton
+            onClick={this.zoomOut.bind(this)}
+          >
           <ZoomOutIcon/>
           Zoom Out
-        </ZoomOutButton>
+          </ZoomOutButton>
+          
+      }
      
 
         <LineChart
