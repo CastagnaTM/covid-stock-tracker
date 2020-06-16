@@ -3,7 +3,6 @@ import { Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Referenc
 import { convertToRealTime } from '../functions';
 import { Ul, ZoomOutButton, SVGDiv, Modal, ModalHeader } from './Styles';
 import { significantDates } from '../constants';
-// import DescriptionIcon from '@material-ui/icons/Description';
 import InfoIcon from '@material-ui/icons/Info';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 export default class ZoomGraph extends PureComponent {
@@ -37,8 +36,7 @@ export default class ZoomGraph extends PureComponent {
     console.log("FROM", from, "TO", to);
 
     const refData = this.state.data.slice(from - 1, to);
-    // console.log("REFDATA",refData);
-    // console.log("DATA",this.state.data);
+    
     let [bottom, top] = [refData[0][ref], refData[0][ref]];
     refData.forEach((d) => {
       if (d[ref] > top) top = d[ref];
@@ -72,10 +70,6 @@ export default class ZoomGraph extends PureComponent {
       data: data.slice(),
       left: refAreaLeft,
       right: refAreaRight,
-      // bottom,
-      // top,
-      // bottom2,
-      // top2,
     }));
   }
 
@@ -126,7 +120,7 @@ export default class ZoomGraph extends PureComponent {
         break;
     }
   }
-  //  top: this.state.modalY
+  
   displayModal = () => {
     return (
       <Modal style={{position: "fixed", top: 510, left: this.state.modalX > 375 ? this.state.modalX : this.state.modalX+ 480}}>
@@ -145,15 +139,11 @@ export default class ZoomGraph extends PureComponent {
   }
 
   render() {
-    // const {
-    //   data, barIndex, left, right, refAreaLeft, refAreaRight, top, bottom, top2, bottom2,
-    // } = this.state;
-
+    
     const legendStyle = {
       color: '#FFFFFF'
     }
-    //recharts-default-legend
-
+    
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
         {this.state.modal ? this.displayModal() : null}
@@ -244,7 +234,7 @@ export default class ZoomGraph extends PureComponent {
             />
           <Tooltip 
             labelFormatter={(label) => convertToRealTime(label, true)}
-            // contentStyle={{fontSize: '1.2rem'}}
+            
           />
           <Legend
             content ={(props)=> {
@@ -254,9 +244,6 @@ export default class ZoomGraph extends PureComponent {
                   {
                     payload.map((entry, index) => (
                       <SVGDiv key={index} onClick={() => this.toggleLine(index)}>
-                        {/* <svg className="recharts-surface" width="20" height="20" style={{marginRight: '0.5rem', marginTop:'0.2rem'}} viewBox="0 0 32 32" version="1.1">
-                          <path fill={entry.color} className="recharts-symbols" transform="translate(16, 16)" d="M5.856406460551019,3.381197846482995L5.856406460551019,15.094010767585033L-5.856406460551019,15.094010767585033L-5.856406460551019,3.3811978464829937L-16,-2.475208614068025L-10.143593539448982,-12.618802153517008L4.440892098500626e-16,-6.762395692965988L10.143593539448982,-12.618802153517008L16,-2.475208614068025Z"></path>
-                        </svg> */}
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                           <path fill={entry.color} d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                         </svg>

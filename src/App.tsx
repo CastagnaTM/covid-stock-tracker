@@ -265,25 +265,12 @@ const App: React.FC = () => {
         .then((resp) => resp.json())
         .then(({ c, h, l, o, t }) => {
           const stock = c.map((value: number, index: number) => {
-            // let close_price = value;
-            // let high_price = h[index];
-            // let low_price = l[index];
-            // let open_price = o[index];
-            // let date = convertToRealTime(t[index]);
             let dateObj = {};
             dateObj["close_price"] = value;
             dateObj["high_price"] = h[index];
             dateObj["low_price"] = l[index];
             dateObj["open_price"] = o[index];
             dateObj["date_number"] = t[index];
-
-            // let dateInput = new DateInput(
-            //   date,
-            //   open_price,
-            //   close_price,
-            //   high_price,
-            //   low_price
-            // );
             return dateObj;
           });
           setChartData(stock)
@@ -293,28 +280,6 @@ const App: React.FC = () => {
           throw error;
         });
     };
-    //   beginDate = new Date(beginDate).getTime()/1000;
-    //   endDate = new Date(endDate).getTime()/1000;
-    //   fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate}&to=${endDate}&token=${finnhubKey}`)
-    //   .then(resp => resp.json())
-    //   .then(({ c, h, l, o, t }) => {
-    //     const stock = c.map((value: number, index: number) => {
-    //       let close_price = value;
-    //       let high_price = h[index];
-    //       let low_price = l[index];
-    //       let open_price = o[index];
-    //       let date = convertToRealTime(t[index]);
-    //       let dateInput = new DateInput(
-    //         date,
-    //         open_price,
-    //         close_price,
-    //         high_price,
-    //         low_price
-    //       );
-    //       return dateInput;
-    //     })
-
-    // }
 
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => {
       if(from){
