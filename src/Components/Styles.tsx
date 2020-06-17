@@ -10,11 +10,11 @@ const palette = {
 };
 
 export const Navigation = styled.nav`
-    top: 0;
+    // top: 0;
     box-sizing: border-box;
     height: 80px;
     padding: 1em;
-    width: 100%;
+    // width: 100%;
     background-color: ${palette.grey};
     // display: flex;
     align-items: center;
@@ -231,5 +231,9 @@ export const DataColumn = styled.div`
 
 export const CompanyStyle = styled.div`
     // float: left;
+`
+
+export const CompanyName = styled.div`
+    color: white;
 `
 

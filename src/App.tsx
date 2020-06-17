@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {
     Navigation, Ul, NavButton,
     Main, ControlPanel, H1,
-    GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn
+    GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, CompanyName
 } from './Components/Styles';
 import Filters from './Components/Filters';
 // import { useForm } from "react-hook-form";
@@ -204,7 +204,7 @@ const App: React.FC = () => {
     const [state, setState] = useState({about: false});
     const  [chartData, setChartData] =  useState([]);
     const [companyData,  setCompanyData] = useState({});
-
+    const [companyName, setCompanyName] = useState("");
     
     const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => { 
       if (ticker) {
@@ -252,6 +252,7 @@ const App: React.FC = () => {
           }
             setChartData(arr);
             setCompanyData(data.data.findDates.companyData);
+            setCompanyName(data.data.findDates.companyData.name)
         });
       }
     };
@@ -281,9 +282,11 @@ const App: React.FC = () => {
         });
     };
 
-    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => {
-      if(from){
+    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = 'false'): void => {
+      console.log(!!from)
+      if(from && from !== "default"){
         fetchFromFinnhub(ticker, beginDate, endDate)
+        
       }
       else {
         fetchSingleStock(ticker, beginDate, endDate);  
@@ -307,6 +310,9 @@ return (
         </ControlPanel>
           {chartData.length > 0 &&  
             <GraphContainer> 
+              <CompanyName>
+                <p>{companyName}</p>
+              </CompanyName>
               <GraphBox1>
                 <ResponsiveContainer >
                   <ZoomGraph data={chartData}></ZoomGraph>
