@@ -49,78 +49,6 @@ const fetchData = (ticker: string): any => {
     });
 };
 
-const getCompanyData = (ticker: string):void => {
-  fetch(
-    `${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`
-  )
-    .then((resp) => resp.json())
-    .then(({country, currency, exchange, name, ipo, marketCapitalization, shareOutstanding, logo, phone, weburl, finnhubIndustry}) => {
-      // do something with the data
-      let companyInput = new CompanyInput(
-        country,
-        currency,
-        exchange,
-        name,
-        ipo,
-        marketCapitalization,
-        shareOutstanding,
-        logo,
-        phone,
-        weburl,
-        finnhubIndustry
-      );
-      inputCompanyData(ticker, companyInput)
-    })
-    .catch((error) => {
-      throw error;
-    });
-}
-
-const inputCompanyData = (ticker: string, companyInput: CompanyInput) => {
-  const query = 
-  `
-  mutation {
-    updateCompany(ticker: "${ticker}" companyInput: ${companyInput.toString()}){
-      ticker,
-      dates {
-        date
-      },
-      companyData {
-        country
-        currency
-        exchange
-        industry
-        ipo
-        logo
-        market_capitalization
-        name
-        phone
-        share_outstanding
-        web_url
-      }
-    }
-  }
-  `
-  fetch(GRAPHQL_API, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: `application/json`,
-    },
-    body: JSON.stringify({ query }),
-  })
-    .then((resp) => resp.json())
-    .then((data) => {
-      if (tickers[counter]) {
-        setTimeout(() => getCompanyData(tickers[++counter]),2000);
-      }
-      else {
-        clearTimeout();
-      }
-    });
-
-}
-
 const inputStock = (ticker: string, stock: []): void => {
   const query = `mutation {
       createStock(stockInput: {ticker: "${ticker}", dates: [${stock.toString()}]})
@@ -154,14 +82,6 @@ const inputStock = (ticker: string, stock: []): void => {
         clearTimeout();
       }
     });
-};
-
-const getStockData = (): void => {
-  // fetchData(tickers[counter])
-  getCompanyData(tickers[counter])
-  // tickers.slice(88, 100).forEach((ticker) => {
-  //   fetchData(ticker);
-  // });
 };
 
 const fetchAllStock = (): void => {
@@ -198,14 +118,88 @@ const fetchAllStock = (): void => {
     .then(data => Object.keys(data).length > 0 ? ticker: "")
     return data;
   }   
+  
 
 const App: React.FC = () => {
+  const [state, setState] = useState({about: false});
+  const  [chartData, setChartData] =  useState([]);
+  const [companyData,  setCompanyData] = useState({});
+  const [companyName, setCompanyName] = useState("");
 
-    const [state, setState] = useState({about: false});
-    const  [chartData, setChartData] =  useState([]);
-    const [companyData,  setCompanyData] = useState({});
-    const [companyName, setCompanyName] = useState("");
     
+    const getCompanyData = (ticker: string):void => {
+      fetch(
+        `${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`
+      )
+        .then((resp) => resp.json())
+        .then((data) => {
+          setCompanyData(data);
+          // do something with the data
+          // {country, currency, exchange, name, ipo, marketCapitalization, shareOutstanding, logo, phone, weburl, finnhubIndustry}
+          // let companyInput = new CompanyInput(
+          //   country,
+          //   currency,
+          //   exchange,
+          //   name,
+          //   ipo,
+          //   marketCapitalization,
+          //   shareOutstanding,
+          //   logo,
+          //   phone,
+          //   weburl,
+          //   finnhubIndustry
+          // );
+          // inputCompanyData(ticker, companyInput)
+        })
+        .catch((error) => {
+          throw error;
+        });
+    }
+
+    const inputCompanyData = (ticker: string, companyInput: CompanyInput) => {
+      const query = 
+      `
+      mutation {
+        updateCompany(ticker: "${ticker}" companyInput: ${companyInput.toString()}){
+          ticker,
+          dates {
+            date
+          },
+          companyData {
+            country
+            currency
+            exchange
+            industry
+            ipo
+            logo
+            market_capitalization
+            name
+            phone
+            share_outstanding
+            web_url
+          }
+        }
+      }
+      `
+      fetch(GRAPHQL_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: `application/json`,
+        },
+        body: JSON.stringify({ query }),
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          if (tickers[counter]) {
+            setTimeout(() => getCompanyData(tickers[++counter]),2000);
+          }
+          else {
+            clearTimeout();
+          }
+        });
+    }
+
     const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => { 
       if (ticker) {
         const query = `
@@ -258,10 +252,9 @@ const App: React.FC = () => {
     };
 
     const fetchFromFinnhub = (ticker, beginDate, endDate) => {
-      console.log(`before: ${beginDate}`)
         beginDate = new Date(beginDate).getTime()/1000 - 3600;
         endDate = new Date(endDate).getTime()/1000;
-        console.log(`after: ${beginDate}`)
+        getCompanyData(ticker);
         fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate}&to=${endDate}&token=${finnhubKey}`)
         .then((resp) => resp.json())
         .then(({ c, h, l, o, t }) => {
@@ -282,18 +275,9 @@ const App: React.FC = () => {
         });
     };
 
-    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = 'false'): void => {
-      console.log(!!from)
-      if(from && from !== "default"){
-        fetchFromFinnhub(ticker, beginDate, endDate)
-        
-      }
-      else {
-        fetchSingleStock(ticker, beginDate, endDate);  
-      }
-    }
-
-    
+    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => {
+      from && from !== "default" ? fetchFromFinnhub(ticker, beginDate, endDate) : fetchSingleStock(ticker, beginDate, endDate);  
+    }  
 
 return (
   <div>

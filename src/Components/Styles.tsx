@@ -230,7 +230,11 @@ export const DataColumn = styled.div`
 `
 
 export const CompanyStyle = styled.div`
-    // float: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 2rem;
+
 `
 
 export const CompanyName = styled.div`
