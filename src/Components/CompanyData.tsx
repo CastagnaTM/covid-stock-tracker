@@ -15,11 +15,11 @@ function printingCompany(companyData): any{
   if(companyData){
     return (
       <CompanyStyle>
-        <p>Company: <a href={companyData.web_url}>{companyData.name}</a></p>
-        <p>Industry: {companyData.industry}</p>
+        <p>Company: <a href={companyData.web_url || companyData.weburl}>{companyData.name}</a></p>
+        <p>Industry: {companyData.industry || companyData.finnhubIndustry}</p>
         <p>Currency: {companyData.currency}</p>
-        <p>Market Capitalization: {companyData.market_capitalization}</p>
-        <p>Share Outstanding: {companyData.share_outstanding}</p>
+        <p>Market Capitalization: {companyData.market_capitalization || companyData.marketCapitalization}</p>
+        <p>Share Outstanding: {companyData.share_outstanding || companyData.shareOutstanding}</p>
         <p>Country: {companyData.country}</p>
         <p>IPO: {companyData.ipo}</p>
         <p>Phone Number: {companyData.phone && formatPhoneNumber(companyData.phone)}</p>
