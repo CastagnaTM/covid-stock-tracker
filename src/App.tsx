@@ -5,18 +5,16 @@ import {
     GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, CompanyName
 } from './Components/Styles';
 import Filters from './Components/Filters';
-// import { useForm } from "react-hook-form";
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
 import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
 import { ResponsiveContainer } from 'recharts';
 import ZoomGraph from './Components/ZoomGraph';
 import { convertToRealTime } from './functions';
-import CompanyData from './Components/CompanyData'
+import CompanyData from './Components/CompanyData';
+import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery } from './queries';
 // let timer = setTimeout(callAPI, 2000);
 let counter = 0;
-// left off at 285
-
 // function callAPI () {
 //   fetchData(tickers[counter]);
 // }
@@ -50,27 +48,13 @@ const fetchData = (ticker: string): any => {
 };
 
 const inputStock = (ticker: string, stock: []): void => {
-  const query = `mutation {
-      createStock(stockInput: {ticker: "${ticker}", dates: [${stock.toString()}]})
-      {
-        ticker, 
-        dates
-          { 
-            date,
-            open_price,
-            close_price,
-            high_price,
-            low_price
-          }
-        }  
-      }`;
   fetch(GRAPHQL_API, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: `application/json`,
     },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify(createStockQuery()),
   })
     .then((resp) => resp.json())
     .then((data) => {
@@ -85,27 +69,13 @@ const inputStock = (ticker: string, stock: []): void => {
 };
 
 const fetchAllStock = (): void => {
-    const query = `
-    query {
-      stocks{
-        ticker
-        dates{
-          open_price,
-          close_price,
-          low_price,
-          high_price,
-          date
-        }
-      }
-    }
-    `;
     fetch(GRAPHQL_API, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Accept: `application/json`,
       },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify(fetchAllStocksQuery()),
     })
     .then(resp => resp.json())
     .then(data => {
@@ -158,37 +128,14 @@ const App: React.FC = () => {
     }
 
     const inputCompanyData = (ticker: string, companyInput: CompanyInput) => {
-      const query = 
-      `
-      mutation {
-        updateCompany(ticker: "${ticker}" companyInput: ${companyInput.toString()}){
-          ticker,
-          dates {
-            date
-          },
-          companyData {
-            country
-            currency
-            exchange
-            industry
-            ipo
-            logo
-            market_capitalization
-            name
-            phone
-            share_outstanding
-            web_url
-          }
-        }
-      }
-      `
+
       fetch(GRAPHQL_API, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: `application/json`,
         },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify(updateCompanyDataQuery()),
       })
         .then((resp) => resp.json())
         .then((data) => {
@@ -203,40 +150,13 @@ const App: React.FC = () => {
 
     const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => { 
       if (ticker) {
-        const query = `
-        query {
-          findDates(ticker: "${ticker}", startDate: "${beginDate?.toLocaleDateString('en')}", endDate: "${endDate?.toLocaleDateString('en')}"){ 
-          ticker,
-          dates {
-            date,
-            low_price,
-            high_price,
-            open_price,
-            close_price
-          },
-          companyData {
-            country,
-            currency,
-            exchange,
-            industry,
-            ipo,
-            market_capitalization,
-            logo,
-            name,
-            phone,
-            share_outstanding,
-            web_url
-          }
-        }
-      
-      }`
         fetch(GRAPHQL_API, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Accept: `application/json`,
           },
-          body: JSON.stringify({ query }),
+          body: JSON.stringify(findCompanyDatesQuery(ticker, beginDate, endDate)),
         })
         .then(resp => resp.json())
         .then(data => {

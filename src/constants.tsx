@@ -9,7 +9,7 @@ export const tickers: string[] = [
     "COF", "AMGN", "TFC", "EXC", "LOW", "SO", "BLK", "NEE", "DE", "UNP", "TMO", "GILD", "PSX", "MDLZ", "AVGO",  //15       72
     "MMM", "TGT", "MPC", "PGR", "COP", "PM", "MCD", "GD", "AFL", "TRV", "LLY", "KHC", "SCHW", "HCA", "DHR",
     "HUM", "NOC", "NKE", "PYPL", "QCOM", "DAL", "KR", "MA", "D", "MU", "NFLX", "HPQ", "SBUX"
-];
+];// left off at 285
 
 export const significantDates = {
      "12/31/19": "Chinese authorities treated dozens of cases of pneumonia of unknown cause.", 
