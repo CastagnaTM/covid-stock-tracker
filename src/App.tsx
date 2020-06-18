@@ -105,22 +105,6 @@ const App: React.FC = () => {
         .then((data) => {
           setCompanyData(data);
           setCompanyName(data.name)
-          // do something with the data
-          // {country, currency, exchange, name, ipo, marketCapitalization, shareOutstanding, logo, phone, weburl, finnhubIndustry}
-          // let companyInput = new CompanyInput(
-          //   country,
-          //   currency,
-          //   exchange,
-          //   name,
-          //   ipo,
-          //   marketCapitalization,
-          //   shareOutstanding,
-          //   logo,
-          //   phone,
-          //   weburl,
-          //   finnhubIndustry
-          // );
-          // inputCompanyData(ticker, companyInput)
         })
         .catch((error) => {
           throw error;
