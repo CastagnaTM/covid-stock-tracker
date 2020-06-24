@@ -126,10 +126,11 @@ export const GraphContainer = styled.div`
     height: 100%;
     display: grid;
     overflow: scroll;
-    grid-template-rows: 3fr 1fr;
+    grid-template-rows: 1fr 3fr 1fr;
     grid-template-columns: 1fr 5fr 1fr;
     grid-template-areas: 
-        " .   box1  . "
+        "box0 box0 box0"
+        " .   box1  .  "
         "box2 box2 box2";
 `
 
@@ -235,9 +236,16 @@ export const CompanyStyle = styled.div`
     align-items: flex-start;
     padding-left: 2rem;
 
+    > p {
+        > a {
+            color: ${palette.blue}
+        }
+    }
 `
 
 export const CompanyName = styled.div`
+    grid-area: box0;
     color: white;
+    text-align: center;
 `
 
