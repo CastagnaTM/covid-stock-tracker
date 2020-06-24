@@ -33,8 +33,8 @@ export const Filters: React.FC<Props> = (props) => {
   }
 
   const mapTickers = () => {
-    return tickers.sort((a,b) => a.localeCompare(b)).map((ticker, key) => {
-         return <MenuItem value={ticker} key={key}>{ticker}</MenuItem> 
+    return tickers.sort((a,b) => a.ticker.localeCompare(b.ticker)).map((ticker, key) => {
+         return <MenuItem value={ticker.ticker} key={key}>{ticker.ticker}</MenuItem> 
     })
   }
 
@@ -101,7 +101,7 @@ export const Filters: React.FC<Props> = (props) => {
         className={classes.root}
         onChange={(e) => {
           if (e.target.value.length === 0) setValidTicker('default');
-          if (e.target.value.length > 0 && e.target.value.length <= 5) {
+          else if (e.target.value.length > 0 && e.target.value.length <= 5) {
             props.findStock(e.target.value).then(ticker => {
               setValidTicker(ticker);
               setStock(ticker);

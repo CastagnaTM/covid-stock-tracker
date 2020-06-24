@@ -212,8 +212,8 @@ export default class ZoomGraph extends PureComponent {
                     y={y+15}
                     stroke="none" 
                     fill={significantDates[something] ? "yellow" : "white"} 
-                    font-size="1rem"  
-                    text-anchor="middle"
+                    fontSize="1rem"  
+                    textAnchor="middle"
                     >
                             {something}
                     </text>
