@@ -34,7 +34,7 @@ export const Filters: React.FC<Props> = (props) => {
 
   const mapTickers = () => {
     return tickers.sort((a,b) => a.ticker.localeCompare(b.ticker)).map((ticker, key) => {
-         return <MenuItem value={ticker.ticker} key={key}>{ticker.ticker}</MenuItem> 
+         return <MenuItem value={ticker.ticker} key={key}> {`${ticker.name} (${ticker.ticker})`} </MenuItem> 
     })
   }
 
