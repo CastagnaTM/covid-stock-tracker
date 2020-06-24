@@ -48,19 +48,19 @@ const fetchData = (ticker: string): any => {
 };
 
 const inputStock = (ticker: string, stock: []): void => {
+  const query = createStockQuery()
   fetch(GRAPHQL_API, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: `application/json`,
     },
-    body: JSON.stringify(createStockQuery()),
+    body: JSON.stringify({query}),
   })
     .then((resp) => resp.json())
     .then((data) => {
       if (tickers[counter]) {
-        console.log(data);
-        setTimeout(() => fetchData(tickers[++counter]),2000);
+        setTimeout(() => fetchData(tickers[++counter].ticker),2000);
       }
       else {
         clearTimeout();
@@ -69,13 +69,14 @@ const inputStock = (ticker: string, stock: []): void => {
 };
 
 const fetchAllStock = (): void => {
+  const query = fetchAllStocksQuery();
     fetch(GRAPHQL_API, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Accept: `application/json`,
       },
-      body: JSON.stringify(fetchAllStocksQuery()),
+      body: JSON.stringify({query}),
     })
     .then(resp => resp.json())
     .then(data => {
@@ -112,19 +113,19 @@ const App: React.FC = () => {
     }
 
     const inputCompanyData = (ticker: string, companyInput: CompanyInput) => {
-
+      const query = updateCompanyDataQuery();
       fetch(GRAPHQL_API, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: `application/json`,
         },
-        body: JSON.stringify(updateCompanyDataQuery()),
+        body: JSON.stringify({query}),
       })
         .then((resp) => resp.json())
         .then((data) => {
           if (tickers[counter]) {
-            setTimeout(() => getCompanyData(tickers[++counter]),2000);
+            setTimeout(() => getCompanyData(tickers[++counter].ticker),2000);
           }
           else {
             clearTimeout();
@@ -132,7 +133,8 @@ const App: React.FC = () => {
         });
     }
 
-    const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => { 
+    const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
+      const query = findCompanyDatesQuery(ticker, beginDate, endDate);
       if (ticker) {
         fetch(GRAPHQL_API, {
           method: "POST",
@@ -140,7 +142,7 @@ const App: React.FC = () => {
             "Content-Type": "application/json",
             Accept: `application/json`,
           },
-          body: JSON.stringify(findCompanyDatesQuery(ticker, beginDate, endDate)),
+          body: JSON.stringify({query}),
         })
         .then(resp => resp.json())
         .then(data => {
@@ -181,7 +183,7 @@ const App: React.FC = () => {
     };
 
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => {
-      from && from !== "default" ? fetchFromFinnhub(ticker, beginDate, endDate) : fetchSingleStock(ticker, beginDate, endDate);  
+      from && (from !== "default" ? fetchFromFinnhub(ticker, beginDate, endDate) : fetchSingleStock(ticker, beginDate, endDate));  
     }  
 
 return (

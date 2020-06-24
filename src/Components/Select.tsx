@@ -23,7 +23,7 @@ export default function SimpleSelect() {
 
   const mapTickers = () => {
    return tickers.map((ticker, key) => {
-        return <MenuItem value={ticker} key={key}>{ticker}</MenuItem> 
+        return <MenuItem value={ticker.ticker} key={key}>{ticker.ticker}</MenuItem> 
     })
   }
 
