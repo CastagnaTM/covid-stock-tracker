@@ -5,6 +5,9 @@ import { Ul, ZoomOutButton, SVGDiv, Modal, ModalHeader } from './Styles';
 import { significantDates } from '../constants';
 import InfoIcon from '@material-ui/icons/Info';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';
+
+
+
 export default class ZoomGraph extends PureComponent {
 
   constructor(props) {
@@ -46,34 +49,81 @@ export default class ZoomGraph extends PureComponent {
     return [(bottom | 0) - offset, (top | 0) + offset];
   }; 
   
-  zoom() {
-    let { refAreaLeft, refAreaRight, data } = this.state;
+  // zoom () {
+  //   // e.target.className = "sc-fzpans iwByBU"
+  //   let { refAreaLeft, refAreaRight, data } = this.state;
 
-    if (refAreaLeft === refAreaRight || refAreaRight === '') {
+  //   if (refAreaLeft === refAreaRight || refAreaRight === '') {
+  //     this.setState(() => ({
+  //       refAreaLeft: '',
+  //       refAreaRight: '',
+  //     }));
+  //   }
+
+  //   // xAxis domain
+  //   // this line specifically allows the highlight to work right to left
+  //   if (refAreaLeft > refAreaRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
+
+  //   // yAxis domain
+  //   // const [bottom, top] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'low_price', 1);
+  //   // const [bottom2, top2] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'high_price', 50);
+
+  //   this.setState(() => ({
+  //     refAreaLeft: '',
+  //     refAreaRight: '',
+  //     data: data.slice(),
+  //     left: refAreaLeft,
+  //     right: refAreaRight,
+  //   }));
+  // }
+
+  // zoomOut() {
+  //   const { data } = this.state;
+  //   this.setState(() => ({
+  //     data: data.slice(),
+  //     refAreaLeft: '',
+  //     refAreaRight: '',
+  //     left: 'dataMin',
+  //     right: 'dataMax',
+  //     top : dataMax => (Math.floor(dataMax)+1),
+  //     bottom : dataMin => (Math.floor(dataMin)-1),
+  //     top2 : dataMax => (Math.floor(dataMax)+20),
+  //     bottom2 : dataMin => (Math.floor(dataMin)-20)
+  //   }));
+  // }
+
+  zoom = (e) => {
+    if(e){
+
+      // e.target.className = "sc-fzpans iwByBU"
+      let { refAreaLeft, refAreaRight, data } = this.state;
+    
+      if (refAreaLeft === refAreaRight || refAreaRight === '') {
+        this.setState(() => ({
+          refAreaLeft: '',
+          refAreaRight: '',
+        }));
+      }
+    
+      // xAxis domain
+      // this line specifically allows the highlight to work right to left
+      if (refAreaLeft > refAreaRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
+    
+      // yAxis domain
+      // const [bottom, top] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'low_price', 1);
+      // const [bottom2, top2] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'high_price', 50);
+    
       this.setState(() => ({
         refAreaLeft: '',
         refAreaRight: '',
+        data: data.slice(),
+        left: refAreaLeft,
+        right: refAreaRight,
       }));
     }
-
-    // xAxis domain
-    // this line specifically allows the highlight to work right to left
-    if (refAreaLeft > refAreaRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
-
-    // yAxis domain
-    // const [bottom, top] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'low_price', 1);
-    // const [bottom2, top2] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'high_price', 50);
-
-    this.setState(() => ({
-      refAreaLeft: '',
-      refAreaRight: '',
-      data: data.slice(),
-      left: refAreaLeft,
-      right: refAreaRight,
-    }));
   }
-
-  zoomOut() {
+  
+  zoomOut = () => {
     const { data } = this.state;
     this.setState(() => ({
       data: data.slice(),
@@ -147,17 +197,17 @@ export default class ZoomGraph extends PureComponent {
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
         {this.state.modal ? this.displayModal() : null}
-        {this.state.left === 'dataMin' && this.state.right === 'dataMax' 
+        {
+          this.state.left === 'dataMin' && this.state.right === 'dataMax' 
         ? 
           <ZoomOutButton style={{opacity: '0'}}></ZoomOutButton>
         : 
           <ZoomOutButton
-            onClick={this.zoomOut.bind(this)}
+            onClick={this.zoomOut}
           >
           <ZoomOutIcon/>
           Zoom Out
-          </ZoomOutButton>
-          
+          </ZoomOutButton> 
       }
      
 
@@ -168,7 +218,7 @@ export default class ZoomGraph extends PureComponent {
           data={this.state.data}
           onMouseDown = { (e) => e && this.setState({refAreaLeft:e.activeLabel})}
           onMouseMove = { (e) => e && this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
-          onMouseUp = { this.zoom.bind( this ) }
+          onMouseUp = {(e) => this.zoom(e) }
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
