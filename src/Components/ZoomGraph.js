@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea } from 'recharts';
+import { Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea, ResponsiveContainer } from 'recharts';
 import { convertToRealTime } from '../functions';
 import { Ul, ZoomOutButton, SVGDiv, Modal, ModalHeader } from './Styles';
 import { significantDates } from '../constants';
@@ -196,6 +196,7 @@ export default class ZoomGraph extends PureComponent {
     
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
+        
         {this.state.modal ? this.displayModal() : null}
         {
           this.state.left === 'dataMin' && this.state.right === 'dataMax' 
@@ -210,10 +211,10 @@ export default class ZoomGraph extends PureComponent {
           </ZoomOutButton> 
       }
      
-
+       <ResponsiveContainer aspect={2} width="100%">
         <LineChart
-          width={900}
-          height={400}
+          // width={900}
+          // height={400}
           margin={{right: 35, left: 25}}
           data={this.state.data}
           onMouseDown = { (e) => e && this.setState({refAreaLeft:e.activeLabel})}
@@ -317,6 +318,7 @@ export default class ZoomGraph extends PureComponent {
             <ReferenceArea yAxisId="1" x1={this.state.refAreaLeft} x2={this.state.refAreaRight}  strokeOpacity={0.3} /> ) : null
           }
         </LineChart>
+        </ResponsiveContainer>
       </div>
     );
   }

@@ -92,7 +92,7 @@ export const Filters: React.FC<Props> = (props) => {
   }
 
   return (
-    <div>
+    <section>
       <TextField 
         id="outlined-search" 
         label="Search Ticker" 
@@ -175,7 +175,7 @@ export const Filters: React.FC<Props> = (props) => {
         Submit
       </Button>
       </FormContainer>
-    </div>
+    </section>
   );
 }
 

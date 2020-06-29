@@ -205,9 +205,12 @@ return (
                 <p>{companyName}</p>
               </CompanyName>
               <GraphBox1>
-                <ResponsiveContainer >
+                {/* <ResponsiveContainer 
+                  aspect={1.6}
+                // width="80%" height={400} 
+                > */}
                   <ZoomGraph data={chartData}></ZoomGraph>
-                </ResponsiveContainer>
+                {/* </ResponsiveContainer> */}
               </GraphBox1>
               <GraphBox2>
                 <DataColumn>

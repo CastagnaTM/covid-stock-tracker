@@ -68,6 +68,10 @@ export const Main = styled.div`
     display: flex;
     flex-direction: row;
     height: 90vh;
+
+    @media screen and (max-width: 1000px){
+        flex-direction: column;
+    }
 `
 
 export const ControlPanel = styled.div`
@@ -80,11 +84,22 @@ export const ControlPanel = styled.div`
     justify-content: space-evenly;
     box-sizing: border-box;
 
-    > div {
+    > section {
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
         height: 500px;
+    }
+
+    @media screen and (max-width: 1000px){
+        width: 100%;
+        max-height: 30%; 
+        overflow: hidden;
+
+        > section {
+            max-height: 0;
+            overflow: hidden;
+        }
     }
 `
 
@@ -130,13 +145,17 @@ export const GraphContainer = styled.div`
     grid-template-columns: 1fr 5fr 1fr;
     grid-template-areas: 
         "box0 box0 box0"
-        " .   box1  .  "
+        "box1 box1 box1"
         "box2 box2 box2";
+
+    @media screen and (max-width: 1000px) {
+        width: 100%;
+    }
 `
 
 export const GraphBox1 = styled.div`
     grid-area: box1;
-    padding: 1em;
+    // padding: 1em;
 `
 
 export const ZoomOutButton = styled.button`
