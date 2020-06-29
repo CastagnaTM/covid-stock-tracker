@@ -6,7 +6,8 @@ const palette = {
     green: "#1db954",
     red: "#f45b5b",
     blue: "#2c99b5",
-    darkGrey: "#0a0a0a"
+    darkGrey: "#0a0a0a",
+    headerBlue: "#2c8096"
 };
 
 export const Navigation = styled.nav`
@@ -69,7 +70,7 @@ export const Main = styled.div`
     flex-direction: row;
     height: 90vh;
 
-    @media screen and (max-width: 1000px){
+    @media screen and (max-width: 650px){
         flex-direction: column;
     }
 `
@@ -91,28 +92,39 @@ export const ControlPanel = styled.div`
         height: 500px;
     }
 
-    @media screen and (max-width: 1000px){
-        width: 100%;
-        max-height: 30%; 
-        overflow: hidden;
-
-        > section {
-            max-height: 0;
-            overflow: hidden;
-        }
+    @media screen and (max-width: 650px) {
+        display: none;
     }
+
+    // @media screen and (max-width: 650px){
+    //     width: 100%;
+    //     max-height: 30%; 
+    //     overflow: hidden;
+
+    //     > section {
+    //         max-height: 0;
+    //         overflow: hidden;
+    //     }
+    // }
 `
 
 export const H1 = styled.h1`
     font-size: xx-large;
     color: ${palette.blue}; 
     margin: 0 auto;
-    // padding-top: 1em;
+`
+
+export const MobileButton = styled.div`
+    display: none;
+
+    @media screen and (max-width: 650px) {
+        display: initial;
+    }
 `
 
 export const H4 = styled.h3`
     font-size: x-large;
-    color: #2c8096; 
+    color: ${palette.headerBlue}; 
     margin: 0 auto;
     text-align: center;
 `
@@ -148,14 +160,13 @@ export const GraphContainer = styled.div`
         "box1 box1 box1"
         "box2 box2 box2";
 
-    @media screen and (max-width: 1000px) {
+    @media screen and (max-width: 650px) {
         width: 100%;
     }
 `
 
 export const GraphBox1 = styled.div`
     grid-area: box1;
-    // padding: 1em;
 `
 
 export const ZoomOutButton = styled.button`

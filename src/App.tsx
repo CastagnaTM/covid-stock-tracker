@@ -1,18 +1,37 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {
     Navigation, Ul, NavButton,
-    Main, ControlPanel, H1,
+    Main, ControlPanel, H1, MobileButton,
     GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, CompanyName
 } from './Components/Styles';
 import Filters from './Components/Filters';
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
 import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
-import { ResponsiveContainer } from 'recharts';
 import ZoomGraph from './Components/ZoomGraph';
 import { convertToRealTime } from './functions';
 import CompanyData from './Components/CompanyData';
 import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery } from './queries';
+import { makeStyles } from '@material-ui/core/styles';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(25),
+    fontWeight: theme.typography.fontWeightRegular,
+    color: "#2c8096",
+  },
+}));
+
+
 // let timer = setTimeout(callAPI, 2000);
 let counter = 0;
 // function callAPI () {
@@ -91,12 +110,33 @@ const fetchAllStock = (): void => {
   }   
   
 
+
+
+
+
+
+
+
 const App: React.FC = () => {
+  const classes = useStyles();
   const [state, setState] = useState({about: false});
-  const  [chartData, setChartData] =  useState([]);
+  const [chartData, setChartData] =  useState([]);
   const [companyData,  setCompanyData] = useState({});
   const [companyName, setCompanyName] = useState("");
+  const [isMobile, setMobile] = useState(false);
+  useEffect( () => {
+    windowSizeCheck()
+    window.addEventListener('resize', windowSizeCheck)
+  }, [])
 
+  const windowSizeCheck = () => {
+    console.log('hello from app')
+    if(window.innerWidth < 650) {
+      setMobile(true);
+    } else {
+      setMobile(false);
+    }
+  }
     
     const getCompanyData = (ticker: string):void => {
       fetch(
@@ -195,9 +235,27 @@ return (
         </Ul>
       </Navigation>
       <Main>
+        <MobileButton className={classes.root}>
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className={classes.heading}>Filters</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Typography>
+              <Filters findStock={findStock} getUserData={getUserData} ></Filters>
+              </Typography>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          </MobileButton>
         <ControlPanel>
-        <H1>Control Panel</H1>
-            <Filters findStock={findStock} getUserData={getUserData} ></Filters>
+
+          <H1>Control Panel</H1>
+            
+          <Filters findStock={findStock} getUserData={getUserData} ></Filters>
         </ControlPanel>
           {chartData.length > 0 &&  
             <GraphContainer> 
@@ -205,12 +263,7 @@ return (
                 <p>{companyName}</p>
               </CompanyName>
               <GraphBox1>
-                {/* <ResponsiveContainer 
-                  aspect={1.6}
-                // width="80%" height={400} 
-                > */}
-                  <ZoomGraph data={chartData}></ZoomGraph>
-                {/* </ResponsiveContainer> */}
+                  <ZoomGraph data={chartData} isMobile={isMobile}></ZoomGraph>
               </GraphBox1>
               <GraphBox2>
                 <DataColumn>

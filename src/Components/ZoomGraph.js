@@ -27,31 +27,26 @@ export default class ZoomGraph extends PureComponent {
       close: true,
       high: true,
       low: true,
-      modal: false,
-      isMobile: false
+      modal: false
     };
   }
 
   componentDidMount = () => {
-    this.windowSizeCheck();
-    window.addEventListener('resize', this.windowSizeCheck)
+    // this.windowSizeCheck();
+    // window.addEventListener('resize', this.windowSizeCheck)
   }
 
-  // windowResizeListener = () => {
-  //   this.setState
+  // windowSizeCheck = () => {
+  //   if(window.innerWidth < 1000) {
+  //     this.setState({
+  //       isMobile: true
+  //     })
+  //   } else {
+  //     this.setState({
+  //       isMobile: false
+  //     })
+  //   }
   // }
-
-  windowSizeCheck = () => {
-    if(window.innerWidth < 1000) {
-      this.setState({
-        isMobile: true
-      })
-    } else {
-      this.setState({
-        isMobile: false
-      })
-    }
-  }
   static getDerivedStateFromProps(nextProps) {    
     return {
       data: nextProps.data,
@@ -211,10 +206,10 @@ export default class ZoomGraph extends PureComponent {
   }
 
   render() {
-    
+    console.log(this.props.isMobile)
     const legendStyle = {
       color: '#FFFFFF',
-      fontSize: this.state.isMobile ? '.8em' : '1.5em'
+      fontSize: this.props.isMobile ? '.8em' : '1em'
     }
     
     return (
