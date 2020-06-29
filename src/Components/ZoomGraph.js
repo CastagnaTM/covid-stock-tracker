@@ -27,8 +27,30 @@ export default class ZoomGraph extends PureComponent {
       close: true,
       high: true,
       low: true,
-      modal: false
+      modal: false,
+      isMobile: false
     };
+  }
+
+  componentDidMount = () => {
+    this.windowSizeCheck();
+    window.addEventListener('resize', this.windowSizeCheck)
+  }
+
+  // windowResizeListener = () => {
+  //   this.setState
+  // }
+
+  windowSizeCheck = () => {
+    if(window.innerWidth < 1000) {
+      this.setState({
+        isMobile: true
+      })
+    } else {
+      this.setState({
+        isMobile: false
+      })
+    }
   }
   static getDerivedStateFromProps(nextProps) {    
     return {
@@ -191,7 +213,8 @@ export default class ZoomGraph extends PureComponent {
   render() {
     
     const legendStyle = {
-      color: '#FFFFFF'
+      color: '#FFFFFF',
+      fontSize: this.state.isMobile ? '.8em' : '1.5em'
     }
     
     return (
@@ -305,8 +328,6 @@ export default class ZoomGraph extends PureComponent {
                 </Ul>
               );
             }} 
-            iconSize={20} 
-            iconType='wye' 
             wrapperStyle={legendStyle}
           />
           <Line yAxisId="1" type='natural' dataKey='open_price' name="Open Price" stroke={this.state.open ? '#8804d8': 'transparent'} animationDuration={300} dot={false}/>
