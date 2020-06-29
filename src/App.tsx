@@ -130,12 +130,7 @@ const App: React.FC = () => {
   }, [])
 
   const windowSizeCheck = () => {
-    console.log('hello from app')
-    if(window.innerWidth < 650) {
-      setMobile(true);
-    } else {
-      setMobile(false);
-    }
+    setMobile(window.innerWidth < 650);
   }
     
     const getCompanyData = (ticker: string):void => {

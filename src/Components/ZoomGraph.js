@@ -30,23 +30,6 @@ export default class ZoomGraph extends PureComponent {
       modal: false
     };
   }
-
-  componentDidMount = () => {
-    // this.windowSizeCheck();
-    // window.addEventListener('resize', this.windowSizeCheck)
-  }
-
-  // windowSizeCheck = () => {
-  //   if(window.innerWidth < 1000) {
-  //     this.setState({
-  //       isMobile: true
-  //     })
-  //   } else {
-  //     this.setState({
-  //       isMobile: false
-  //     })
-  //   }
-  // }
   static getDerivedStateFromProps(nextProps) {    
     return {
       data: nextProps.data,
