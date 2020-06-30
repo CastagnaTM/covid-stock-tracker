@@ -70,7 +70,7 @@ export const Main = styled.div`
     flex-direction: row;
     height: 90vh;
 
-    @media screen and (max-width: 650px){
+    @media screen and (max-width: 1000px){
         flex-direction: column;
     }
 `
@@ -87,13 +87,13 @@ export const ControlPanel = styled.div`
     box-sizing: border-box;
     padding: 1em;
 
-    @media screen and (max-width: 650px) {
+    @media screen and (max-width: 1000px) {
         display: none;
     }
 `
 
 export const H1 = styled.header`
-    font-size: xx-large;
+    font-size: 1.5em;
     color: ${palette.blue}; 
     margin: 0 auto;
     padding: .2em;
@@ -102,16 +102,21 @@ export const H1 = styled.header`
 export const MobileButton = styled.div`
     display: none;
 
-    @media screen and (max-width: 650px) {
+    @media screen and (max-width: 1000px) {
         display: initial;
     }
 `
 
 export const H4 = styled.header`
-    font-size: x-large;
+    font-size: 1.3em;
     color: ${palette.headerBlue}; 
     margin: 0 auto;
     text-align: center;
+
+    @media screen and (max-width: 1000px) and (min-width: 651px) {
+        font-size: 2em;
+    } 
+    
 `
 
 export const ErrorMessage = styled.p`
@@ -125,7 +130,7 @@ export const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 90%;
+    width: 100%;
     margin: 0 auto; 
 
     > div {
@@ -145,7 +150,7 @@ export const GraphContainer = styled.div`
         "box1 box1 box1"
         "box2 box2 box2";
 
-    @media screen and (max-width: 650px) {
+    @media screen and (max-width: 1000px) {
         width: 100%;
         overflow-x: hidden;
     }

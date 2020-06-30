@@ -66,7 +66,8 @@ export const Filters: React.FC<Props> = (props) => {
     },
     formControl: {
       margin: theme.spacing(1),
-      minWidth: 120    
+      minWidth: "90%",
+      maxWidth: "90%"
     }})
   )
   const classes = useStyles();
