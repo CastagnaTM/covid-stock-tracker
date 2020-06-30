@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { H4, FormContainer, FormDiv, ErrorMessage } from './Styles';
+import { H4, FormContainer, FormDiv, ErrorMessage, FormSection } from './Styles';
 import { FormControl, InputLabel, FormHelperText, Select, MenuItem } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { tickers } from "../constants";
@@ -92,7 +92,7 @@ export const Filters: React.FC<Props> = (props) => {
   }
 
   return (
-    <section>
+    <FormSection>
       <TextField 
         id="outlined-search" 
         label="Search Ticker" 
@@ -175,7 +175,7 @@ export const Filters: React.FC<Props> = (props) => {
         Submit
       </Button>
       </FormContainer>
-    </section>
+    </FormSection>
   );
 }
 

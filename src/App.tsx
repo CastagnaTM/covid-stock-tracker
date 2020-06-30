@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {
     Navigation, Ul, NavButton,
-    Main, ControlPanel, H1, MobileButton,
+    Main, ControlPanel, H1, MobileButton, 
     GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, CompanyName
 } from './Components/Styles';
 import Filters from './Components/Filters';
@@ -29,6 +29,11 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightRegular,
     color: "#2c8096",
   },
+  filters: {
+    display: 'flex',
+    justifyContent: 'center', 
+    height: 'calc(100vh - 180px)',
+  }
 }));
 
 
@@ -239,10 +244,10 @@ return (
             >
               <Typography className={classes.heading}>Filters</Typography>
             </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Typography>
+            <ExpansionPanelDetails className={classes.filters}> 
+              {/* <Typography> */}
               <Filters findStock={findStock} getUserData={getUserData} ></Filters>
-              </Typography>
+              {/* </Typography> */}
             </ExpansionPanelDetails>
           </ExpansionPanel>
           </MobileButton>

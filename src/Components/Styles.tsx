@@ -255,6 +255,14 @@ export const FormDiv = styled.div`
     align-items: center;
 `
 
+export const FormSection = styled.section`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+`
+
+
 export const DataColumn = styled.div`
     float: left;
     width: 50%;
