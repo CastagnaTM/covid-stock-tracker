@@ -252,7 +252,7 @@ return (
           </ExpansionPanel>
           </MobileButton>
         <ControlPanel>
-
+          
           <H1>Control Panel</H1>
             
           <Filters findStock={findStock} getUserData={getUserData} ></Filters>

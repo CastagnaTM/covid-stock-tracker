@@ -82,36 +82,21 @@ export const ControlPanel = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    // justify-content: space-evenly;
+    text-align: center;
     box-sizing: border-box;
-
-    > section {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        height: 500px;
-    }
+    padding: 1em;
 
     @media screen and (max-width: 650px) {
         display: none;
     }
-
-    // @media screen and (max-width: 650px){
-    //     width: 100%;
-    //     max-height: 30%; 
-    //     overflow: hidden;
-
-    //     > section {
-    //         max-height: 0;
-    //         overflow: hidden;
-    //     }
-    // }
 `
 
-export const H1 = styled.h1`
+export const H1 = styled.header`
     font-size: xx-large;
     color: ${palette.blue}; 
     margin: 0 auto;
+    padding: .2em;
 `
 
 export const MobileButton = styled.div`
@@ -122,7 +107,7 @@ export const MobileButton = styled.div`
     }
 `
 
-export const H4 = styled.h3`
+export const H4 = styled.header`
     font-size: x-large;
     color: ${palette.headerBlue}; 
     margin: 0 auto;
@@ -236,9 +221,6 @@ export const GraphBox2 = styled.div`
     grid-area: box2;
     text-align: center;
     font-size: large;
-    > div p {
-        color: white;
-    }
 `
 
 export const Footer = styled.footer`
@@ -260,7 +242,7 @@ export const FormSection = styled.section`
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-
+    height: 100%;
 `
 
 export const DataColumn = styled.div`
@@ -271,10 +253,14 @@ export const DataColumn = styled.div`
 export const CompanyStyle = styled.div`
     display: flex;
     flex-direction: column;
-    // align-items: center;
     margin: 0 auto;
 
     > p {
+        color: #eedaa4;
+        > span {
+            color: #c7a4ee;
+            font-family: 'Roboto', sans-serif;
+        }
         > a {
             color: ${palette.blue}
         }
