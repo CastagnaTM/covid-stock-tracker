@@ -162,6 +162,7 @@ export const GraphContainer = styled.div`
 
     @media screen and (max-width: 650px) {
         width: 100%;
+        overflow-x: hidden;
     }
 `
 
@@ -262,17 +263,16 @@ export const FormSection = styled.section`
 
 `
 
-
 export const DataColumn = styled.div`
-    float: left;
-    width: 50%;
+    width: 80%;
+    margin: 0 auto;
 `
 
 export const CompanyStyle = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding-left: 2rem;
+    // align-items: center;
+    margin: 0 auto;
 
     > p {
         > a {

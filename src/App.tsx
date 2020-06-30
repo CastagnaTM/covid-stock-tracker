@@ -267,10 +267,7 @@ return (
               </GraphBox1>
               <GraphBox2>
                 <DataColumn>
-                <CompanyData companyData={companyData}/>
-                </DataColumn>
-                <DataColumn>
-                  <p>this consist of more data :D</p>
+                  <CompanyData companyData={companyData}/>
                 </DataColumn>
               </GraphBox2>
             </GraphContainer>
