@@ -13,12 +13,25 @@ import { convertToRealTime } from './functions';
 import CompanyData from './Components/CompanyData';
 import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery } from './queries';
 import { makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+
+// const accordionTheme = createMuiTheme({
+//   overrides: {
+//     // Style sheet name ⚛️
+//     MuiTypography: {
+//       // Name of the rule
+//       alignCenter: {
+//         align="center",
+//       },
+//     },
+//   },
+// });
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,13 +42,15 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightRegular,
     color: "#2c8096",
     padding: "1em",
-    align: 'center',
   },
   filters: {
     display: 'flex',
     justifyContent: 'center', 
     height: 'calc(100vh - 180px)',
   },
+  summary: {
+    flexGrow: 0,
+  }
 }));
 
 
@@ -243,7 +258,9 @@ return (
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
-              
+              classes={{
+                content: classes.summary,
+              }}
             >
               <Typography className={classes.heading} >Dashboard</Typography>
             </AccordionSummary>

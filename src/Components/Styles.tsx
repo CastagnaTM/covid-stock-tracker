@@ -10,6 +10,8 @@ const palette = {
     headerBlue: "#2c8096"
 };
 
+const maxWidth = '1024px';
+
 export const Navigation = styled.nav`
     // top: 0;
     box-sizing: border-box;
@@ -70,7 +72,7 @@ export const Main = styled.div`
     flex-direction: row;
     height: 90vh;
 
-    @media screen and (max-width: 1000px){
+    @media screen and (max-width: ${maxWidth}){
         flex-direction: column;
     }
 `
@@ -87,7 +89,7 @@ export const ControlPanel = styled.div`
     box-sizing: border-box;
     padding: 1em;
 
-    @media screen and (max-width: 1000px) {
+    @media screen and (max-width: ${maxWidth}) {
         display: none;
     }
 `
@@ -103,7 +105,7 @@ export const H1 = styled.header`
 export const MobileButton = styled.div`
     display: none;
 
-    @media screen and (max-width: 1000px) {
+    @media screen and (max-width: ${maxWidth}) {
         display: initial;
     }
 `
@@ -114,7 +116,7 @@ export const H4 = styled.header`
     margin: 0 auto;
     text-align: center;
 
-    @media screen and (max-width: 1000px) and (min-width: 651px) {
+    @media screen and (max-width: ${maxWidth}) and (min-width: 651px) {
         font-size: 2em;
     } 
     
@@ -151,7 +153,7 @@ export const GraphContainer = styled.div`
         "box1 box1 box1"
         "box2 box2 box2";
 
-    @media screen and (max-width: 1000px) {
+    @media screen and (max-width: ${maxWidth}) {
         width: 100%;
         overflow-x: hidden;
     }
