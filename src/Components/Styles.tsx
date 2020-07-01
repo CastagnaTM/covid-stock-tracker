@@ -94,7 +94,8 @@ export const ControlPanel = styled.div`
 
 export const H1 = styled.header`
     font-size: 1.5em;
-    color: ${palette.blue}; 
+    font-weight: bolder;
+    color: #0c8224; 
     margin: 0 auto;
     padding: .2em;
 `
@@ -241,6 +242,7 @@ export const FormDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: .5em;
 `
 
 export const FormSection = styled.section`

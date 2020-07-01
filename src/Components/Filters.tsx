@@ -94,23 +94,6 @@ export const Filters: React.FC<Props> = (props) => {
 
   return (
     <FormSection>
-      <TextField 
-        id="outlined-search" 
-        label="Search Ticker" 
-        type="search" 
-        variant="outlined" 
-        className={classes.root}
-        onChange={(e) => {
-          if (e.target.value.length === 0) setValidTicker('default');
-          else if (e.target.value.length > 0 && e.target.value.length <= 5) {
-            props.findStock(e.target.value).then(ticker => {
-              setValidTicker(ticker);
-              setStock(ticker);
-            });
-
-          } 
-        }}
-      />
       <ErrorMessage>{errorMessage}</ErrorMessage>  
       <H4> Select Stock </H4>
       <FormDiv>
@@ -126,6 +109,25 @@ export const Filters: React.FC<Props> = (props) => {
             </Select>
             <FormHelperText>Select Stock Ticker</FormHelperText>
         </FormControl>
+        <FormDiv>
+          <TextField 
+            id="outlined-search" 
+            label="Search Ticker" 
+            type="search" 
+            variant="outlined" 
+            className={classes.root}
+            onChange={(e) => {
+              if (e.target.value.length === 0) setValidTicker('default');
+              else if (e.target.value.length > 0 && e.target.value.length <= 5) {
+                props.findStock(e.target.value).then(ticker => {
+                  setValidTicker(ticker);
+                  setStock(ticker);
+                });
+
+              } 
+            }}
+          />
+        </FormDiv>
       </FormDiv>
       <H4> Select Dates </H4>
       <FormContainer> 

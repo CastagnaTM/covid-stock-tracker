@@ -28,11 +28,15 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.typography.pxToRem(25),
     fontWeight: theme.typography.fontWeightRegular,
     color: "#2c8096",
+    padding: "1em",
   },
   filters: {
     display: 'flex',
     justifyContent: 'center', 
     height: 'calc(100vh - 180px)',
+  },
+  summary: {
+    textAlign: 'center',
   }
 }));
 
@@ -241,6 +245,7 @@ return (
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
+              className={classes.summary}
             >
               <Typography className={classes.heading}>Filters</Typography>
             </ExpansionPanelSummary>
@@ -253,7 +258,7 @@ return (
           </MobileButton>
         <ControlPanel>
           
-          <H1>Control Panel</H1>
+          <H1>Dashboard</H1>
             
           <Filters findStock={findStock} getUserData={getUserData} ></Filters>
         </ControlPanel>
