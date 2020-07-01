@@ -48,49 +48,6 @@ export default class ZoomGraph extends PureComponent {
   
     return [(bottom | 0) - offset, (top | 0) + offset];
   }; 
-  
-  // zoom () {
-  //   // e.target.className = "sc-fzpans iwByBU"
-  //   let { refAreaLeft, refAreaRight, data } = this.state;
-
-  //   if (refAreaLeft === refAreaRight || refAreaRight === '') {
-  //     this.setState(() => ({
-  //       refAreaLeft: '',
-  //       refAreaRight: '',
-  //     }));
-  //   }
-
-  //   // xAxis domain
-  //   // this line specifically allows the highlight to work right to left
-  //   if (refAreaLeft > refAreaRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
-
-  //   // yAxis domain
-  //   // const [bottom, top] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'low_price', 1);
-  //   // const [bottom2, top2] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'high_price', 50);
-
-  //   this.setState(() => ({
-  //     refAreaLeft: '',
-  //     refAreaRight: '',
-  //     data: data.slice(),
-  //     left: refAreaLeft,
-  //     right: refAreaRight,
-  //   }));
-  // }
-
-  // zoomOut() {
-  //   const { data } = this.state;
-  //   this.setState(() => ({
-  //     data: data.slice(),
-  //     refAreaLeft: '',
-  //     refAreaRight: '',
-  //     left: 'dataMin',
-  //     right: 'dataMax',
-  //     top : dataMax => (Math.floor(dataMax)+1),
-  //     bottom : dataMin => (Math.floor(dataMin)-1),
-  //     top2 : dataMax => (Math.floor(dataMax)+20),
-  //     bottom2 : dataMin => (Math.floor(dataMin)-20)
-  //   }));
-  // }
 
   zoom = (e) => {
     if(e){
