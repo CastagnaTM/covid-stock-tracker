@@ -252,6 +252,11 @@ export const FormSection = styled.section`
     flex-direction: column;
     justify-content: space-evenly;
     height: 100%;
+    width: 90%;
+
+    @media screen and (max-width: ${maxWidth}){
+        width: 70%;
+    }
 `
 
 export const DataColumn = styled.div`

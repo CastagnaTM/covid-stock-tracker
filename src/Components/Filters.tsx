@@ -21,6 +21,7 @@ import {
 interface Props {
   getUserData(ticker: string, beginDate: Date | null, endDate: Date | null, from: string): void;
   findStock(ticker: string): Promise<string>;
+  setExpanded(value);
 }
 
 export const Filters: React.FC<Props> = (props) => {
@@ -49,6 +50,7 @@ export const Filters: React.FC<Props> = (props) => {
   createStyles({
     button: {
       margin: theme.spacing(1),
+      width: '100%',
       background: "#1db954",
       marginTop: "1em",
       fontSize: "1.2rem",
@@ -56,7 +58,7 @@ export const Filters: React.FC<Props> = (props) => {
       '&:hover': {
         background: "#059ac1",
         color: "#0a0a0a",
-        transition: 'all 500ms ease-in-out'
+        transition: 'all 500ms ease-in-out',
       }
     },
     root: {
@@ -171,8 +173,10 @@ export const Filters: React.FC<Props> = (props) => {
           size="large"
           className={classes.button}
           startIcon={<SaveIcon />}
-          onClick={() => 
-            validateSubmit(stock, startDate, endDate)
+          onClick={() => {
+              validateSubmit(stock, startDate, endDate);
+            props.setExpanded(false)
+          }
           }
         >
         Submit
