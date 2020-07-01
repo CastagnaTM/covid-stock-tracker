@@ -36,7 +36,7 @@ export default class ZoomGraph extends PureComponent {
     }
   }
   getAxisYDomain = (from, to, ref, offset) => {
-    console.log("FROM", from, "TO", to);
+    // console.log("FROM", from, "TO", to);
 
     const refData = this.state.data.slice(from - 1, to);
     
@@ -146,7 +146,7 @@ export default class ZoomGraph extends PureComponent {
   }
 
   render() {
-    console.log(this.props.isMobile)
+    // console.log(this.props.isMobile)
     const legendStyle = {
       color: '#FFFFFF',
       fontSize: this.props.isMobile ? '.8em' : '1em'
