@@ -13,9 +13,9 @@ import { convertToRealTime } from './functions';
 import CompanyData from './Components/CompanyData';
 import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery } from './queries';
 import { makeStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -29,15 +29,13 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightRegular,
     color: "#2c8096",
     padding: "1em",
+    align: 'center',
   },
   filters: {
     display: 'flex',
     justifyContent: 'center', 
     height: 'calc(100vh - 180px)',
   },
-  summary: {
-    textAlign: 'center',
-  }
 }));
 
 
@@ -240,21 +238,21 @@ return (
       </Navigation>
       <Main>
         <MobileButton className={classes.root}>
-          <ExpansionPanel>
-            <ExpansionPanelSummary
+          <Accordion>
+            <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
-              className={classes.summary}
+              
             >
-              <Typography className={classes.heading}>Filters</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails className={classes.filters}> 
+              <Typography className={classes.heading} >Dashboard</Typography>
+            </AccordionSummary>
+            <AccordionDetails className={classes.filters}> 
               {/* <Typography> */}
               <Filters findStock={findStock} getUserData={getUserData} ></Filters>
               {/* </Typography> */}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+            </AccordionDetails>
+          </Accordion>
           </MobileButton>
         <ControlPanel>
           
