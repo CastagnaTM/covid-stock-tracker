@@ -15,7 +15,6 @@ function printingCompany(companyData): any{
   if(companyData){
     return (
       <CompanyStyle>
-        <p><span>Company:</span> <a href={companyData.web_url || companyData.weburl}>{companyData.name}</a></p>
         <p><span>Industry:</span> {companyData.industry || companyData.finnhubIndustry}</p>
         <p><span>Currency:</span> {companyData.currency}</p>
         <p><span>Market Capitalization:</span> {companyData.market_capitalization || companyData.marketCapitalization}</p>

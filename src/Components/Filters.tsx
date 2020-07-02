@@ -98,39 +98,35 @@ export const Filters: React.FC<Props> = (props) => {
     <FormSection>
       <ErrorMessage>{errorMessage}</ErrorMessage>  
       <H4> Select Stock </H4>
-      <FormDiv>
-        <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-helper-label">Ticker</InputLabel>
-            <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={stock}
-                onChange={handleChange}
-                >
-                {mapTickers()}
-            </Select>
-            <FormHelperText>Select Stock Ticker</FormHelperText>
-        </FormControl>
-        <FormDiv>
-          <TextField 
-            id="outlined-search" 
-            label="Search Ticker" 
-            type="search" 
-            variant="outlined" 
-            className={classes.root}
-            onChange={(e) => {
-              if (e.target.value.length === 0) setValidTicker('default');
-              else if (e.target.value.length > 0 && e.target.value.length <= 5) {
-                props.findStock(e.target.value).then(ticker => {
-                  setValidTicker(ticker);
-                  setStock(ticker);
-                });
+      <FormControl className={classes.formControl}>
+          <InputLabel id="demo-simple-select-helper-label">Ticker</InputLabel>
+          <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={stock}
+              onChange={handleChange}
+              >
+              {mapTickers()}
+          </Select>
+          <FormHelperText>Select Stock Ticker</FormHelperText>
+      </FormControl>
+      <TextField 
+        id="outlined-search" 
+        label="Search Ticker" 
+        type="search" 
+        variant="outlined" 
+        className={classes.root}
+        onChange={(e) => {
+          if (e.target.value.length === 0) setValidTicker('default');
+          else if (e.target.value.length > 0 && e.target.value.length <= 5) {
+            props.findStock(e.target.value).then(ticker => {
+              setValidTicker(ticker);
+              setStock(ticker);
+            });
 
-              } 
-            }}
-          />
-        </FormDiv>
-      </FormDiv>
+          } 
+        }}
+      />
       <H4> Select Dates </H4>
       <FormContainer> 
         <MuiPickersUtilsProvider utils={DateFnsUtils}>

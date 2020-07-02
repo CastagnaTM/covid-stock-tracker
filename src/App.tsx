@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   filters: {
     display: 'flex',
     justifyContent: 'center', 
-    height: 'calc(100vh - 180px)',
+    height: 'calc(100vh - 180px - 2em)',
   },
   summary: {
     flexGrow: 0,
@@ -118,21 +118,12 @@ const fetchAllStock = (): void => {
     .then(data => Object.keys(data).length > 0 ? ticker: "")
     return data;
   }   
-  
-
-
-
-
-
-
-
 
 const App: React.FC = () => {
   const classes = useStyles();
   const [state, setState] = useState({about: false});
   const [chartData, setChartData] =  useState([]);
-  const [companyData,  setCompanyData] = useState({});
-  const [companyName, setCompanyName] = useState("");
+  const [companyData,  setCompanyData] = useState<any>({});
   const [isMobile, setMobile] = useState(false);
   const [expanded, setExpanded] = React.useState<string | false>('panel1');
 
@@ -155,8 +146,8 @@ const App: React.FC = () => {
       )
         .then((resp) => resp.json())
         .then((data) => {
-          setCompanyData(data);
-          setCompanyName(data.name)
+          setCompanyData(data);          
+          console.log(data.name);
         })
         .catch((error) => {
           throw error;
@@ -204,7 +195,6 @@ const App: React.FC = () => {
           }
             setChartData(arr);
             setCompanyData(data.data.findDates.companyData);
-            setCompanyName(data.data.findDates.companyData.name)
         });
       }
     };
@@ -272,10 +262,10 @@ return (
           {chartData.length > 0 &&  
             <GraphContainer> 
               <CompanyName>
-                <p>{companyName}</p>
+                <a href={companyData.web_url || companyData.weburl}>{companyData.name}</a>
               </CompanyName>
               <GraphBox1>
-                  <ZoomGraph data={chartData} isMobile={isMobile}></ZoomGraph>
+                <ZoomGraph data={chartData} isMobile={isMobile}></ZoomGraph>
               </GraphBox1>
               <GraphBox2>
                 <DataColumn>
