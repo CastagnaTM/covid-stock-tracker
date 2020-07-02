@@ -31,6 +31,7 @@ export const Filters: React.FC<Props> = (props) => {
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setStock(event.target.value as string);
+    setSearch('');
   }
 
   const mapTickers = () => {
@@ -45,7 +46,8 @@ export const Filters: React.FC<Props> = (props) => {
   const [endDate, setEndDate] = useState<Date | null>( new Date('2020-01-02'));
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [validTicker, setValidTicker] = useState<string>('default');
-  const [stock, setStock] = useState<String>('');  
+  const [stock, setStock] = useState<string>(''); 
+  const [search, setSearch] = useState<string>('');
   const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
@@ -115,8 +117,10 @@ export const Filters: React.FC<Props> = (props) => {
         label="Search Ticker" 
         type="search" 
         variant="outlined" 
+        value={search}
         className={classes.root}
         onChange={(e) => {
+          setSearch(e.target.value)
           if (e.target.value.length === 0) setValidTicker('default');
           else if (e.target.value.length > 0 && e.target.value.length <= 5) {
             props.findStock(e.target.value).then(ticker => {
