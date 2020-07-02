@@ -3,7 +3,7 @@ import {
     Navigation, Ul, NavButton,
     Main, ControlPanel, H1, MobileButton, 
     GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, CompanyName
-} from './Components/Styles';
+} from './Input/Styles';
 import Filters from './Components/Filters';
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
 import DateInput from './Input/DateInput';
@@ -247,23 +247,17 @@ return (
               <Typography className={classes.heading} >Dashboard</Typography>
             </MuiAccordionSummary>
             <MuiAccordionDetails className={classes.filters}> 
-              {/* <Typography> */}
               <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
-              {/* </Typography> */}
             </MuiAccordionDetails>
           </MuiAccordion>
           </MobileButton>
         <ControlPanel>
-          
           <H1>Dashboard</H1>
-            
           <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
         </ControlPanel>
           {chartData.length > 0 &&  
             <GraphContainer> 
-              <CompanyName>
-                <a href={companyData.web_url || companyData.weburl}>{companyData.name}</a>
-              </CompanyName>
+              <CompanyName href={companyData.web_url || companyData.weburl} target="_blank" rel="noopener">{companyData.name}</CompanyName>
               <GraphBox1>
                 <ZoomGraph data={chartData} isMobile={isMobile}></ZoomGraph>
               </GraphBox1>

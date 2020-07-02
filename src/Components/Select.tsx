@@ -1,5 +1,5 @@
 import React from "react";
-import { FormDiv } from "./Styles";
+import { FormDiv } from "../Input/Styles";
 import { FormControl, InputLabel, FormHelperText, Select, MenuItem } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { tickers } from "../constants";

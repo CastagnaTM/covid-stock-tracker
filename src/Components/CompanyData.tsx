@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {CompanyStyle} from './Styles'
+import {CompanyStyle} from '../Input/Styles'
 
 interface Props {
   companyData: Object

@@ -173,7 +173,7 @@ export const ZoomOutButton = styled.button`
     background-color: transparent;
     border: solid 2px ${palette.blue};
     border-radius: 4px;
-    margin-bottom: 4px;
+    margin: 1em;
     transition: all 500ms ease-in-out;
 
     &:hover {
@@ -275,15 +275,13 @@ export const CompanyStyle = styled.div`
             color: #c7a4ee;
             font-family: 'Roboto', sans-serif;
         }
-        > a {
-            color: ${palette.blue}
-        }
     }
 `
 
-export const CompanyName = styled.div`
+export const CompanyName = styled.a`
     grid-area: box0;
-    color: white;
+    color: ${palette.blue};
     text-align: center;
+    margin-top: 1rem;
 `
 
