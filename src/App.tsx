@@ -3,7 +3,7 @@ import {
     Navigation, Ul, NavButton,
     Main, ControlPanel, H1, MobileButton, 
     GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, CompanyName
-} from './Input/Styles';
+} from './Components/Styles';
 import Filters from './Components/Filters';
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
 import DateInput from './Input/DateInput';
@@ -269,9 +269,6 @@ return (
             </GraphContainer>
           }
       </Main>
-      <Footer>
-
-      </Footer>
   </div>
   );
 };
