@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Legend, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceArea, ResponsiveContainer } from 'recharts';
 import { convertToRealTime } from '../functions';
-import { Ul, ZoomOutButton, SVGDiv, Modal, ModalHeader } from '../Input/Styles';
+import { Ul, ZoomOutButton, SVGDiv, Modal, ModalHeader } from './Styles';
 import { significantDates } from '../constants';
 import InfoIcon from '@material-ui/icons/Info';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';
