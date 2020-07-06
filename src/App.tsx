@@ -19,6 +19,7 @@ import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AboutPage from './Components/AboutPage'
+import VirusData from "./Components/VirusData";
 
 
 
@@ -128,6 +129,8 @@ const App: React.FC = () => {
   const [isMobile, setMobile] = useState(false);
   const [expanded, setExpanded] = React.useState<string | false>('panel1');
   const [virusData,  setVirusData] = useState<any>([]);
+  const [beginDate, setBeginDate] = useState<any>(null);
+  const [endDate, setEndDate] = useState<any>(null);
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
@@ -177,8 +180,8 @@ const App: React.FC = () => {
         });
     }
 
-    const fetchSingleStock = (ticker: string, beginDate: Date | null , endDate: Date | null): void => {
-      const query = findCompanyDatesQuery(ticker, beginDate, endDate);
+    const fetchSingleStock = (ticker: string, startingDate: Date | null, endingDate: Date | null): void => {
+      const query = findCompanyDatesQuery(ticker, startingDate, endingDate);
       if (ticker) {
         fetch(GRAPHQL_API, {
           method: "POST",
@@ -201,11 +204,11 @@ const App: React.FC = () => {
       }
     };
 
-    const fetchFromFinnhub = (ticker, beginDate, endDate) => {
-        beginDate = new Date(beginDate).getTime()/1000 - 3600;
-        endDate = new Date(endDate).getTime()/1000;
+    const fetchFromFinnhub = (ticker: string, startingDate, endingDate) => {
+        startingDate = new Date(startingDate).getTime()/1000 - 3600;
+        endingDate = new Date(endingDate).getTime()/1000;
         getCompanyData(ticker);
-        fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate}&to=${endDate}&token=${finnhubKey}`)
+        fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
         .then((resp) => resp.json())
         .then(({ c, h, l, o, t }) => {
           const stock = c.map((value: number, index: number) => {
@@ -224,8 +227,22 @@ const App: React.FC = () => {
           throw error;
         });
     };
-
+    const convertDateObjectToString = (date):string => {   //yyyymmdd
+      let mm = date.getMonth() + 1; // getMonth() is zero-based
+      let dd = date.getDate();
+    
+      return [date.getFullYear(),
+              (mm>9 ? '' : '0') + mm,
+              (dd>9 ? '' : '0') + dd
+             ].join('');
+    };
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => {
+      if (beginDate) {
+        setBeginDate(convertDateObjectToString(beginDate));
+      }
+      if (endDate) {
+        setEndDate(convertDateObjectToString(endDate));
+      }
       from && (from !== "default" ? fetchFromFinnhub(ticker, beginDate, endDate) : fetchSingleStock(ticker, beginDate, endDate));  
     }  
 
@@ -277,6 +294,9 @@ return (
                 <GraphBox2>
                   <DataColumn>
                     <CompanyData companyData={companyData}/>
+                  </DataColumn>
+                  <DataColumn>
+                    <VirusData beginDate={beginDate} endDate={endDate} virusData={virusData}/>
                   </DataColumn>
                 </GraphBox2>
               </GraphContainer>
