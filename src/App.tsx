@@ -257,7 +257,7 @@ const App: React.FC = () => {
     }
 
 return (
-  <div>
+  <>
       <Navigation>
         <Ul>
             <li> <NavButton onClick={() => setAbout(false)}> Covid Stock Tracker </NavButton> </li>
@@ -303,12 +303,11 @@ return (
             }
         </Main>
       }
-
       {about && 
       <AboutPage/>
       
       }
-  </div>
+  </>
   );
 };
 

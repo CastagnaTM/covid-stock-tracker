@@ -68,7 +68,6 @@ function VirusData({virusData, beginDate, endDate}: Props) {
     ) 
     : 
     null      
-      // {printVirusData(virusData)}
   );
 }
 
