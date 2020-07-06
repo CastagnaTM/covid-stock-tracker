@@ -5,7 +5,7 @@ import {
     GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, CompanyName
 } from './Components/Styles';
 import Filters from './Components/Filters';
-import { finnhubKey, finnhubBase, tickers, GRAPHQL_API } from "./constants";
+import { finnhubKey, finnhubBase, tickers, GRAPHQL_API, VIRUS_API } from "./constants";
 import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
 import ZoomGraph from './Components/ZoomGraph';
@@ -228,8 +228,21 @@ const App: React.FC = () => {
       from && (from !== "default" ? fetchFromFinnhub(ticker, beginDate, endDate) : fetchSingleStock(ticker, beginDate, endDate));  
     }  
 
+
+    const getVirusData = () => {
+      fetch(VIRUS_API,  {
+        method: 'GET',
+        redirect: 'manual'
+      })
+        .then(response => response.json())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+      // fetch(VIRUS_API).then(resp => resp.json).then(data => console.log(data)).catch(error => console.log(error))
+    }
+
 return (
   <div>
+    {getVirusData()}
       <Navigation>
         <Ul>
             <li> <NavButton onClick={() => setAbout(false)}> Covid Stock Tracker </NavButton> </li>

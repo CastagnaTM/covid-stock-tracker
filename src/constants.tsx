@@ -1,6 +1,7 @@
 export const finnhubKey = process.env.REACT_APP_FINNHUB_KEY;
 export const finnhubBase = 'https://finnhub.io/api/v1/';
 export const GRAPHQL_API = "http://localhost:4000/graphql";
+export const VIRUS_API = "https://covidtracking.com/api/us/daily";
 export const tickers = [
     { ticker: 'JPM', name: 'JPMorgan Chase & Co' },
     { ticker: 'BRK.A', name: 'Bank of America Corp' },
