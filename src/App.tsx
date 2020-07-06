@@ -121,7 +121,7 @@ const fetchAllStock = (): void => {
 
 const App: React.FC = () => {
   const classes = useStyles();
-  const [state, setState] = useState({about: false});
+  const [about, setAbout  ] = useState(false);
   const [chartData, setChartData] =  useState([]);
   const [companyData,  setCompanyData] = useState<any>({});
   const [isMobile, setMobile] = useState(false);
@@ -231,44 +231,47 @@ return (
   <div>
       <Navigation>
         <Ul>
-            <li> <NavButton onClick={() => setState({about: false})}> Covid Stock Tracker </NavButton> </li>
-            <li> <NavButton onClick={() => setState({about: true})}> About </NavButton> </li> 
+            <li> <NavButton onClick={() => setAbout(false)}> Covid Stock Tracker </NavButton> </li>
+            <li> <NavButton onClick={() => setAbout(true)}> About </NavButton> </li> 
         </Ul>
       </Navigation>
-      <Main>
-        <MobileButton className={classes.root}>
-          <MuiAccordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-            <MuiAccordionSummary aria-controls="panel1d-content" id="panel1d-header"
-              expandIcon={<ExpandMoreIcon />}
-              classes={{
-                content: classes.summary,
-              }}
-            >
-              <Typography className={classes.heading} >Dashboard</Typography>
-            </MuiAccordionSummary>
-            <MuiAccordionDetails className={classes.filters}> 
-              <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
-            </MuiAccordionDetails>
-          </MuiAccordion>
-          </MobileButton>
-        <ControlPanel>
-          <H1>Dashboard</H1>
-          <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
-        </ControlPanel>
-          {chartData.length > 0 &&  
-            <GraphContainer> 
-              <CompanyName href={companyData.web_url || companyData.weburl} target="_blank" rel="noopener">{companyData.name}</CompanyName>
-              <GraphBox1>
-                <ZoomGraph data={chartData} isMobile={isMobile}></ZoomGraph>
-              </GraphBox1>
-              <GraphBox2>
-                <DataColumn>
-                  <CompanyData companyData={companyData}/>
-                </DataColumn>
-              </GraphBox2>
-            </GraphContainer>
-          }
-      </Main>
+      {!about && 
+        <Main>
+          <MobileButton className={classes.root}>
+            <MuiAccordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+              <MuiAccordionSummary aria-controls="panel1d-content" id="panel1d-header"
+                expandIcon={<ExpandMoreIcon />}
+                classes={{
+                  content: classes.summary,
+                }}
+              >
+                <Typography className={classes.heading} >Dashboard</Typography>
+              </MuiAccordionSummary>
+              <MuiAccordionDetails className={classes.filters}> 
+                <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
+              </MuiAccordionDetails>
+            </MuiAccordion>
+            </MobileButton>
+          <ControlPanel>
+            <H1>Dashboard</H1>
+            <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
+          </ControlPanel>
+            {chartData.length > 0 &&  
+              <GraphContainer> 
+                <CompanyName href={companyData.web_url || companyData.weburl} target="_blank" rel="noopener">{companyData.name}</CompanyName>
+                <GraphBox1>
+                  <ZoomGraph data={chartData} isMobile={isMobile}></ZoomGraph>
+                </GraphBox1>
+                <GraphBox2>
+                  <DataColumn>
+                    <CompanyData companyData={companyData}/>
+                  </DataColumn>
+                </GraphBox2>
+              </GraphContainer>
+            }
+        </Main>
+      }
+
   </div>
   );
 };
