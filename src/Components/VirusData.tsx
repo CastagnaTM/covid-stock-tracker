@@ -4,8 +4,8 @@ import {CompanyStyle} from './Styles'
 
 interface Props {
   virusData: any,
-  beginDate: String | null,
-  endDate: String | null,
+  beginDate: any,
+  endDate: any,
 }
 
 function printVirusData(virusData): any {
@@ -21,8 +21,8 @@ function printVirusData(virusData): any {
 
 
 function VirusData({virusData, beginDate, endDate}: Props) {
-  const [beginData, setBeginData] = useState<object>({});
-  const [endData, setEndData] = useState<object>({});
+  const [beginData, setBeginData] = useState<any>({});
+  const [endData, setEndData] = useState<any>({});
   const [hasDates, setHasDates] = useState<boolean>(true);
 
   const setVirusDate = (): void => {
@@ -47,11 +47,27 @@ function VirusData({virusData, beginDate, endDate}: Props) {
     setVirusDate();
   }, [beginDate, endDate])
 
-  return (
-    hasDates &&
-    <div>
-
-    </div>
+  return (    
+    hasDates ? (
+      <>
+        <CompanyStyle>
+          <div>{beginData.date}</div>
+          <p><span>positive:</span>{beginData.positive}</p>
+          <p><span>negative:</span>{beginData.negative}</p>
+          <p><span>recovered:</span>{beginData.recovered}</p>
+          <div>{endData.date}</div>
+          <p><span>positive:</span>{endData.positive}</p>
+          <p><span>negative:</span>{endData.negative}</p>
+          <p><span>recovered:</span>{endData.recovered}</p>
+          <div>differences</div>
+          <p><span>positive:</span>{endData.positive - beginData.positive}</p>
+          <p><span>negative:</span>{endData.negative - beginData.negative}</p>
+          <p><span>recovered:</span>{endData.recovered - beginData.recovered}</p>
+        </CompanyStyle>
+      </>
+    ) 
+    : 
+    null      
       // {printVirusData(virusData)}
   );
 }
