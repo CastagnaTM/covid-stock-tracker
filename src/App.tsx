@@ -127,14 +127,15 @@ const App: React.FC = () => {
   const [companyData,  setCompanyData] = useState<any>({});
   const [isMobile, setMobile] = useState(false);
   const [expanded, setExpanded] = React.useState<string | false>('panel1');
-
+  const [virusData,  setVirusData] = useState<any>([]);
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
 
   useEffect( () => {
-    windowSizeCheck()
-    window.addEventListener('resize', windowSizeCheck)
+    windowSizeCheck();
+    getVirusData();
+    window.addEventListener('resize', windowSizeCheck);
   }, [])
 
   const windowSizeCheck = () => {
@@ -228,21 +229,18 @@ const App: React.FC = () => {
       from && (from !== "default" ? fetchFromFinnhub(ticker, beginDate, endDate) : fetchSingleStock(ticker, beginDate, endDate));  
     }  
 
-
     const getVirusData = () => {
       fetch(VIRUS_API,  {
         method: 'GET',
         redirect: 'manual'
       })
         .then(response => response.json())
-        .then(result => console.log(result))
+        .then(result => setVirusData(result))
         .catch(error => console.log('error', error));
-      // fetch(VIRUS_API).then(resp => resp.json).then(data => console.log(data)).catch(error => console.log(error))
     }
 
 return (
   <div>
-    {getVirusData()}
       <Navigation>
         <Ul>
             <li> <NavButton onClick={() => setAbout(false)}> Covid Stock Tracker </NavButton> </li>
