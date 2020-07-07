@@ -109,6 +109,13 @@ export const MobileButton = styled.div`
         display: initial;
     }
 `
+export const MobileVirusButton = styled.div`
+    display: none;
+
+    @media screen and (max-width: 750px) {
+        display: initial;
+    }
+`
 
 export const H4 = styled.header`
     font-size: 1.3em;
@@ -228,7 +235,7 @@ export const ModalHeader = styled.header`
 export const GraphBox2 = styled.div`
     grid-area: box2;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     text-align: center;
     font-size: large;
 `
@@ -266,6 +273,13 @@ export const DataColumn = styled.div`
     margin: 0 auto;
 `
 
+export const VirusDataColumn = styled(DataColumn)`
+
+    @media screen and (max-width: 750px){
+        display: none;
+    }
+`
+
 export const CompanyStyle = styled.div`
     display: flex;
     flex-direction: column;
@@ -286,9 +300,27 @@ export const CompanyStyle = styled.div`
 
 export const VirusStyle = styled(CompanyStyle)`
 
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+
+    .virusColumn {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+
+        
+
     p { 
         color: ${palette.blue};
-        > span {
+       
+    }
+
+    .labels {
+        > p {
+
             color: white;
         }
     }
@@ -297,11 +329,40 @@ export const VirusStyle = styled(CompanyStyle)`
         color: ${palette.green};
         // color: #2a7f62;
         // 2E933C
+       
+    }
+
+    .positive {
+        color: ${palette.red};
+        // #B80C09;
+       
+    }
+
+    .recovered {
+        color: #eedaa4;
+        
+    }   
+`
+
+export const MobileVirusStyle = styled(CompanyStyle)`
+
+    display: flex;
+    flex-direction: column;
+    background-color: ${palette.darkGrey};
+    p { 
+        color: ${palette.blue};
         > span {
             color: white;
         }
     }
-
+    .negative {
+        color: ${palette.green};
+        // color: #2a7f62;
+        // 2E933C
+        > span {
+            color: white;
+        }
+    }
     .positive {
         color: ${palette.red};
         // #B80C09;
@@ -309,14 +370,12 @@ export const VirusStyle = styled(CompanyStyle)`
             color: white;
         }
     }
-
     .recovered {
         color: #eedaa4;
         > span {
             color: white;
         }
     }
-   
 `
 
 export const CompanyName = styled.a`

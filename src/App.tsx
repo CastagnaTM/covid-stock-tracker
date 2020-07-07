@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react";
 import {
     Navigation, Ul, NavButton,
-    Main, ControlPanel, H1, MobileButton, 
-    GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, CompanyName
+    Main, ControlPanel, H1, MobileButton, MobileVirusButton,
+    GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, VirusDataColumn, CompanyName
 } from './Components/Styles';
 import Filters from './Components/Filters';
 import { finnhubKey, finnhubBase, tickers, GRAPHQL_API, VIRUS_API } from "./constants";
@@ -32,14 +32,40 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightRegular,
     color: "#2c8096",
     padding: "1em",
+    
   },
   filters: {
     display: 'flex',
     justifyContent: 'center', 
     height: 'calc(100vh - 180px - 2em)',
+    
   },
   summary: {
     flexGrow: 0,
+    
+  },
+  virusDataRoot: {
+    width: '100%',
+  },
+  virusDataHeading: {
+    fontSize: theme.typography.pxToRem(25),
+    fontWeight: theme.typography.fontWeightRegular,
+    color: "white",
+    padding: "1em",
+    backgroundColor: '#0a0a0a',
+  },
+  virusDataFilters: {
+    display: 'flex',
+    justifyContent: 'center', 
+    height: 'calc(100vh - 180px - 2em)',
+    backgroundColor: '#0a0a0a',
+  },
+  virusDataSummary: {
+    flexGrow: 0,
+    backgroundColor: '#0a0a0a',
+  },
+  virusSumRoot: {
+    backgroundColor: '#0a0a0a',
   }
 }));
 
@@ -272,7 +298,7 @@ return (
               <MuiAccordionSummary aria-controls="panel1d-content" id="panel1d-header"
                 expandIcon={<ExpandMoreIcon />}
                 classes={{
-                  content: classes.summary,
+                  content: classes.summary
                 }}
               >
                 <Typography className={classes.heading} >Dashboard</Typography>
@@ -296,9 +322,27 @@ return (
                   <DataColumn>
                     <CompanyData companyData={companyData}/>
                   </DataColumn>
-                  <DataColumn>
-                    <VirusData beginDate={beginDate} endDate={endDate} virusData={virusData}/>
-                  </DataColumn>
+                  <MobileVirusButton className={classes.virusDataRoot}>
+                  <MuiAccordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                    <MuiAccordionSummary aria-controls="panel2d-content" id="panel2d-header"
+                      expandIcon={<ExpandMoreIcon style={{color: 'white'}}/>}
+                      classes={{
+                        content: classes.virusDataSummary,
+                        root: classes.virusSumRoot,
+                      }}
+                    >
+                      <Typography className={classes.virusDataHeading} >Virus Data</Typography>
+                    </MuiAccordionSummary>
+                    <MuiAccordionDetails className={classes.virusDataFilters}> 
+                      <DataColumn>
+                        <VirusData beginDate={beginDate} endDate={endDate} virusData={virusData} virusMobile={true}/>
+                      </DataColumn>
+                    </MuiAccordionDetails>
+                  </MuiAccordion>
+                  </MobileVirusButton>
+                  <VirusDataColumn>
+                        <VirusData beginDate={beginDate} endDate={endDate} virusData={virusData} virusMobile={false}/>
+                  </VirusDataColumn>
                 </GraphBox2>
               </GraphContainer>
             }
