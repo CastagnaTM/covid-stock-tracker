@@ -227,6 +227,8 @@ export const ModalHeader = styled.header`
 
 export const GraphBox2 = styled.div`
     grid-area: box2;
+    display: flex;
+    flex-direction: row;
     text-align: center;
     font-size: large;
 `
@@ -269,6 +271,10 @@ export const CompanyStyle = styled.div`
     flex-direction: column;
     margin: 0 auto;
 
+    h2 {
+        color: white;
+    }
+
     > p {
         color: #eedaa4;
         > span {
@@ -276,6 +282,41 @@ export const CompanyStyle = styled.div`
             font-family: 'Roboto', sans-serif;
         }
     }
+`
+
+export const VirusStyle = styled(CompanyStyle)`
+
+    p { 
+        color: ${palette.blue};
+        > span {
+            color: white;
+        }
+    }
+
+    .negative {
+        color: ${palette.green};
+        // color: #2a7f62;
+        // 2E933C
+        > span {
+            color: white;
+        }
+    }
+
+    .positive {
+        color: ${palette.red};
+        // #B80C09;
+        > span {
+            color: white;
+        }
+    }
+
+    .recovered {
+        color: #eedaa4;
+        > span {
+            color: white;
+        }
+    }
+   
 `
 
 export const CompanyName = styled.a`

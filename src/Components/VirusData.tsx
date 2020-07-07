@@ -1,6 +1,6 @@
 
 import React, {useState, useEffect} from 'react';
-import {CompanyStyle} from './Styles'
+import {VirusStyle} from './Styles'
 
 interface Props {
   virusData: any,
@@ -8,22 +8,16 @@ interface Props {
   endDate: any,
 }
 
-function printVirusData(virusData): any {
-  if(virusData){
-    return (
-      <CompanyStyle>
-        <p><span>Industry:</span> {virusData.industry || virusData.finnhubIndustry}</p>
-
-      </CompanyStyle>
-    )
-  }
-}
-
 
 function VirusData({virusData, beginDate, endDate}: Props) {
+  
   const [beginData, setBeginData] = useState<any>({});
   const [endData, setEndData] = useState<any>({});
   const [hasDates, setHasDates] = useState<boolean>(true);
+
+  const formatDate = (date) => {
+    return `${date.slice(4,6)}-${date.slice(6)}-${date.slice(0,4)}`;
+  }
 
   const setVirusDate = (): void => {
     const filteredVirusDates = virusData.filter(virusDate => virusDate.date.toString() === endDate ||virusDate.date.toString() === beginDate );
@@ -52,20 +46,21 @@ function VirusData({virusData, beginDate, endDate}: Props) {
   return (    
     hasDates ? (
       <>
-        <CompanyStyle>
-          <div>{beginData.date}</div>
-          <p><span>positive:</span>{beginData.positive}</p>
-          <p><span>negative:</span>{beginData.negative}</p>
-          <p><span>recovered:</span>{beginData.recovered}</p>
-          <div>{endData.date}</div>
-          <p><span>positive:</span>{endData.positive}</p>
-          <p><span>negative:</span>{endData.negative}</p>
-          <p><span>recovered:</span>{endData.recovered}</p>
-          <div>differences</div>
-          <p><span>positive:</span>{endData.positive - beginData.positive}</p>
-          <p><span>negative:</span>{endData.negative - beginData.negative}</p>
-          <p><span>recovered:</span>{endData.recovered - beginData.recovered}</p>
-        </CompanyStyle>
+        <VirusStyle>
+          <h2>Virus Data</h2>
+          <p><span>Starting Date: </span>{formatDate(beginDate)}</p>
+          <p className='positive'><span>Positive Cases: </span>{beginData.positive}</p>
+          <p className='negative'><span>Negative Cases: </span>{beginData.negative}</p>
+          {beginData.recovered && <p className='recovered'><span>Recovered: </span>{beginData.recovered}</p>}
+          <p><span>Ending Date: </span>{formatDate(endDate)}</p>
+          <p className='positive'><span>Positive Cases: </span>{endData.positive}</p>
+          <p className='negative'><span>Negative Cases: </span>{endData.negative}</p>
+          {endData.recovered && <p className='recovered'><span>Recovered: </span>{endData.recovered}</p>}
+          <p>differences</p>
+          <p className='positive'><span>Positive Cases: </span>{endData.positive - beginData.positive}</p>
+          <p className='negative'><span>Negative Cases: </span>{endData.negative - beginData.negative}</p>
+          {endData.recovered && <p className='recovered'><span>Recovered:</span> {endData.recovered - beginData.recovered}</p>}
+        </VirusStyle>
       </>
     ) 
     : 

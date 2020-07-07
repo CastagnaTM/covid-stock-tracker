@@ -15,6 +15,7 @@ function printingCompany(companyData): any{
   if(companyData){
     return (
       <CompanyStyle>
+        <h2>Company Data</h2>
         <p><span>Industry:</span> {companyData.industry || companyData.finnhubIndustry}</p>
         <p><span>Currency:</span> {companyData.currency}</p>
         <p><span>Market Capitalization:</span> {companyData.market_capitalization || companyData.marketCapitalization}</p>
