@@ -30,10 +30,12 @@ function VirusData({virusData, beginDate, endDate}: Props) {
     if (filteredVirusDates.length === 1) {
       setBeginData(virusData[virusData.length -1]);
       setEndData(filteredVirusDates[0]);
+      setHasDates(true);
     }
     else if (filteredVirusDates.length === 2) {
       setBeginData(filteredVirusDates[1]);
       setEndData(filteredVirusDates[0]);
+      setHasDates(true);
     }
     else {
       setHasDates(false);
