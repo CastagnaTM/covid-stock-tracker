@@ -9,6 +9,7 @@ import { finnhubKey, finnhubBase, tickers, GRAPHQL_API, VIRUS_API } from "./cons
 import DateInput from './Input/DateInput';
 import CompanyInput from './Input/CompanyInput';
 import ZoomGraph from './Components/ZoomGraph';
+import LandingPage from './Components/LandingPage';
 import { convertToRealTime } from './functions';
 import CompanyData from './Components/CompanyData';
 import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery } from './queries';
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   filters: {
     display: 'flex',
     justifyContent: 'center', 
-    height: 'calc(100vh - 180px - 2em)',
+    height: 'calc(100vh - 180px - 1.4em)',
     
   },
   summary: {
@@ -60,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   virusDataFilters: {
     display: 'flex',
     justifyContent: 'center', 
-    height: 'calc(100vh - 180px - 2em)',
+    height: 'calc(100vh - 180px - 1.4em)',
     backgroundColor: '#0a0a0a',
   },
   virusDataSummary: {
@@ -156,7 +157,7 @@ const App: React.FC = () => {
   const [chartData, setChartData] =  useState([]);
   const [companyData,  setCompanyData] = useState<any>({});
   const [isMobile, setMobile] = useState(false);
-  const [expanded, setExpanded] = React.useState<string | false>('panel1');
+  const [expanded, setExpanded] = React.useState<string | false>(false);
   const [virusData,  setVirusData] = useState<any>([]);
   const [beginDate, setBeginDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>(null);
@@ -315,7 +316,8 @@ return (
             <H1>Dashboard</H1>
             <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
           </ControlPanel>
-            {chartData.length > 0 &&  
+            {chartData.length > 0? 
+             (
               <GraphContainer> 
                 <CompanyName href={companyData.web_url || companyData.weburl} target="_blank" rel="noopener">{companyData.name}</CompanyName>
                 <GraphBox1>
@@ -348,11 +350,14 @@ return (
                   </MuiAccordion>
                   </MobileVirusButton>
                   <VirusDataColumn>
-                        <VirusData beginDate={beginDate} endDate={endDate} virusData={virusData} virusMobile={false}/>
+                    <VirusData beginDate={beginDate} endDate={endDate} virusData={virusData} virusMobile={false}/>
                   </VirusDataColumn>
                 </GraphBox2>
               </GraphContainer>
-            }
+             )
+             :
+             <LandingPage/>
+            }            
         </Main>
       }
       {about && 

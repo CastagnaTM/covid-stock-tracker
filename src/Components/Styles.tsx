@@ -70,8 +70,7 @@ export const Main = styled.div`
     background-color: ${palette.darkGrey}; 
     display: flex;
     flex-direction: row;
-    height: 90vh;
-
+    height: calc(100vh - 80px);
     @media screen and (max-width: ${maxWidth}){
         flex-direction: column;
     }
@@ -118,13 +117,13 @@ export const MobileVirusButton = styled.div`
 `
 
 export const H4 = styled.header`
-    font-size: 1.3em;
+    font-size: 1.2em;
     color: ${palette.headerBlue}; 
     margin: 0 auto;
     text-align: center;
 
-    @media screen and (max-width: ${maxWidth}) and (min-width: 651px) {
-        font-size: 2em;
+    @media screen and (max-width: 750px){
+        font-size: 1.5rem;
     } 
     
 `
