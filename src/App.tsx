@@ -44,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 0,
     
   },
+  virusAccordionRoot: {
+    backgroundColor: 'transparent',
+  },
   virusDataRoot: {
     width: '100%',
   },
@@ -323,7 +326,11 @@ return (
                     <CompanyData companyData={companyData}/>
                   </DataColumn>
                   <MobileVirusButton className={classes.virusDataRoot}>
-                  <MuiAccordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                  <MuiAccordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}
+                    classes={{
+                      root: classes.virusAccordionRoot,
+                    }}
+                  >
                     <MuiAccordionSummary aria-controls="panel2d-content" id="panel2d-header"
                       expandIcon={<ExpandMoreIcon style={{color: 'white'}}/>}
                       classes={{
