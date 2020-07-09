@@ -70,7 +70,7 @@ export const Main = styled.div`
     background-color: ${palette.darkGrey}; 
     display: flex;
     flex-direction: row;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 30px);
     @media screen and (max-width: ${maxWidth}){
         flex-direction: column;
     }
@@ -239,15 +239,6 @@ export const GraphBox2 = styled.div`
     font-size: large;
 `
 
-export const Footer = styled.footer`
-   bottom: 0;
-   box-sizing: border-box;
-   height: 80px;
-   padding: 1em;
-   width: 100%;
-   background-color: ${palette.grey};
-`
-
 export const FormDiv = styled.div`
     display: flex;
     flex-direction: column;
@@ -386,7 +377,49 @@ export const CompanyName = styled.a`
 
 
 export const Introduction = styled.div `
+    color: white;
+    padding: 1em;
+    font-size: medium;
+    background-color: black;
+    overflow: scroll;
 
+    h4 {
+        font-family: 'Roboto';
+        margin-bottom: 0;
+    }
+
+    section {
+        padding: .5em;
+    }
+
+    ol {
+        > li {
+            list-style-type: number;
+        }
+    }
 
 `
 
+export const Footer = styled.footer`
+    background-color: #0c495b;
+    bottom: 0;
+    height: 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    font-size: medium;
+
+
+    > div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        > p, a {
+            color: white;
+            padding: 5px;
+        }
+    }
+`

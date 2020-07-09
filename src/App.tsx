@@ -21,6 +21,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AboutPage from './Components/AboutPage'
 import VirusData from "./Components/VirusData";
+import GitHubIcon from '@material-ui/icons/GitHub';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
 
 
 
@@ -289,81 +291,86 @@ const App: React.FC = () => {
 
 return (
   <>
-      <Navigation>
-        <Ul>
-            <li> <NavButton onClick={() => setAbout(false)}> Covid Stock Tracker </NavButton> </li>
-            <li> <NavButton onClick={() => setAbout(true)}> About </NavButton> </li> 
-        </Ul>
-      </Navigation>
-      {!about && 
-        <Main>
-          <MobileButton className={classes.root}>
-            <MuiAccordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-              <MuiAccordionSummary aria-controls="panel1d-content" id="panel1d-header"
-                expandIcon={<ExpandMoreIcon />}
+    <Main>
+      <MobileButton className={classes.root}>
+        <MuiAccordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+          <MuiAccordionSummary aria-controls="panel1d-content" id="panel1d-header"
+            expandIcon={<ExpandMoreIcon />}
+            classes={{
+              content: classes.summary
+            }}
+          >
+            <Typography className={classes.heading} >Dashboard</Typography>
+          </MuiAccordionSummary>
+          <MuiAccordionDetails className={classes.filters}> 
+            <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
+          </MuiAccordionDetails>
+        </MuiAccordion>
+        </MobileButton>
+      <ControlPanel>
+        <H1>Dashboard</H1>
+        <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
+      </ControlPanel>
+        {chartData.length > 0? 
+          (
+          <GraphContainer> 
+            <CompanyName href={companyData.web_url || companyData.weburl} target="_blank" rel="noopener">{companyData.name}</CompanyName>
+            <GraphBox1>
+              <ZoomGraph data={chartData} isMobile={isMobile}></ZoomGraph>
+            </GraphBox1>
+            <GraphBox2>
+              <DataColumn>
+                <CompanyData companyData={companyData}/>
+              </DataColumn>
+              <MobileVirusButton className={classes.virusDataRoot}>
+              <MuiAccordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}
                 classes={{
-                  content: classes.summary
+                  root: classes.virusAccordionRoot,
                 }}
               >
-                <Typography className={classes.heading} >Dashboard</Typography>
-              </MuiAccordionSummary>
-              <MuiAccordionDetails className={classes.filters}> 
-                <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
-              </MuiAccordionDetails>
-            </MuiAccordion>
-            </MobileButton>
-          <ControlPanel>
-            <H1>Dashboard</H1>
-            <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
-          </ControlPanel>
-            {chartData.length > 0? 
-             (
-              <GraphContainer> 
-                <CompanyName href={companyData.web_url || companyData.weburl} target="_blank" rel="noopener">{companyData.name}</CompanyName>
-                <GraphBox1>
-                  <ZoomGraph data={chartData} isMobile={isMobile}></ZoomGraph>
-                </GraphBox1>
-                <GraphBox2>
+                <MuiAccordionSummary aria-controls="panel2d-content" id="panel2d-header"
+                  expandIcon={<ExpandMoreIcon style={{color: 'white'}}/>}
+                  classes={{
+                    content: classes.virusDataSummary,
+                    root: classes.virusSumRoot,
+                  }}
+                >
+                  <Typography className={classes.virusDataHeading} >Virus Data</Typography>
+                </MuiAccordionSummary>
+                <MuiAccordionDetails className={classes.virusDataFilters}> 
                   <DataColumn>
-                    <CompanyData companyData={companyData}/>
+                    <VirusData beginDate={beginDate} endDate={endDate} virusData={virusData} virusMobile={true}/>
                   </DataColumn>
-                  <MobileVirusButton className={classes.virusDataRoot}>
-                  <MuiAccordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}
-                    classes={{
-                      root: classes.virusAccordionRoot,
-                    }}
-                  >
-                    <MuiAccordionSummary aria-controls="panel2d-content" id="panel2d-header"
-                      expandIcon={<ExpandMoreIcon style={{color: 'white'}}/>}
-                      classes={{
-                        content: classes.virusDataSummary,
-                        root: classes.virusSumRoot,
-                      }}
-                    >
-                      <Typography className={classes.virusDataHeading} >Virus Data</Typography>
-                    </MuiAccordionSummary>
-                    <MuiAccordionDetails className={classes.virusDataFilters}> 
-                      <DataColumn>
-                        <VirusData beginDate={beginDate} endDate={endDate} virusData={virusData} virusMobile={true}/>
-                      </DataColumn>
-                    </MuiAccordionDetails>
-                  </MuiAccordion>
-                  </MobileVirusButton>
-                  <VirusDataColumn>
-                    <VirusData beginDate={beginDate} endDate={endDate} virusData={virusData} virusMobile={false}/>
-                  </VirusDataColumn>
-                </GraphBox2>
-              </GraphContainer>
-             )
-             :
-             <LandingPage/>
-            }            
-        </Main>
-      }
-      {about && 
-      <AboutPage/>
-      
-      }
+                </MuiAccordionDetails>
+              </MuiAccordion>
+              </MobileVirusButton>
+              <VirusDataColumn>
+                <VirusData beginDate={beginDate} endDate={endDate} virusData={virusData} virusMobile={false}/>
+              </VirusDataColumn>
+            </GraphBox2>
+          </GraphContainer>
+          )
+          :
+          <LandingPage/>
+        }            
+    </Main>
+    <Footer>
+      <div>
+        <p>Thomas Castagna</p> 
+        <a href="https://github.com/CastagnaTM" target="_blank" rel="noopener noreferrer"><GitHubIcon /></a> 
+        <a href="https://www.linkedin.com/in/castagnatm/" target="_blank" rel="noopener noreferrer"><LinkedInIcon/></a>
+      </div>
+      <div>
+        <p>Cees Wang</p> 
+        <a href="" target="_blank" rel="noopener noreferrer"><GitHubIcon /></a> 
+        <a href="" target="_blank" rel="noopener noreferrer"><LinkedInIcon/></a>
+      </div>
+      <div>
+        <p>Amber Ye</p> 
+        <a href="" target="_blank" rel="noopener noreferrer"><GitHubIcon /></a> 
+        <a href="" target="_blank" rel="noopener noreferrer"><LinkedInIcon/></a>
+      </div>
+    </Footer>
   </>
   );
 };

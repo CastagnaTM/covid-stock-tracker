@@ -95,7 +95,7 @@ function VirusData({virusData, beginDate, endDate, virusMobile}: Props) {
                 {endData.recovered && <p className='recovered'>{endData.recovered}</p>}
               </div>
               <div>
-                <p>differences</p>
+                <p>Differences</p>
                 <p className='positive'>{endData.positive - beginData.positive}</p>
                 <p className='negative'>{endData.negative - beginData.negative}</p>
                 {endData.recovered && <p className='recovered'>{endData.recovered - beginData.recovered}</p>}

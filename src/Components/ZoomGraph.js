@@ -179,7 +179,7 @@ export default class ZoomGraph extends PureComponent {
           onMouseMove = { (e) => e && this.state.refAreaLeft && this.setState({refAreaRight:e.activeLabel}) }
           onMouseUp = {(e) => this.zoom(e) }
         >
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid />
           <XAxis 
             allowDataOverflow={true}
             dataKey="date_number"
