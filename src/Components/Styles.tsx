@@ -384,3 +384,9 @@ export const CompanyName = styled.a`
     margin-top: 1rem;
 `
 
+
+export const Introduction = styled.div `
+
+
+`
+
