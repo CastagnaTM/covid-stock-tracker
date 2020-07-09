@@ -367,8 +367,8 @@ return (
       </div>
       <div>
         <p>Amber Ye</p> 
-        <a href="" target="_blank" rel="noopener noreferrer"><GitHubIcon /></a> 
-        <a href="" target="_blank" rel="noopener noreferrer"><LinkedInIcon/></a>
+        <a href="https://github.com/tingtingye24" target="_blank" rel="noopener noreferrer"><GitHubIcon /></a> 
+        <a href="https://www.linkedin.com/in/ting-ting-ye-73a6b0157/" target="_blank" rel="noopener noreferrer"><LinkedInIcon/></a>
       </div>
     </Footer>
   </>
