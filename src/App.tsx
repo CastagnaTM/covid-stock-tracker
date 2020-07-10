@@ -12,7 +12,7 @@ import ZoomGraph from './Components/ZoomGraph';
 import LandingPage from './Components/LandingPage';
 import { convertToRealTime } from './functions';
 import CompanyData from './Components/CompanyData';
-import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery, findDates } from './queries';
+import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery, findDates, updateDates } from './queries';
 import { makeStyles } from '@material-ui/core/styles';
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
@@ -81,71 +81,7 @@ let counter = 0;
 // function callAPI () {
 //   fetchData(tickers[counter]);
 // }
-const fetchData = (ticker: string): any => {
-  fetch(
-    `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=1577750400&to=1591290500&token=${finnhubKey}`
-  )
-    .then((resp) => resp.json())
-    .then(({ c, h, l, o, t }) => {
-      const stock = c.map((value: number, index: number) => {
-        let close_price = value;
-        let high_price = h[index];
-        let low_price = l[index];
-        let open_price = o[index];
-        let date = convertToRealTime(t[index]);
-        let dateInput = new DateInput(
-          date,
-          open_price,
-          close_price,
-          high_price,
-          low_price
-        );
-        return dateInput;
-      });
-      inputStock(ticker, stock);
-    })
 
-    .catch((error) => {
-      throw error;
-    });
-};
-
-const inputStock = (ticker: string, stock: []): void => {
-  const query = createStockQuery()
-  fetch(GRAPHQL_API, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: `application/json`,
-    },
-    body: JSON.stringify({query}),
-  })
-    .then((resp) => resp.json())
-    .then((data) => {
-      if (tickers[counter]) {
-        setTimeout(() => fetchData(tickers[++counter].ticker),2000);
-      }
-      else {
-        clearTimeout();
-      }
-    });
-};
-const getLatestDate = (ticker): void => {
-  const query = findDates(ticker);
-  fetch (GRAPHQL_API,{
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: `application/json`,
-    },
-    body: JSON.stringify({query}),
-  })
-  .then(resp => resp.json())
-  .then(data => {
-    const dates = data.data.findStock.dates;
-    console.log(dates[dates.length - 1].date);
-  })
-}
 
 const fetchAllStock = (): void => {
   const query = fetchAllStocksQuery();
@@ -162,12 +98,14 @@ const fetchAllStock = (): void => {
       console.log(data)
     })
   };
+
   const findStock = async (ticker: string): Promise<string> => {
     let data = await fetch(`${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`)
     .then(resp => resp.json())
     .then(data => Object.keys(data).length > 0 ? ticker: "")
     return data;
   }   
+
 const App: React.FC = () => {
   const classes = useStyles();
   const [chartData, setChartData] =  useState([]);
@@ -177,12 +115,13 @@ const App: React.FC = () => {
   const [virusData,  setVirusData] = useState<any>([]);
   const [beginDate, setBeginDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>(null);
-  const [today, setToday] = useState<any>("2/7/89");
+  const [today, setToday] = useState<any>("2/7/89");    // unix
 
   const setCurrentDate = () => {
     const currDate = new Date();
-    setToday((currDate.getMonth()+1)+'/'+currDate.getDate()+'/' + currDate.getFullYear()); 
+    setToday(new Date((currDate.getMonth()+1)+'/'+currDate.getDate()+'/' + currDate.getFullYear()).getTime()/1000);
   }
+  
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
@@ -193,6 +132,56 @@ const App: React.FC = () => {
     getVirusData();
     window.addEventListener('resize', windowSizeCheck);
   }, [])
+
+  const fetchData = (ticker: string, beginDate: number, endDate: number): any => {
+    fetch(
+      `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate}&to=${endDate}&token=${finnhubKey}`
+    )
+      .then((resp) => resp.json())
+      .then(({ c, h, l, o, t }) => {
+        const stock = t.map((value: number, index: number) => {
+          let close_price = c[index];
+          let high_price = h[index];
+          let low_price = l[index];
+          let open_price = o[index];
+          let date = convertToRealTime(value);
+          let dateInput = new DateInput(
+            date,
+            open_price,
+            close_price,
+            high_price,
+            low_price
+          );
+          return dateInput;
+        });
+        // inputStock(ticker, stock);
+        updateMongoDb(ticker, stock);
+      })
+  
+      .catch((error) => {
+        throw error;
+      });
+  };
+  // const inputStock = (ticker: string, stock: []): void => {
+  //   const query = createStockQuery()
+  //   fetch(GRAPHQL_API, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: `application/json`,
+  //     },
+  //     body: JSON.stringify({query}),
+  //   })
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       if (tickers[counter]) {
+  //         setTimeout(() => fetchData(tickers[++counter].ticker),2000);
+  //       }
+  //       else {
+  //         clearTimeout();
+  //       }
+  //     });
+  // };
 
   const windowSizeCheck = () => {
     setMobile(window.innerWidth < 1024);
@@ -205,7 +194,6 @@ const App: React.FC = () => {
         .then((resp) => resp.json())
         .then((data) => {
           setCompanyData(data);          
-          console.log(data.name);
         })
         .catch((error) => {
           throw error;
@@ -233,27 +221,70 @@ const App: React.FC = () => {
         });
     }
 
-    const fetchSingleStock = (ticker: string, startingDate: Date | null, endingDate: Date | null): void => {
-      const query = findCompanyDatesQuery(ticker, startingDate, endingDate);
+
+    const getLatestDate = async (ticker): Promise<number> => {
+      const query = findDates(ticker);
+      let data = fetch (GRAPHQL_API,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: `application/json`,
+        },
+        body: JSON.stringify({query}),
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        const dates = data.data.findStock.dates;
+        return new Date(dates[dates.length - 1].date).getTime()/1000;
+      })
+      return data;
+    }
+
+    const updateMongoDb = (ticker, dateInput) => {
+      const query = updateDates(ticker, dateInput);
+      fetch(GRAPHQL_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: `application/json`,
+        },
+        body: JSON.stringify({query}),
+      })
+      // .then(resp => resp.json())
+      // .then(data => data);
+    }
+
+    const fetchSingleStock = (ticker: string, startingDate: Date | null, endingDate: Date | null): void => {  // graphql not finnhub
       if (ticker) {
-        fetch(GRAPHQL_API, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: `application/json`,
-          },
-          body: JSON.stringify({query}),
-        })
-        .then(resp => resp.json())
-        .then(data => {
-          let arr = data.data.findDates.dates;
-          for (let i = 0; i < arr.length; ++i) {
-            arr[i]["name"] =  i+1;
-            arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
+        getLatestDate(ticker).then(latestDate => {
+          console.log(latestDate, today); // 06/04 vs 07/10
+          if (latestDate < today ) {
+            fetchFromFinnhub(ticker, startingDate, endingDate);
+            fetchData(ticker, latestDate, today);
           }
-            setChartData(arr);
-            setCompanyData(data.data.findDates.companyData);
-        });
+          else {
+            const query = findCompanyDatesQuery(ticker, startingDate, endingDate);
+              fetch(GRAPHQL_API, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: `application/json`,
+                },
+                body: JSON.stringify({query}),
+              })
+              .then(resp => resp.json())
+              .then(data => {
+                let arr = data.data.findDates.dates;
+                for (let i = 0; i < arr.length; ++i) {
+                  arr[i]["name"] =  i+1;
+                  arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
+                }
+                  setChartData(arr);
+                  setCompanyData(data.data.findDates.companyData);
+                  console.log("THIS IS FROM MONGODB BISHHHHHHH ")
+              });
+          }
+        })
       }
     };
 
@@ -261,19 +292,21 @@ const App: React.FC = () => {
         startingDate = new Date(startingDate).getTime()/1000 - 3600;
         endingDate = new Date(endingDate).getTime()/1000;
         getCompanyData(ticker);
+        // 01/01 - 07/07 and our database only has 01/01 - 06/04 then we need to fetch from finnhub (06/04 - 07-07)
         fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
         .then((resp) => resp.json())
         .then(({ c, h, l, o, t }) => {
-          const stock = c.map((value: number, index: number) => {
+          const stock = t.map((value: number, index: number) => {
             let dateObj = {};
-            dateObj["close_price"] = value;
+            dateObj["close_price"] = c[index];
             dateObj["high_price"] = h[index];
             dateObj["low_price"] = l[index];
             dateObj["open_price"] = o[index];
-            dateObj["date_number"] = t[index];
+            dateObj["date_number"] = value;
             return dateObj;
           });
           setChartData(stock)
+          //update mongo dbboolean
         })
     
         .catch((error) => {
@@ -312,7 +345,6 @@ const App: React.FC = () => {
 
 return (
   <>
-  {console.log(today)};
     <Main>
       <MobileButton className={classes.root}>
         <MuiAccordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>

@@ -1,6 +1,6 @@
-export const createStockQuery = (ticker, stock) => {
+export const createStockQuery = (ticker, dates) => {
     const query = `mutation {
-        createStock(stockInput: {ticker: "${ticker}", dates: [${stock.toString()}]})
+        createStock(stockInput: {ticker: "${ticker}", dates: [${dates.toString()}]})
         {
           ticker, 
           dates
@@ -96,7 +96,7 @@ export const findCompanyDatesQuery = (ticker, beginDate, endDate) => {
 export const findDates = (ticker ) => {
   const query = `
   query {
-    findStock(ticker: "AAPL")
+    findStock(ticker: "${ticker}")
     {
       dates {
         date
@@ -104,4 +104,16 @@ export const findDates = (ticker ) => {
     }
   }`
 return query;
+}
+
+export const updateDates = (ticker, dates) => {
+  const query = `
+    mutation {
+      updateDates(ticker: "${ticker}", dateInput: [${dates.toString()}]) {
+        dates {
+          date
+        }
+      }
+    }`
+  return query;
 }
