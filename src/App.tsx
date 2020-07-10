@@ -362,8 +362,8 @@ return (
       </div>
       <div>
         <p>Cees Wang</p> 
-        <a href="" target="_blank" rel="noopener noreferrer"><GitHubIcon /></a> 
-        <a href="" target="_blank" rel="noopener noreferrer"><LinkedInIcon/></a>
+        <a href="https://github.com/CeesWang" target="_blank" rel="noopener noreferrer"><GitHubIcon /></a> 
+        <a href="https://www.linkedin.com/in/cees-wang/" target="_blank" rel="noopener noreferrer"><LinkedInIcon/></a>
       </div>
       <div>
         <p>Amber Ye</p> 
