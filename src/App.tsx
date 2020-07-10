@@ -12,7 +12,7 @@ import ZoomGraph from './Components/ZoomGraph';
 import LandingPage from './Components/LandingPage';
 import { convertToRealTime } from './functions';
 import CompanyData from './Components/CompanyData';
-import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery } from './queries';
+import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery, findDates } from './queries';
 import { makeStyles } from '@material-ui/core/styles';
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
@@ -130,6 +130,22 @@ const inputStock = (ticker: string, stock: []): void => {
       }
     });
 };
+const getLatestDate = (ticker): void => {
+  const query = findDates(ticker);
+  fetch (GRAPHQL_API,{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: `application/json`,
+    },
+    body: JSON.stringify({query}),
+  })
+  .then(resp => resp.json())
+  .then(data => {
+    const dates = data.data.findStock.dates;
+    console.log(dates[dates.length - 1].date);
+  })
+}
 
 const fetchAllStock = (): void => {
   const query = fetchAllStocksQuery();
@@ -152,10 +168,8 @@ const fetchAllStock = (): void => {
     .then(data => Object.keys(data).length > 0 ? ticker: "")
     return data;
   }   
-
 const App: React.FC = () => {
   const classes = useStyles();
-  const [about, setAbout  ] = useState(false);
   const [chartData, setChartData] =  useState([]);
   const [companyData,  setCompanyData] = useState<any>({});
   const [isMobile, setMobile] = useState(false);
@@ -163,12 +177,18 @@ const App: React.FC = () => {
   const [virusData,  setVirusData] = useState<any>([]);
   const [beginDate, setBeginDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>(null);
+  const [today, setToday] = useState<any>("2/7/89");
 
+  const setCurrentDate = () => {
+    const currDate = new Date();
+    setToday((currDate.getMonth()+1)+'/'+currDate.getDate()+'/' + currDate.getFullYear()); 
+  }
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
 
   useEffect( () => {
+    setCurrentDate();
     windowSizeCheck();
     getVirusData();
     window.addEventListener('resize', windowSizeCheck);
@@ -269,6 +289,7 @@ const App: React.FC = () => {
               (dd>9 ? '' : '0') + dd
              ].join('');
     };
+    
     const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => {
       if (beginDate) {
         setBeginDate(convertDateObjectToString(beginDate));
@@ -291,6 +312,7 @@ const App: React.FC = () => {
 
 return (
   <>
+  {console.log(today)};
     <Main>
       <MobileButton className={classes.root}>
         <MuiAccordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>

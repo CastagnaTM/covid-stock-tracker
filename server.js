@@ -78,7 +78,7 @@ app.use(
         type RootMutation {
             createStock(stockInput: StockInput): Stock,
             updateCompany(ticker: String, companyInput: CompanyInput): Stock,
-            updateDate(ticker: String, dateInput: [DateInput]): Stock 
+            updateDates(ticker: String, dateInput: [DateInput]): Stock 
         }
 
         schema {
@@ -143,7 +143,7 @@ app.use(
           });
         
       },
-      updateDate: (args) => {
+      updateDates: (args) => {
         const query = { ticker: args.ticker };
         const update = { $push: { dates: {$each: [...args.dateInput]} } };
         const options = { returnNewDocument: true, new: true };

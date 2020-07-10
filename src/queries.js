@@ -92,3 +92,16 @@ export const findCompanyDatesQuery = (ticker, beginDate, endDate) => {
   }`
   return query;
 }
+
+export const findDates = (ticker ) => {
+  const query = `
+  query {
+    findStock(ticker: "AAPL")
+    {
+      dates {
+        date
+      }  
+    }
+  }`
+return query;
+}
