@@ -119,7 +119,7 @@ const App: React.FC = () => {
 
   const setCurrentDate = () => {
     const currDate = new Date();
-    setToday(new Date((currDate.getMonth()+1)+'/'+currDate.getDate()+'/' + currDate.getFullYear()).getTime()/1000);
+    setToday(new Date((currDate.getMonth()+1)+'/'+currDate.getDate()+'/' + currDate.getFullYear()).getTime()/1000 + 68400);
   }
   
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, newExpanded: boolean) => {
@@ -135,7 +135,7 @@ const App: React.FC = () => {
 
   const fetchData = (ticker: string, beginDate: number, endDate: number): any => {
     fetch(
-      `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate}&to=${endDate}&token=${finnhubKey}`
+      `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate + 86400}&to=${endDate}&token=${finnhubKey}`
     )
       .then((resp) => resp.json())
       .then(({ c, h, l, o, t }) => {
@@ -235,7 +235,7 @@ const App: React.FC = () => {
       .then(resp => resp.json())
       .then(data => {
         const dates = data.data.findStock.dates;
-        return new Date(dates[dates.length - 1].date).getTime()/1000;
+        return new Date(dates[dates.length - 1].date).getTime()/1000 + 68400;
       })
       return data;
     }
@@ -250,19 +250,20 @@ const App: React.FC = () => {
         },
         body: JSON.stringify({query}),
       })
-      // .then(resp => resp.json())
-      // .then(data => data);
+      .then(resp => resp.json())
+      .then(data => console.log(data));
     }
 
     const fetchSingleStock = (ticker: string, startingDate: Date | null, endingDate: Date | null): void => {  // graphql not finnhub
       if (ticker) {
         getLatestDate(ticker).then(latestDate => {
-          console.log(latestDate, today); // 06/04 vs 07/10
-          if (latestDate < today ) {
+          console.log(latestDate, today);
+          if (latestDate < today) {
             fetchFromFinnhub(ticker, startingDate, endingDate);
             fetchData(ticker, latestDate, today);
           }
           else {
+            console.log(startingDate, endingDate);
             const query = findCompanyDatesQuery(ticker, startingDate, endingDate);
               fetch(GRAPHQL_API, {
                 method: "POST",
@@ -274,11 +275,13 @@ const App: React.FC = () => {
               })
               .then(resp => resp.json())
               .then(data => {
+                console.log(data);
                 let arr = data.data.findDates.dates;
                 for (let i = 0; i < arr.length; ++i) {
                   arr[i]["name"] =  i+1;
                   arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
                 }
+                console.log(arr);
                   setChartData(arr);
                   setCompanyData(data.data.findDates.companyData);
                   console.log("THIS IS FROM MONGODB BISHHHHHHH ")
@@ -323,7 +326,7 @@ const App: React.FC = () => {
              ].join('');
     };
     
-    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => {
+    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => { // sumbit
       if (beginDate) {
         setBeginDate(convertDateObjectToString(beginDate));
       }
