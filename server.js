@@ -151,7 +151,7 @@ app.use(
           (result) => result
         );
       },
-      findDates: (args) => {
+      findDates: (args) => {    // issue mostlikely here 
         return Stock.findOne({ ticker: args.ticker }) 
           .then((result) => {
             let data = result.dates

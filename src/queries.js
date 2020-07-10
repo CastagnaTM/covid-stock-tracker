@@ -88,7 +88,6 @@ export const findCompanyDatesQuery = (ticker, beginDate, endDate) => {
         web_url
       }
     }
-  
   }`
   return query;
 }
