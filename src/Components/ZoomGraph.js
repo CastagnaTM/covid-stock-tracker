@@ -130,7 +130,7 @@ export default class ZoomGraph extends PureComponent {
   
   displayModal = () => {
     return (
-      <Modal style={{position: "fixed", top: 510, left: this.state.modalX > 375 ? this.state.modalX : this.state.modalX+ 480}}>
+      <Modal style={{position: "fixed", top: 530, left: this.state.modalX > 375 ? this.state.modalX - 150 : this.state.modalX+ 480}}>
         <div>
           <ModalHeader>
             <InfoIcon fontSize="large" style={{color: "#2c99b5"}}/> 
@@ -186,8 +186,8 @@ export default class ZoomGraph extends PureComponent {
             tickFormatter={(tick) => convertToRealTime(tick, true)}
             domain={[this.state.left, this.state.right]}
             type="number"
-            onMouseEnter={(e)=> {
-              
+            onClick={(e)=> {
+              console.log(e)
               let time = convertToRealTime(e.value, true);
               if(significantDates[time]){  
                 // also have to check if the content has multiple events
