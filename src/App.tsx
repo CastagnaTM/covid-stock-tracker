@@ -139,12 +139,12 @@ const App: React.FC = () => {
     )
       .then((resp) => resp.json())
       .then(({ c, h, l, o, t }) => {
-        const stock = t.map((value: number, index: number) => {
-          let close_price = c[index];
+        const stock = c.map((value: number, index: number) => {
+          let close_price = value;
           let high_price = h[index];
           let low_price = l[index];
           let open_price = o[index];
-          let date = convertToRealTime(value);
+          let date = convertToRealTime(t[index]);
           let dateInput = new DateInput(
             date,
             open_price,
@@ -296,13 +296,13 @@ const App: React.FC = () => {
         fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
         .then((resp) => resp.json())
         .then(({ c, h, l, o, t }) => {
-          const stock = t.map((value: number, index: number) => {
+          const stock = c.map((value: number, index: number) => {
             let dateObj = {};
-            dateObj["close_price"] = c[index];
+            dateObj["close_price"] = value;
             dateObj["high_price"] = h[index];
             dateObj["low_price"] = l[index];
             dateObj["open_price"] = o[index];
-            dateObj["date_number"] = value;
+            dateObj["date_number"] = t[index];
             return dateObj;
           });
           setChartData(stock)
