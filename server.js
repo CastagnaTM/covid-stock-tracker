@@ -78,7 +78,7 @@ app.use(
         type RootMutation {
             createStock(stockInput: StockInput): Stock,
             updateCompany(ticker: String, companyInput: CompanyInput): Stock,
-            updateDate(ticker: String, dateInput: DateInput): Stock 
+            updateDate(ticker: String, dateInput: [DateInput]): Stock 
         }
 
         schema {
@@ -141,19 +141,11 @@ app.use(
             console.log(err);
             throw err;
           });
-        // return Stock.findOne({ ticker: args.ticker })
-        // .then(result => {
-        //   let current = result
-        //   current['company'] = {ticker: "AAPL"}
-        //   return current
-        // }).save()
-        // .then((result => {
-        //   return {...result._doc}
-        // }).catch(err => console.log(err)))
+        
       },
       updateDate: (args) => {
         const query = { ticker: args.ticker };
-        const update = { $push: { dates: args.dateInput } };
+        const update = { $push: { dates: {$each: [...args.dateInput]} } };
         const options = { returnNewDocument: true, new: true };
         return Stock.findOneAndUpdate(query, update, options).then(
           (result) => result
