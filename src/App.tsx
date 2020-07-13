@@ -224,7 +224,7 @@ const App: React.FC = () => {
 
     const getLatestDate = async (ticker): Promise<number> => {
       const query = findDates(ticker);
-      let data = fetch (GRAPHQL_API,{
+      let data = await fetch(GRAPHQL_API,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -254,16 +254,18 @@ const App: React.FC = () => {
       .then(data => console.log(data));
     }
 
-    const fetchSingleStock = (ticker: string, startingDate: Date | null, endingDate: Date | null): void => {  // graphql not finnhub
+    const fetchSingleStock = (ticker: string, startingDate: Date, endingDate: Date): void => {  // graphql not finnhub
+      const startingDateUnix = startingDate && startingDate.getTime()/1000 - 3600;
+      const endingDateUnix = endingDate && endingDate.getTime()/1000;
       if (ticker) {
-        getLatestDate(ticker).then(latestDate => {
-          console.log(latestDate, today);
-          if (latestDate < today) {
-            fetchFromFinnhub(ticker, startingDate, endingDate);
-            fetchData(ticker, latestDate, today);
+        getLatestDate(ticker).then(latestDateUnix => {
+          // endingDate <= latestDateUnix then we have it in our db and we fetch;
+          if (latestDateUnix < endingDateUnix) {
+            console.log("FINNHUB and update our database ")
+            fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix);
+            fetchData(ticker, latestDateUnix, today);
           }
           else {
-            console.log(startingDate, endingDate);
             const query = findCompanyDatesQuery(ticker, startingDate, endingDate);
               fetch(GRAPHQL_API, {
                 method: "POST",
@@ -281,7 +283,6 @@ const App: React.FC = () => {
                   arr[i]["name"] =  i+1;
                   arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
                 }
-                console.log(arr);
                   setChartData(arr);
                   setCompanyData(data.data.findDates.companyData);
                   console.log("THIS IS FROM MONGODB BISHHHHHHH ")
@@ -292,8 +293,6 @@ const App: React.FC = () => {
     };
 
     const fetchFromFinnhub = (ticker: string, startingDate, endingDate) => {
-        startingDate = new Date(startingDate).getTime()/1000 - 3600;
-        endingDate = new Date(endingDate).getTime()/1000;
         getCompanyData(ticker);
         // 01/01 - 07/07 and our database only has 01/01 - 06/04 then we need to fetch from finnhub (06/04 - 07-07)
         fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
@@ -308,6 +307,7 @@ const App: React.FC = () => {
             dateObj["date_number"] = t[index];
             return dateObj;
           });
+          console.log(stock);
           setChartData(stock)
           //update mongo dbboolean
         })
@@ -326,7 +326,7 @@ const App: React.FC = () => {
              ].join('');
     };
     
-    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => { // sumbit
+    const getUserData = (ticker: string, beginDate: Date, endDate: Date, from: string = ''): void => { // sumbit
       if (beginDate) {
         setBeginDate(convertDateObjectToString(beginDate));
       }
