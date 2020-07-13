@@ -296,17 +296,14 @@ const App: React.FC = () => {
 
     const fetchFromFinnhub = (ticker: string, startingDate, endingDate) => {
         getCompanyData(ticker);
-        // 01/01 - 07/07 and our database only has 01/01 - 06/04 then we need to fetch from finnhub (06/04 - 07-07)
         fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
         .then((resp) => resp.json())
         .then(({ c, h, l, o, t }) => {
           const stock = c.map((value: number, index: number) => {
-            let dateObj = {};
-            dateObj["close_price"] = value;
-            dateObj["high_price"] = h[index];
-            dateObj["low_price"] = l[index];
-            dateObj["open_price"] = o[index];
-            dateObj["date_number"] = t[index];
+            let dateObj = {
+              "close_price": value, "high_price": h[index], "low_price": l[index], "open_price": o[index], "date_number": t[index]
+            };
+           
             return dateObj;
           });
           console.log("DATES FROM FINNHUB", stock);

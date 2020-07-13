@@ -141,7 +141,8 @@ export const Filters: React.FC<Props> = (props) => {
               variant="inline"
               format="MM/dd/yyyy"
               margin="normal"
-              minDate="2019-01-01"
+              minDate="2020-01-01"
+              maxDate={new Date()}
               // id="date-picker-start"
               label="Start Date"
               value={startDate}
@@ -157,6 +158,7 @@ export const Filters: React.FC<Props> = (props) => {
               format="MM/dd/yyyy"
               margin="normal"
               minDate="2020-01-02"
+              maxDate={new Date()}
               // id="date-picker-end"
               label="End Date"
               value={endDate}
