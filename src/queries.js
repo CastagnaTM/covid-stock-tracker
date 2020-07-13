@@ -65,7 +65,7 @@ export const updateCompanyDataQuery = (ticker, companyInput) => {
 export const findCompanyDatesQuery = (ticker, beginDate, endDate) => {
     const query = `
     query {
-      findDates(ticker: "${ticker}", startDate: "${beginDate?.toLocaleDateString('en')}", endDate: "${endDate?.toLocaleDateString('en')}"){ 
+      findDates(ticker: "${ticker}", startDate: "${beginDate}", endDate: "${endDate}"){ 
       ticker,
       dates {
         date,

@@ -139,12 +139,14 @@ const App: React.FC = () => {
     )
       .then((resp) => resp.json())
       .then(({ c, h, l, o, t }) => {
+        if (c) {
         const stock = c.map((value: number, index: number) => {
           let close_price = value;
           let high_price = h[index];
           let low_price = l[index];
           let open_price = o[index];
           let date = convertToRealTime(t[index]);
+          console.log(date);
           let dateInput = new DateInput(
             date,
             open_price,
@@ -156,6 +158,7 @@ const App: React.FC = () => {
         });
         // inputStock(ticker, stock);
         updateMongoDb(ticker, stock);
+      }
       })
   
       .catch((error) => {
@@ -221,7 +224,6 @@ const App: React.FC = () => {
         });
     }
 
-
     const getLatestDate = async (ticker): Promise<number> => {
       const query = findDates(ticker);
       let data = await fetch(GRAPHQL_API,{
@@ -254,19 +256,19 @@ const App: React.FC = () => {
       .then(data => console.log(data));
     }
 
-    const fetchSingleStock = (ticker: string, startingDate: Date, endingDate: Date): void => {  // graphql not finnhub
-      const startingDateUnix = startingDate && startingDate.getTime()/1000 - 3600;
-      const endingDateUnix = endingDate && endingDate.getTime()/1000;
+    const fetchSingleStock = (ticker: string, startingDateUnix: number, endingDateUnix: number): void => {  // graphql not finnhub
       if (ticker) {
         getLatestDate(ticker).then(latestDateUnix => {
           // endingDate <= latestDateUnix then we have it in our db and we fetch;
           if (latestDateUnix < endingDateUnix) {
-            console.log("FINNHUB and update our database ")
-            fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix);
-            fetchData(ticker, latestDateUnix, today);
+            console.log("FINNHUB and update our database ");
+            console.log("ENDINGDATE", endingDateUnix);
+            console.log("TODAY", today);
+            fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix); // fetches stargint to end date that we as user fill in
+            fetchData(ticker, latestDateUnix, today);                   // this fetches latest date from mongodb untill today; 
           }
           else {
-            const query = findCompanyDatesQuery(ticker, startingDate, endingDate);
+            const query = findCompanyDatesQuery(ticker, convertToRealTime(startingDateUnix), convertToRealTime(endingDateUnix));
               fetch(GRAPHQL_API, {
                 method: "POST",
                 headers: {
@@ -307,7 +309,7 @@ const App: React.FC = () => {
             dateObj["date_number"] = t[index];
             return dateObj;
           });
-          console.log(stock);
+          console.log("DATES FROM FINNHUB", stock);
           setChartData(stock)
           //update mongo dbboolean
         })
@@ -327,13 +329,11 @@ const App: React.FC = () => {
     };
     
     const getUserData = (ticker: string, beginDate: Date, endDate: Date, from: string = ''): void => { // sumbit
-      if (beginDate) {
-        setBeginDate(convertDateObjectToString(beginDate));
-      }
-      if (endDate) {
-        setEndDate(convertDateObjectToString(endDate));
-      }
-      from && (from !== "default" ? fetchFromFinnhub(ticker, beginDate, endDate) : fetchSingleStock(ticker, beginDate, endDate));  
+      setBeginDate(convertDateObjectToString(beginDate));
+      setEndDate(convertDateObjectToString(endDate));
+      const startingDateUnix = beginDate && beginDate.getTime()/1000 - 3600;
+      const endingDateUnix = endDate && endDate.getTime()/1000;
+      from && (from !== "default" ? fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix) : fetchSingleStock(ticker, startingDateUnix, endingDateUnix));  
     }  
 
     const getVirusData = () => {
