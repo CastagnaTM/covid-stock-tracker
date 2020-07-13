@@ -138,29 +138,31 @@ const App: React.FC = () => {
       `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate + 86400}&to=${endDate}&token=${finnhubKey}`
     )
       .then((resp) => resp.json())
-      .then(({ c, h, l, o, t }) => {
+      .then(stockData => {
+        const {c, h, l, o, t} = stockData;
         if (c) {
-        const stock = c.map((value: number, index: number) => {
-          let close_price = value;
-          let high_price = h[index];
-          let low_price = l[index];
-          let open_price = o[index];
-          let date = convertToRealTime(t[index]);
-          console.log(date);
-          let dateInput = new DateInput(
-            date,
-            open_price,
-            close_price,
-            high_price,
-            low_price
-          );
-          return dateInput;
-        });
+          const stock = c.map((value: number, index: number) => {
+            let close_price = value;
+            let high_price = h[index];
+            let low_price = l[index];
+            let open_price = o[index];
+            let date = convertToRealTime(t[index]);
+            console.log(t[index], date);
+            let dateInput = new DateInput(
+              date,
+              open_price,
+              close_price,
+              high_price,
+              low_price
+            );
+            return dateInput;
+          });
+          stock[stock.length-1].date += 86400; 
         // inputStock(ticker, stock);
-        updateMongoDb(ticker, stock);
-      }
+          updateMongoDb(ticker, stock);
+        }
       })
-  
+
       .catch((error) => {
         throw error;
       });
@@ -176,7 +178,7 @@ const App: React.FC = () => {
   //     body: JSON.stringify({query}),
   //   })
   //     .then((resp) => resp.json())
-  //     .then((data) => {
+  //     .then((data) => {f
   //       if (tickers[counter]) {
   //         setTimeout(() => fetchData(tickers[++counter].ticker),2000);
   //       }
@@ -252,20 +254,16 @@ const App: React.FC = () => {
         },
         body: JSON.stringify({query}),
       })
-      .then(resp => resp.json())
-      .then(data => console.log(data));
     }
 
     const fetchSingleStock = (ticker: string, startingDateUnix: number, endingDateUnix: number): void => {  // graphql not finnhub
       if (ticker) {
         getLatestDate(ticker).then(latestDateUnix => {
           // endingDate <= latestDateUnix then we have it in our db and we fetch;
+          console.log(latestDateUnix);
           if (latestDateUnix < endingDateUnix) {
-            console.log("FINNHUB and update our database ");
-            console.log("ENDINGDATE", endingDateUnix);
-            console.log("TODAY", today);
-            fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix); // fetches stargint to end date that we as user fill in
-            fetchData(ticker, latestDateUnix, today);                   // this fetches latest date from mongodb untill today; 
+            fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix);           // fetches stargint to end date that we as user fill in
+            fetchData(ticker, latestDateUnix, today);                    // this fetches latest date from mongodb untill today; 
           }
           else {
             const query = findCompanyDatesQuery(ticker, convertToRealTime(startingDateUnix), convertToRealTime(endingDateUnix));
@@ -279,15 +277,14 @@ const App: React.FC = () => {
               })
               .then(resp => resp.json())
               .then(data => {
-                console.log(data);
                 let arr = data.data.findDates.dates;
                 for (let i = 0; i < arr.length; ++i) {
                   arr[i]["name"] =  i+1;
                   arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
                 }
+                console.log("MONGODB", arr);
                   setChartData(arr);
                   setCompanyData(data.data.findDates.companyData);
-                  console.log("THIS IS FROM MONGODB BISHHHHHHH ")
               });
           }
         })
@@ -309,9 +306,10 @@ const App: React.FC = () => {
             dateObj["date_number"] = t[index];
             return dateObj;
           });
+          stock[stock.length-1].date_number += 86400; 
           console.log("DATES FROM FINNHUB", stock);
           setChartData(stock)
-          //update mongo dbboolean
+          //update mongodb boolean
         })
     
         .catch((error) => {

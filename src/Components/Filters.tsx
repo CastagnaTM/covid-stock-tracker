@@ -81,7 +81,6 @@ export const Filters: React.FC<Props> = (props) => {
 
   const handleEndDateChange = (date: Date | null) => {
     setEndDate(date);
-    console.log("END DATE FROM FILTERS", date);
   }; 
 
   const validateSubmit = (stock, startDate, endDate) => {
