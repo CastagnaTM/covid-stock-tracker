@@ -86,12 +86,17 @@ export const Filters: React.FC<Props> = (props) => {
 
   const validateSubmit = (stock, startDate, endDate) => {
     if(stock.length > 0){
-      if (endDate <= startDate){
-        setErrorMessage('The End Date must be greater than the Start Date')
+      if(startDate != 'Invalid Date' && endDate != 'Invalid Date'){
+        if (endDate <= startDate){
+          setErrorMessage('The End Date must be greater than the Start Date')
+        } else {
+          props.getUserData(stock, startDate, endDate, validTicker) 
+          setErrorMessage('')
+        }
       } else {
-        props.getUserData(stock, startDate, endDate, validTicker) 
-        setErrorMessage('')
+        setErrorMessage('Selected Dates must be valid')
       }
+
     } else {
       setErrorMessage('Please select a valid stock ticker')
     }
