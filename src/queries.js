@@ -1,6 +1,6 @@
-export const createStockQuery = (ticker, stock) => {
+export const createStockQuery = (ticker, dates) => {
     const query = `mutation {
-        createStock(stockInput: {ticker: "${ticker}", dates: [${stock.toString()}]})
+        createStock(stockInput: {ticker: "${ticker}", dates: [${dates.toString()}]})
         {
           ticker, 
           dates
@@ -65,7 +65,7 @@ export const updateCompanyDataQuery = (ticker, companyInput) => {
 export const findCompanyDatesQuery = (ticker, beginDate, endDate) => {
     const query = `
     query {
-      findDates(ticker: "${ticker}", startDate: "${beginDate?.toLocaleDateString('en')}", endDate: "${endDate?.toLocaleDateString('en')}"){ 
+      findDates(ticker: "${ticker}", startDate: "${beginDate}", endDate: "${endDate}"){ 
       ticker,
       dates {
         date,
@@ -88,7 +88,31 @@ export const findCompanyDatesQuery = (ticker, beginDate, endDate) => {
         web_url
       }
     }
-  
   }`
+  return query;
+}
+
+export const findDates = (ticker ) => {
+  const query = `
+  query {
+    findStock(ticker: "${ticker}")
+    {
+      dates {
+        date
+      }  
+    }
+  }`
+return query;
+}
+
+export const updateDates = (ticker, dates) => {
+  const query = `
+    mutation {
+      updateDates(ticker: "${ticker}", dateInput: [${dates.toString()}]) {
+        dates {
+          date
+        }
+      }
+    }`
   return query;
 }

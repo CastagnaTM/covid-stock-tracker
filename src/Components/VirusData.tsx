@@ -38,11 +38,11 @@ function VirusData({virusData, beginDate, endDate, virusMobile}: Props) {
   }
   useEffect( () => {    
     setVirusDate();
-  }, [])
+  }, []) // eslint-disable-next-line react-hooks/exhaustive-deps
 
   useEffect( () => {    
     setVirusDate();
-  }, [beginDate, endDate])
+  }, [beginDate, endDate]) // eslint-disable-next-line react-hooks/exhaustive-deps
 
   if (virusMobile) {
     return (

@@ -78,7 +78,7 @@ app.use(
         type RootMutation {
             createStock(stockInput: StockInput): Stock,
             updateCompany(ticker: String, companyInput: CompanyInput): Stock,
-            updateDate(ticker: String, dateInput: DateInput): Stock 
+            updateDates(ticker: String, dateInput: [DateInput]): Stock 
         }
 
         schema {
@@ -141,38 +141,27 @@ app.use(
             console.log(err);
             throw err;
           });
-        // return Stock.findOne({ ticker: args.ticker })
-        // .then(result => {
-        //   let current = result
-        //   current['company'] = {ticker: "AAPL"}
-        //   return current
-        // }).save()
-        // .then((result => {
-        //   return {...result._doc}
-        // }).catch(err => console.log(err)))
+        
       },
-      updateDate: (args) => {
+      updateDates: (args) => {
         const query = { ticker: args.ticker };
-        const update = { $push: { dates: args.dateInput } };
+        const update = { $push: { dates: {$each: [...args.dateInput]} } };
         const options = { returnNewDocument: true, new: true };
         return Stock.findOneAndUpdate(query, update, options).then(
           (result) => result
         );
       },
-      findDates: (args) => {
+      findDates: (args) => {    // issue mostlikely here 
         return Stock.findOne({ ticker: args.ticker }) 
           .then((result) => {
             let data = result.dates
             let endDate = new Date(args.endDate);
+            
             let startIndex = data.findIndex(element => element.date === args.startDate) 
             let endIndex = 0;
-            for (let i = 0; i < data.length; ++i) {
-              let date = new Date(data[i].date);
-              if (date > endDate) {
-                endIndex = i;
-                break;
-              }
-              else if (date === args.endDate) {
+            for (let i = startIndex; i < data.length; ++i) {    // convert dates to unix and then use binary serach for O(LOG N)
+              let date = new Date(data[i].date).toLocaleDateString('en');
+              if (date === args.endDate) {
                 endIndex = i + 1;
                 break;
               }              

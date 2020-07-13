@@ -12,7 +12,7 @@ import ZoomGraph from './Components/ZoomGraph';
 import LandingPage from './Components/LandingPage';
 import { convertToRealTime } from './functions';
 import CompanyData from './Components/CompanyData';
-import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery } from './queries';
+import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery, findDates, updateDates } from './queries';
 import { makeStyles } from '@material-ui/core/styles';
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
@@ -81,55 +81,7 @@ let counter = 0;
 // function callAPI () {
 //   fetchData(tickers[counter]);
 // }
-const fetchData = (ticker: string): any => {
-  fetch(
-    `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=1577750400&to=1591290500&token=${finnhubKey}`
-  )
-    .then((resp) => resp.json())
-    .then(({ c, h, l, o, t }) => {
-      const stock = c.map((value: number, index: number) => {
-        let close_price = value;
-        let high_price = h[index];
-        let low_price = l[index];
-        let open_price = o[index];
-        let date = convertToRealTime(t[index]);
-        let dateInput = new DateInput(
-          date,
-          open_price,
-          close_price,
-          high_price,
-          low_price
-        );
-        return dateInput;
-      });
-      inputStock(ticker, stock);
-    })
 
-    .catch((error) => {
-      throw error;
-    });
-};
-
-const inputStock = (ticker: string, stock: []): void => {
-  const query = createStockQuery()
-  fetch(GRAPHQL_API, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: `application/json`,
-    },
-    body: JSON.stringify({query}),
-  })
-    .then((resp) => resp.json())
-    .then((data) => {
-      if (tickers[counter]) {
-        setTimeout(() => fetchData(tickers[++counter].ticker),2000);
-      }
-      else {
-        clearTimeout();
-      }
-    });
-};
 
 const fetchAllStock = (): void => {
   const query = fetchAllStocksQuery();
@@ -146,6 +98,7 @@ const fetchAllStock = (): void => {
       console.log(data)
     })
   };
+
   const findStock = async (ticker: string): Promise<string> => {
     let data = await fetch(`${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`)
     .then(resp => resp.json())
@@ -155,7 +108,6 @@ const fetchAllStock = (): void => {
 
 const App: React.FC = () => {
   const classes = useStyles();
-  const [about, setAbout  ] = useState(false);
   const [chartData, setChartData] =  useState([]);
   const [companyData,  setCompanyData] = useState<any>({});
   const [isMobile, setMobile] = useState(false);
@@ -163,16 +115,76 @@ const App: React.FC = () => {
   const [virusData,  setVirusData] = useState<any>([]);
   const [beginDate, setBeginDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>(null);
+  const [today, setToday] = useState<any>("2/7/89");    // unix
 
+  const setCurrentDate = () => {
+    const currDate = new Date();
+    setToday(new Date((currDate.getMonth()+1)+'/'+currDate.getDate()+'/' + currDate.getFullYear()).getTime()/1000 + 68400);
+  }
+  
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
 
   useEffect( () => {
+    setCurrentDate();
     windowSizeCheck();
     getVirusData();
     window.addEventListener('resize', windowSizeCheck);
   }, [])
+
+  const fetchData = (ticker: string, beginDate: number, endDate: number): any => {
+    fetch(
+      `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate + 86400}&to=${endDate}&token=${finnhubKey}`
+    )
+      .then((resp) => resp.json())
+      .then(({ c, h, l, o, t }) => {
+        if (c) {
+        const stock = c.map((value: number, index: number) => {
+          let close_price = value;
+          let high_price = h[index];
+          let low_price = l[index];
+          let open_price = o[index];
+          let date = convertToRealTime(t[index]);
+          console.log(date);
+          let dateInput = new DateInput(
+            date,
+            open_price,
+            close_price,
+            high_price,
+            low_price
+          );
+          return dateInput;
+        });
+        // inputStock(ticker, stock);
+        updateMongoDb(ticker, stock);
+      }
+      })
+  
+      .catch((error) => {
+        throw error;
+      });
+  };
+  // const inputStock = (ticker: string, stock: []): void => {
+  //   const query = createStockQuery()
+  //   fetch(GRAPHQL_API, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Accept: `application/json`,
+  //     },
+  //     body: JSON.stringify({query}),
+  //   })
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       if (tickers[counter]) {
+  //         setTimeout(() => fetchData(tickers[++counter].ticker),2000);
+  //       }
+  //       else {
+  //         clearTimeout();
+  //       }
+  //     });
+  // };
 
   const windowSizeCheck = () => {
     setMobile(window.innerWidth < 1024);
@@ -185,7 +197,6 @@ const App: React.FC = () => {
         .then((resp) => resp.json())
         .then((data) => {
           setCompanyData(data);          
-          console.log(data.name);
         })
         .catch((error) => {
           throw error;
@@ -213,34 +224,79 @@ const App: React.FC = () => {
         });
     }
 
-    const fetchSingleStock = (ticker: string, startingDate: Date | null, endingDate: Date | null): void => {
-      const query = findCompanyDatesQuery(ticker, startingDate, endingDate);
+    const getLatestDate = async (ticker): Promise<number> => {
+      const query = findDates(ticker);
+      let data = await fetch(GRAPHQL_API,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: `application/json`,
+        },
+        body: JSON.stringify({query}),
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        const dates = data.data.findStock.dates;
+        return new Date(dates[dates.length - 1].date).getTime()/1000 + 68400;
+      })
+      return data;
+    }
+
+    const updateMongoDb = (ticker, dateInput) => {
+      const query = updateDates(ticker, dateInput);
+      fetch(GRAPHQL_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: `application/json`,
+        },
+        body: JSON.stringify({query}),
+      })
+      .then(resp => resp.json())
+      .then(data => console.log(data));
+    }
+
+    const fetchSingleStock = (ticker: string, startingDateUnix: number, endingDateUnix: number): void => {  // graphql not finnhub
       if (ticker) {
-        fetch(GRAPHQL_API, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: `application/json`,
-          },
-          body: JSON.stringify({query}),
-        })
-        .then(resp => resp.json())
-        .then(data => {
-          let arr = data.data.findDates.dates;
-          for (let i = 0; i < arr.length; ++i) {
-            arr[i]["name"] =  i+1;
-            arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
+        getLatestDate(ticker).then(latestDateUnix => {
+          // endingDate <= latestDateUnix then we have it in our db and we fetch;
+          if (latestDateUnix < endingDateUnix) {
+            console.log("FINNHUB and update our database ");
+            console.log("ENDINGDATE", endingDateUnix);
+            console.log("TODAY", today);
+            fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix); // fetches stargint to end date that we as user fill in
+            fetchData(ticker, latestDateUnix, today);                   // this fetches latest date from mongodb untill today; 
           }
-            setChartData(arr);
-            setCompanyData(data.data.findDates.companyData);
-        });
+          else {
+            const query = findCompanyDatesQuery(ticker, convertToRealTime(startingDateUnix), convertToRealTime(endingDateUnix));
+              fetch(GRAPHQL_API, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: `application/json`,
+                },
+                body: JSON.stringify({query}),
+              })
+              .then(resp => resp.json())
+              .then(data => {
+                console.log(data);
+                let arr = data.data.findDates.dates;
+                for (let i = 0; i < arr.length; ++i) {
+                  arr[i]["name"] =  i+1;
+                  arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
+                }
+                  setChartData(arr);
+                  setCompanyData(data.data.findDates.companyData);
+                  console.log("THIS IS FROM MONGODB BISHHHHHHH ")
+              });
+          }
+        })
       }
     };
 
     const fetchFromFinnhub = (ticker: string, startingDate, endingDate) => {
-        startingDate = new Date(startingDate).getTime()/1000 - 3600;
-        endingDate = new Date(endingDate).getTime()/1000;
         getCompanyData(ticker);
+        // 01/01 - 07/07 and our database only has 01/01 - 06/04 then we need to fetch from finnhub (06/04 - 07-07)
         fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
         .then((resp) => resp.json())
         .then(({ c, h, l, o, t }) => {
@@ -253,7 +309,9 @@ const App: React.FC = () => {
             dateObj["date_number"] = t[index];
             return dateObj;
           });
+          console.log("DATES FROM FINNHUB", stock);
           setChartData(stock)
+          //update mongo dbboolean
         })
     
         .catch((error) => {
@@ -269,14 +327,13 @@ const App: React.FC = () => {
               (dd>9 ? '' : '0') + dd
              ].join('');
     };
-    const getUserData = (ticker: string, beginDate: Date | null , endDate: Date | null, from: string = ''): void => {
-      if (beginDate) {
-        setBeginDate(convertDateObjectToString(beginDate));
-      }
-      if (endDate) {
-        setEndDate(convertDateObjectToString(endDate));
-      }
-      from && (from !== "default" ? fetchFromFinnhub(ticker, beginDate, endDate) : fetchSingleStock(ticker, beginDate, endDate));  
+    
+    const getUserData = (ticker: string, beginDate: Date, endDate: Date, from: string = ''): void => { // sumbit
+      setBeginDate(convertDateObjectToString(beginDate));
+      setEndDate(convertDateObjectToString(endDate));
+      const startingDateUnix = beginDate && beginDate.getTime()/1000 - 3600;
+      const endingDateUnix = endDate && endDate.getTime()/1000;
+      from && (from !== "default" ? fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix) : fetchSingleStock(ticker, startingDateUnix, endingDateUnix));  
     }  
 
     const getVirusData = () => {
