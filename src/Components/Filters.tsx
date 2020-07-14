@@ -85,11 +85,16 @@ export const Filters: React.FC<Props> = (props) => {
 
   const validateSubmit = (stock, startDate, endDate) => {
     if(stock.length > 0){
-      if (endDate <= startDate){
-        setErrorMessage('The End Date must be greater than the Start Date')
+      if(startDate != 'Invalid Date' && endDate != 'Invalid Date'){
+        if (endDate <= startDate){
+          setErrorMessage('The End Date must be greater than the Start Date')
+        } else {
+          props.getUserData(stock, startDate, endDate, validTicker); 
+          setErrorMessage('');
+          props.setExpanded(false);
+        }
       } else {
-        props.getUserData(stock, startDate, endDate, validTicker) 
-        setErrorMessage('')
+        setErrorMessage('Selected Dates must be valid')
       }
     } else {
       setErrorMessage('Please select a valid stock ticker')
@@ -140,7 +145,8 @@ export const Filters: React.FC<Props> = (props) => {
               variant="inline"
               format="MM/dd/yyyy"
               margin="normal"
-              minDate="2019-01-01"
+              minDate="2020-01-01"
+              maxDate={new Date()}
               // id="date-picker-start"
               label="Start Date"
               value={startDate}
@@ -156,6 +162,7 @@ export const Filters: React.FC<Props> = (props) => {
               format="MM/dd/yyyy"
               margin="normal"
               minDate="2020-01-02"
+              maxDate={new Date()}
               // id="date-picker-end"
               label="End Date"
               value={endDate}
@@ -173,8 +180,7 @@ export const Filters: React.FC<Props> = (props) => {
           className={classes.button}
           startIcon={<SaveIcon />}
           onClick={() => {
-              validateSubmit(stock, startDate, endDate);
-            props.setExpanded(false)
+            validateSubmit(stock, startDate, endDate);
           }
           }
         >

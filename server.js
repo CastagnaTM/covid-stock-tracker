@@ -158,15 +158,22 @@ app.use(
             let endDate = new Date(args.endDate);
             
             let startIndex = data.findIndex(element => element.date === args.startDate) 
-            let endIndex = 0;
+            let endIndex = startIndex + 1;
             for (let i = startIndex; i < data.length; ++i) {    // convert dates to unix and then use binary serach for O(LOG N)
-              let date = new Date(data[i].date).toLocaleDateString('en');
-              if (date === args.endDate) {
+              let date = new Date(data[i].date)
+              console.log(date.getTime(), endDate.getTime())
+              if (date.getTime() == endDate.getTime()) {
+                console.log('beep boop')
                 endIndex = i + 1;
                 break;
-              }              
+              }
+              if(date < endDate){
+                endIndex = i+1;
+              } else {
+                break;
+              }             
             }
-
+          
             let slicedData = data.slice(startIndex, endIndex);
             result.dates = slicedData;
           console.log(result);            

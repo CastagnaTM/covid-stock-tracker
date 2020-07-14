@@ -70,7 +70,7 @@ export const Main = styled.div`
     background-color: ${palette.darkGrey}; 
     display: flex;
     flex-direction: row;
-    height: calc(100vh - 30px);
+    height: calc(100vh - 40px);
     @media screen and (max-width: ${maxWidth}){
         flex-direction: column;
     }
@@ -83,7 +83,6 @@ export const ControlPanel = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    // justify-content: space-evenly;
     text-align: center;
     box-sizing: border-box;
     padding: 1em;
@@ -209,6 +208,13 @@ export const Modal = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: fixed;
+    left: calc(50% - 250px);
+
+    @media screen and (max-width: 550px ){
+        left: 10%;
+        width: 80%;
+    }
    
 
    > div {
@@ -310,22 +316,16 @@ export const VirusStyle = styled(CompanyStyle)`
 
     .labels {
         > p {
-
             color: white;
         }
     }
 
     .negative {
         color: ${palette.green};
-        // color: #2a7f62;
-        // 2E933C
-       
     }
 
     .positive {
-        color: ${palette.red};
-        // #B80C09;
-       
+        color: ${palette.red};       
     }
 
     .recovered {
@@ -347,8 +347,6 @@ export const MobileVirusStyle = styled(CompanyStyle)`
     }
     .negative {
         color: ${palette.green};
-        // color: #2a7f62;
-        // 2E933C
         > span {
             color: white;
         }
@@ -403,13 +401,18 @@ export const Introduction = styled.div `
 export const Footer = styled.footer`
     background-color: #0c495b;
     bottom: 0;
-    height: 30px;
+    height: 40px;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-evenly;
     font-size: medium;
+    position: fixed;
+
+    @media screen and (max-width: 450px) {
+        font-size: small;
+    }
 
 
     > div {
@@ -418,8 +421,8 @@ export const Footer = styled.footer`
         align-items: center;
 
         > p, a {
+            width: min-content;
             color: white;
-            padding: 5px;
         }
     }
 `

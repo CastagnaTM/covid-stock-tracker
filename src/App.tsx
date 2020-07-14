@@ -116,6 +116,7 @@ const App: React.FC = () => {
   const [beginDate, setBeginDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>(null);
   const [today, setToday] = useState<any>("2/7/89");    // unix
+  const [errorMessage, setErrorMessage] = useState<boolean>(false)
 
   const setCurrentDate = () => {
     const currDate = new Date();
@@ -199,7 +200,7 @@ const App: React.FC = () => {
         .then((data) => {
           setCompanyData(data);          
         })
-        .catch((error) => {
+        .catch((error) => { 
           throw error;
         });
     }
@@ -280,8 +281,14 @@ const App: React.FC = () => {
                   arr[i]["name"] =  i+1;
                   arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
                 }
-                setChartData(arr);
-                setCompanyData(data.data.findDates.companyData);
+                // if(data.data.findDates.dates > 0){
+                  setChartData(arr);
+                  setCompanyData(data.data.findDates.companyData);
+                  console.log("THIS IS FROM MONGODB BISHHHHHHH ")
+                  console.log(startingDateUnix, endingDateUnix)
+                // } else {
+                //   setErrorMessage(true)
+                // }
               });
           }
         })
@@ -294,12 +301,10 @@ const App: React.FC = () => {
         .then((resp) => resp.json())
         .then(({ c, h, l, o, t }) => {
           const stock = c.map((value: number, index: number) => {
-            let dateObj = {};
-            dateObj["close_price"] = value;
-            dateObj["high_price"] = h[index];
-            dateObj["low_price"] = l[index];
-            dateObj["open_price"] = o[index];
-            dateObj["date_number"] = t[index];
+            let dateObj = {
+              "close_price": value, "high_price": h[index], "low_price": l[index], "open_price": o[index], "date_number": t[index]
+            };
+           
             return dateObj;
           });
           setChartData(stock)
@@ -400,8 +405,8 @@ return (
           </GraphContainer>
           )
           :
-          <LandingPage/>
-        }            
+         ( errorMessage ? <h2 style={{color: 'white'}} >Sorry, there's been an error</h2> : <LandingPage/>)
+        }   
     </Main>
     <Footer>
       <div>

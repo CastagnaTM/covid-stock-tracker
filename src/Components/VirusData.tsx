@@ -65,7 +65,9 @@ function VirusData({virusData, beginDate, endDate, virusMobile}: Props) {
         </>
       )
       :
-      null 
+      <MobileVirusStyle>
+        <p> Virus data not available until 01/22/2020</p> 
+      </MobileVirusStyle> 
     );
   } else {
     return (    
