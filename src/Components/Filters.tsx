@@ -96,7 +96,6 @@ export const Filters: React.FC<Props> = (props) => {
       } else {
         setErrorMessage('Selected Dates must be valid')
       }
-
     } else {
       setErrorMessage('Please select a valid stock ticker')
     }

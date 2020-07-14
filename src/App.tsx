@@ -116,6 +116,7 @@ const App: React.FC = () => {
   const [beginDate, setBeginDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>(null);
   const [today, setToday] = useState<any>("2/7/89");    // unix
+  const [errorMessage, setErrorMessage] = useState<boolean>(false)
 
   const setCurrentDate = () => {
     const currDate = new Date();
@@ -198,7 +199,7 @@ const App: React.FC = () => {
         .then((data) => {
           setCompanyData(data);          
         })
-        .catch((error) => {
+        .catch((error) => { 
           throw error;
         });
     }
@@ -285,9 +286,13 @@ const App: React.FC = () => {
                   arr[i]["name"] =  i+1;
                   arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
                 }
+                // if(data.data.findDates.dates > 0){
                   setChartData(arr);
                   setCompanyData(data.data.findDates.companyData);
                   console.log("THIS IS FROM MONGODB BISHHHHHHH ")
+                // } else {
+                //   setErrorMessage(true)
+                // }
               });
           }
         })
@@ -405,7 +410,7 @@ return (
           </GraphContainer>
           )
           :
-          <LandingPage/>
+         ( errorMessage ? <LandingPage/>  : <h2>Sorry, there's been an error</h2>)
         }            
     </Main>
     <Footer>
