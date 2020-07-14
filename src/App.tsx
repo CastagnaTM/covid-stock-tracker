@@ -157,7 +157,6 @@ const App: React.FC = () => {
             );
             return dateInput;
           });
-          stock[stock.length-1].date += 86400; 
         // inputStock(ticker, stock);
           updateMongoDb(ticker, stock);
         }
@@ -260,9 +259,8 @@ const App: React.FC = () => {
       if (ticker) {
         getLatestDate(ticker).then(latestDateUnix => {
           // endingDate <= latestDateUnix then we have it in our db and we fetch;
-          console.log(latestDateUnix);
           if (latestDateUnix < endingDateUnix) {
-            fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix);           // fetches stargint to end date that we as user fill in
+            fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix);  // fetches stargint to end date that we as user fill in
             fetchData(ticker, latestDateUnix, today);                    // this fetches latest date from mongodb untill today; 
           }
           else {
@@ -282,9 +280,8 @@ const App: React.FC = () => {
                   arr[i]["name"] =  i+1;
                   arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
                 }
-                console.log("MONGODB", arr);
-                  setChartData(arr);
-                  setCompanyData(data.data.findDates.companyData);
+                setChartData(arr);
+                setCompanyData(data.data.findDates.companyData);
               });
           }
         })
@@ -293,7 +290,6 @@ const App: React.FC = () => {
 
     const fetchFromFinnhub = (ticker: string, startingDate, endingDate) => {
         getCompanyData(ticker);
-        // 01/01 - 07/07 and our database only has 01/01 - 06/04 then we need to fetch from finnhub (06/04 - 07-07)
         fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
         .then((resp) => resp.json())
         .then(({ c, h, l, o, t }) => {
@@ -306,8 +302,6 @@ const App: React.FC = () => {
             dateObj["date_number"] = t[index];
             return dateObj;
           });
-          stock[stock.length-1].date_number += 86400; 
-          console.log("DATES FROM FINNHUB", stock);
           setChartData(stock)
           //update mongodb boolean
         })
