@@ -281,14 +281,10 @@ const App: React.FC = () => {
                   arr[i]["name"] =  i+1;
                   arr[i]["date_number"] =  new Date(arr[i]["date"]).getTime() / 1000;
                 }
-                // if(data.data.findDates.dates > 0){
                   setChartData(arr);
                   setCompanyData(data.data.findDates.companyData);
                   console.log("THIS IS FROM MONGODB BISHHHHHHH ")
                   console.log(startingDateUnix, endingDateUnix)
-                // } else {
-                //   setErrorMessage(true)
-                // }
               });
           }
         })
@@ -298,21 +294,33 @@ const App: React.FC = () => {
     const fetchFromFinnhub = (ticker: string, startingDate, endingDate) => {
         getCompanyData(ticker);
         fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
-        .then((resp) => resp.json())
-        .then(({ c, h, l, o, t }) => {
-          const stock = c.map((value: number, index: number) => {
-            let dateObj = {
-              "close_price": value, "high_price": h[index], "low_price": l[index], "open_price": o[index], "date_number": t[index]
-            };
-           
-            return dateObj;
-          });
-          setChartData(stock)
-          //update mongodb boolean
+        .then((response) => {
+          if(!response.ok){
+            console.log(response); 
+            throw response.statusText;
+          }
+          return response.json() 
         })
-    
+        .then(stockData => {
+          if(stockData) {
+            let { c, h, l, o, t } = stockData;
+            const stock = c.map((value: number, index: number) => {
+              let dateObj = {
+                "close_price": value, 
+                "high_price": h[index], 
+                "low_price": l[index], 
+                "open_price": o[index], 
+                "date_number": t[index]
+              };
+             
+              return dateObj;
+            });
+            setChartData(stock)
+            //update mongodb boolean
+          }
+        })
         .catch((error) => {
-          throw error;
+          setErrorMessage(true);
         });
     };
     const convertDateObjectToString = (date):string => {   //yyyymmdd
@@ -365,7 +373,10 @@ return (
         <H1>Dashboard</H1>
         <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
       </ControlPanel>
-        {chartData.length > 0? 
+        { errorMessage ? 
+          <h2 style={{color: 'white'}}> Sorry, there's been an error </h2> 
+        :  
+        (chartData.length > 0 ? 
           (
           <GraphContainer> 
             <CompanyName href={companyData.web_url || companyData.weburl} target="_blank" rel="noopener">{companyData.name}</CompanyName>
@@ -403,10 +414,10 @@ return (
               </VirusDataColumn>
             </GraphBox2>
           </GraphContainer>
-          )
-          :
-         ( errorMessage ? <h2 style={{color: 'white'}} >Sorry, there's been an error</h2> : <LandingPage/>)
-        }   
+          ) 
+          : 
+          <LandingPage/>
+        )}   
     </Main>
     <Footer>
       <div>
