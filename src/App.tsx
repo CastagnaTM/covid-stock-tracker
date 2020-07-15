@@ -99,13 +99,6 @@ const fetchAllStock = (): void => {
     })
   };
 
-  const findStock = async (ticker: string): Promise<string> => {
-    let data = await fetch(`${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`)
-    .then(resp => resp.json())
-    .then(data => Object.keys(data).length > 0 ? ticker: "")
-    return data;
-  }   
-
 const App: React.FC = () => {
   const classes = useStyles();
   const [chartData, setChartData] =  useState([]);
@@ -116,7 +109,7 @@ const App: React.FC = () => {
   const [beginDate, setBeginDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>(null);
   const [today, setToday] = useState<any>("2/7/89");    // unix
-  const [APIerrorMessage, setAPIerrorMessage] = useState<boolean>(true);
+  const [APIerrorMessage, setAPIerrorMessage] = useState<boolean>(false);
 
   const setCurrentDate = () => {
     const currDate = new Date();
@@ -133,6 +126,20 @@ const App: React.FC = () => {
     getVirusData();
     window.addEventListener('resize', windowSizeCheck);
   }, [])
+
+  const findStock = async (ticker: string): Promise<string> => {
+    let data = await fetch(`${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`)
+    .then((response) => {
+      if(!response.ok){
+        // console.log(response); 
+        handleAPILimit();
+        throw response.statusText;
+      }
+      return response.json() 
+    })
+    .then(data => Object.keys(data).length > 0 ? ticker: "")
+    return data;
+  }   
 
   const fetchData = (ticker: string, beginDate: number, endDate: number): any => {
     fetch(
@@ -257,10 +264,11 @@ const App: React.FC = () => {
     }
 
     const fetchSingleStock = (ticker: string, startingDateUnix: number, endingDateUnix: number): void => {  // graphql not finnhub
+      console.log(ticker)
       if (ticker) {
         getLatestDate(ticker).then(latestDateUnix => {
           // endingDate <= latestDateUnix then we have it in our db and we fetch;
-          if (latestDateUnix < endingDateUnix) {
+          if (latestDateUnix < endingDateUnix && !APIerrorMessage) {
             fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix);  // fetches stargint to end date that we as user fill in
             fetchData(ticker, latestDateUnix, today);                    // this fetches latest date from mongodb untill today; 
           }
@@ -320,9 +328,20 @@ const App: React.FC = () => {
           }
         })
         .catch((error) => {
-          setAPIerrorMessage(true);
+          handleAPILimit();
         });
     };
+
+    const handleAPILimit = () => { 
+      setAPIerrorMessage(true);
+      console.log(APIerrorMessage)
+      setChartData([]);
+      setTimeout( () => {
+        setAPIerrorMessage(false);
+        console.log(APIerrorMessage)
+      }, 60000);
+    }
+
     const convertDateObjectToString = (date):string => {   //yyyymmdd
       let mm = date.getMonth() + 1; // getMonth() is zero-based
       let dd = date.getDate();
@@ -338,7 +357,11 @@ const App: React.FC = () => {
       setEndDate(convertDateObjectToString(endDate));
       const startingDateUnix = beginDate && beginDate.getTime()/1000 - 3600;
       const endingDateUnix = endDate && endDate.getTime()/1000;
-      from && (from !== "default" ? fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix) : fetchSingleStock(ticker, startingDateUnix, endingDateUnix));  
+      if(APIerrorMessage){
+        fetchSingleStock(ticker, startingDateUnix, endingDateUnix);
+      } else {
+        from && (from !== "default" ? fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix) : fetchSingleStock(ticker, startingDateUnix, endingDateUnix));  
+      }
     }  
 
     const getVirusData = () => {
@@ -373,7 +396,7 @@ return (
         <H1>Dashboard</H1>
         <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded} APIerrorMessage={APIerrorMessage}></Filters>
       </ControlPanel>
-        { APIerrorMessage ? 
+        { (APIerrorMessage && chartData.length === 0) ?
           <APIerror> Sorry, the API limit has been reached. Please use the dropdown instead, or try again in a minute </APIerror> 
         :  
         (chartData.length > 0 ? 
