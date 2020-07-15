@@ -99,13 +99,6 @@ const fetchAllStock = (): void => {
     })
   };
 
-  const findStock = async (ticker: string): Promise<string> => {
-    let data = await fetch(`${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`)
-    .then(resp => resp.json())
-    .then(data => Object.keys(data).length > 0 ? ticker: "")
-    return data;
-  }   
-
 const App: React.FC = () => {
   const classes = useStyles();
   const [chartData, setChartData] =  useState([]);
@@ -116,8 +109,7 @@ const App: React.FC = () => {
   const [beginDate, setBeginDate] = useState<any>(null);  // used for Covid Tracker API 
   const [endDate, setEndDate] = useState<any>(null);      // used for Covid Tracker API 
   const [today, setToday] = useState<any>("2/7/89");      // unix
-  const [errorMessage, setErrorMessage] = useState<boolean>(false);
-  const [APIerrorMessage, setAPIerrorMessage] = useState<boolean>(true);
+  const [APIerrorMessage, setAPIerrorMessage] = useState<boolean>(false);
 
   const setCurrentDate = () => {
     const currDate = new Date();
@@ -135,7 +127,21 @@ const App: React.FC = () => {
     window.addEventListener('resize', windowSizeCheck);
   }, [])
 
-  const fetchData = (ticker: string, beginDate: number): any => {
+  const findStock = async (ticker: string): Promise<string> => {
+    let data = await fetch(`${finnhubBase}stock/profile2?symbol=${ticker}&token=${finnhubKey}`)
+    .then((response) => {
+      if(!response.ok){
+        // console.log(response); 
+        handleAPILimit();
+        throw response.statusText;
+      }
+      return response.json() 
+    })
+    .then(data => Object.keys(data).length > 0 ? ticker: "")
+    return data;
+  }   
+
+  const fetchData = (ticker: string, beginDate: number, endDate: number): any => {
     fetch(
       `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate + 86400}&to=${endDate}&token=${finnhubKey}`
     )
@@ -258,10 +264,11 @@ const App: React.FC = () => {
     }
 
     const fetchSingleStock = (ticker: string, startingDateUnix: number, endingDateUnix: number): void => {  // graphql not finnhub
+      console.log(ticker)
       if (ticker) {
         getLatestDate(ticker).then(latestDateUnix => {
           // endingDate <= latestDateUnix then we have it in our db and we fetch;
-          if (latestDateUnix < endingDateUnix) {
+          if (latestDateUnix < endingDateUnix && !APIerrorMessage) {
             fetchFromFinnhubAndUpdateDB(ticker, startingDateUnix, endingDateUnix, latestDateUnix);  // fetches stargint to end date that we as user fill in
             // fetchData(ticker, latestDateUnix);                    // this fetches latest date from mongodb untill today; 
           }
@@ -320,7 +327,7 @@ const App: React.FC = () => {
         }
       })
       .catch((error) => {
-        setErrorMessage(true);
+        handleAPILimit();
       });
   };
 
@@ -381,9 +388,17 @@ const App: React.FC = () => {
           }
         })
         .catch((error) => {
-          setAPIerrorMessage(true);
+          handleAPILimit();
         });
     };
+
+    const handleAPILimit = () => { 
+      setAPIerrorMessage(true);
+      setChartData([]);
+      setTimeout( () => {
+        setAPIerrorMessage(false);
+      }, 60000);
+    }
 
     const convertDateObjectToString = (date):string => {   //yyyymmdd
       let mm = date.getMonth() + 1; // getMonth() is zero-based
@@ -400,7 +415,11 @@ const App: React.FC = () => {
       setEndDate(convertDateObjectToString(endDate));
       const startingDateUnix = beginDate && beginDate.getTime()/1000 - 3600;
       const endingDateUnix = endDate && endDate.getTime()/1000;
-      from && (from !== "default" ? fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix) : fetchSingleStock(ticker, startingDateUnix, endingDateUnix));  
+      if(APIerrorMessage){
+        fetchSingleStock(ticker, startingDateUnix, endingDateUnix);
+      } else {
+        from && (from !== "default" ? fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix) : fetchSingleStock(ticker, startingDateUnix, endingDateUnix));  
+      }
     }  
 
     const getVirusData = () => {
@@ -435,7 +454,7 @@ return (
         <H1>Dashboard</H1>
         <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded} APIerrorMessage={APIerrorMessage}></Filters>
       </ControlPanel>
-        { APIerrorMessage ? 
+        { (APIerrorMessage && chartData.length === 0) ?
           <APIerror> Sorry, the API limit has been reached. Please use the dropdown instead, or try again in a minute </APIerror> 
         :  
         (chartData.length > 0 ? 

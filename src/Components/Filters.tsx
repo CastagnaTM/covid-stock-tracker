@@ -90,7 +90,7 @@ export const Filters: React.FC<Props> = (props) => {
         if (endDate <= startDate){
           setErrorMessage('The End Date must be greater than the Start Date')
         } else {
-          props.getUserData(stock, startDate, endDate, validTicker); 
+          props.getUserData(stock, startDate, endDate, validTicker);
           setErrorMessage('');
           props.setExpanded(false);
         }
