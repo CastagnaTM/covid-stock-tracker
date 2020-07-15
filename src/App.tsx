@@ -116,7 +116,7 @@ const App: React.FC = () => {
   const [beginDate, setBeginDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>(null);
   const [today, setToday] = useState<any>("2/7/89");    // unix
-  const [errorMessage, setErrorMessage] = useState<boolean>(false);
+  const [APIerrorMessage, setAPIerrorMessage] = useState<boolean>(true);
 
   const setCurrentDate = () => {
     const currDate = new Date();
@@ -320,7 +320,7 @@ const App: React.FC = () => {
           }
         })
         .catch((error) => {
-          setErrorMessage(true);
+          setAPIerrorMessage(true);
         });
     };
     const convertDateObjectToString = (date):string => {   //yyyymmdd
@@ -365,15 +365,15 @@ return (
             <Typography className={classes.heading} >Dashboard</Typography>
           </MuiAccordionSummary>
           <MuiAccordionDetails className={classes.filters}> 
-            <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
+            <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded} APIerrorMessage={APIerrorMessage}></Filters>
           </MuiAccordionDetails>
         </MuiAccordion>
         </MobileButton>
       <ControlPanel>
         <H1>Dashboard</H1>
-        <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
+        <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded} APIerrorMessage={APIerrorMessage}></Filters>
       </ControlPanel>
-        { errorMessage ? 
+        { APIerrorMessage ? 
           <APIerror> Sorry, the API limit has been reached. Please use the dropdown instead, or try again in a minute </APIerror> 
         :  
         (chartData.length > 0 ? 

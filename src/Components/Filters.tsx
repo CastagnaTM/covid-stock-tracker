@@ -22,6 +22,7 @@ interface Props {
   getUserData(ticker: string, beginDate: Date | null, endDate: Date | null, from: string): void;
   findStock(ticker: string): Promise<string>;
   setExpanded(value);
+  APIerrorMessage;
 }
 
 export const Filters: React.FC<Props> = (props) => {
@@ -123,6 +124,8 @@ export const Filters: React.FC<Props> = (props) => {
         type="search" 
         variant="outlined" 
         value={search}
+        disabled={props.APIerrorMessage}
+        error={props.APIerrorMessage}
         className={classes.root}
         onChange={(e) => {
           setSearch(e.target.value)
