@@ -113,9 +113,9 @@ const App: React.FC = () => {
   const [isMobile, setMobile] = useState(false);
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [virusData,  setVirusData] = useState<any>([]);
-  const [beginDate, setBeginDate] = useState<any>(null);
-  const [endDate, setEndDate] = useState<any>(null);
-  const [today, setToday] = useState<any>("2/7/89");    // unix
+  const [beginDate, setBeginDate] = useState<any>(null);  // used for Covid Tracker API 
+  const [endDate, setEndDate] = useState<any>(null);      // used for Covid Tracker API 
+  const [today, setToday] = useState<any>("2/7/89");      // unix
   const [errorMessage, setErrorMessage] = useState<boolean>(false);
 
   const setCurrentDate = () => {
@@ -134,7 +134,7 @@ const App: React.FC = () => {
     window.addEventListener('resize', windowSizeCheck);
   }, [])
 
-  const fetchData = (ticker: string, beginDate: number, endDate: number): any => {
+  const fetchData = (ticker: string, beginDate: number): any => {
     fetch(
       `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate + 86400}&to=${endDate}&token=${finnhubKey}`
     )
@@ -261,8 +261,8 @@ const App: React.FC = () => {
         getLatestDate(ticker).then(latestDateUnix => {
           // endingDate <= latestDateUnix then we have it in our db and we fetch;
           if (latestDateUnix < endingDateUnix) {
-            fetchFromFinnhub(ticker, startingDateUnix, endingDateUnix);  // fetches stargint to end date that we as user fill in
-            fetchData(ticker, latestDateUnix, today);                    // this fetches latest date from mongodb untill today; 
+            fetchFromFinnhubAndUpdateDB(ticker, startingDateUnix, endingDateUnix, latestDateUnix);  // fetches stargint to end date that we as user fill in
+            // fetchData(ticker, latestDateUnix);                    // this fetches latest date from mongodb untill today; 
           }
           else {
             const query = findCompanyDatesQuery(ticker, convertToRealTime(startingDateUnix), convertToRealTime(endingDateUnix));
@@ -291,9 +291,42 @@ const App: React.FC = () => {
       }
     };
 
-    const fetchFromFinnhub = (ticker: string, startingDate, endingDate) => {
+    const fetchFromFinnhub = (ticker: string, startingDate: number, endingDate: number) => {
+      getCompanyData(ticker);
+      fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
+      .then((response) => {
+        if(!response.ok){
+          console.log(response); 
+          throw response.statusText;
+        }
+        return response.json() 
+      })
+      .then(stockData => {
+        if(stockData) {
+          let { c, h, l, o, t } = stockData;
+          const stock = c.map((value: number, index: number) => {
+            let dateObj = {
+              "close_price": value, 
+              "high_price": h[index], 
+              "low_price": l[index], 
+              "open_price": o[index], 
+              "date_number": t[index]
+            };
+            return dateObj;
+          });
+          console.log("FINNHUB ONLY");
+          setChartData(stock)
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(true);
+      });
+  };
+
+    const fetchFromFinnhubAndUpdateDB = (ticker: string, startingDate: number, endingDate: number, latestDate: number) => {
         getCompanyData(ticker);
-        fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
+        // fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
+        fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${today}&token=${finnhubKey}`)
         .then((response) => {
           if(!response.ok){
             console.log(response); 
@@ -304,25 +337,40 @@ const App: React.FC = () => {
         .then(stockData => {
           if(stockData) {
             let { c, h, l, o, t } = stockData;
+            let startIdx = 0;
+            let endIdx = 0;
+            let latestStockIdx = 0; 
             const stock = c.map((value: number, index: number) => {
-              let dateObj = {
+              let unixTime = t[index];
+              if (startingDate > unixTime) {
+                startIdx = index;                  
+              }
+              if (endingDate > unixTime) {
+                endIdx = index;
+              }
+              if (latestDate !== 0 && latestDate > unixTime) {
+                latestStockIdx = index;
+              }
+              let dateInput = {
                 "close_price": value, 
                 "high_price": h[index], 
                 "low_price": l[index], 
                 "open_price": o[index], 
-                "date_number": t[index]
+                "date_number": unixTime,
+                "date": convertToRealTime(unixTime)
               };
-             
-              return dateObj;
+              return dateInput;
             });
-            setChartData(stock)
-            //update mongodb boolean
+            console.log("FINNHUB AND UPDATE");
+            setChartData(stock.slice(startIdx,endIdx+1))
+            updateMongoDb(ticker, stock.slice(latestStockIdx+1));
           }
         })
         .catch((error) => {
           setErrorMessage(true);
         });
     };
+
     const convertDateObjectToString = (date):string => {   //yyyymmdd
       let mm = date.getMonth() + 1; // getMonth() is zero-based
       let dd = date.getDate();

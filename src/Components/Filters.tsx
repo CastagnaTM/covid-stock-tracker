@@ -179,10 +179,7 @@ export const Filters: React.FC<Props> = (props) => {
           size="large"
           className={classes.button}
           startIcon={<SaveIcon />}
-          onClick={() => {
-            validateSubmit(stock, startDate, endDate);
-          }
-          }
+          onClick={() => validateSubmit(stock, startDate, endDate)}
         >
         Submit
       </Button>
