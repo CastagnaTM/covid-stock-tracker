@@ -334,11 +334,9 @@ const App: React.FC = () => {
 
     const handleAPILimit = () => { 
       setAPIerrorMessage(true);
-      console.log(APIerrorMessage)
       setChartData([]);
       setTimeout( () => {
         setAPIerrorMessage(false);
-        console.log(APIerrorMessage)
       }, 60000);
     }
 
