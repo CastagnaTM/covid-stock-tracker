@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {
     Navigation, Ul, NavButton,
-    Main, ControlPanel, H1, MobileButton, MobileVirusButton,
+    Main, ControlPanel, H1, MobileButton, MobileVirusButton, APIerror,
     GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, VirusDataColumn, CompanyName
 } from './Components/Styles';
 import Filters from './Components/Filters';
@@ -116,7 +116,7 @@ const App: React.FC = () => {
   const [beginDate, setBeginDate] = useState<any>(null);
   const [endDate, setEndDate] = useState<any>(null);
   const [today, setToday] = useState<any>("2/7/89");    // unix
-  const [errorMessage, setErrorMessage] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<boolean>(false);
 
   const setCurrentDate = () => {
     const currDate = new Date();
@@ -374,7 +374,7 @@ return (
         <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded}></Filters>
       </ControlPanel>
         { errorMessage ? 
-          <h2 style={{color: 'white'}}> Sorry, there's been an error </h2> 
+          <APIerror> Sorry, the API limit has been reached. Please use the dropdown instead, or try again in a minute </APIerror> 
         :  
         (chartData.length > 0 ? 
           (

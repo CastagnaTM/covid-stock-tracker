@@ -78,7 +78,7 @@ export const Main = styled.div`
 
 export const ControlPanel = styled.div`
     background-color: white;
-    width: 30%;
+    min-width: 30%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -98,6 +98,11 @@ export const H1 = styled.header`
     color: #0c8224; 
     margin: 0 auto;
     padding: .2em;
+`
+
+export const APIerror = styled(H1)`
+    color: white;
+    padding: 0.5em;
 `
 
 export const MobileButton = styled.div`
