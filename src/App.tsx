@@ -337,33 +337,46 @@ const App: React.FC = () => {
         .then(stockData => {
           if(stockData) {
             let { c, h, l, o, t } = stockData;
-            let startIdx = 0;
             let endIdx = 0;
             let latestStockIdx = 0; 
-            const stock = c.map((value: number, index: number) => {
-              let unixTime = t[index];
-              if (startingDate > unixTime) {
-                startIdx = index;                  
-              }
+            let displayStocks = [] as any;
+            let stocksMongoDB = [] as any;
+            for (let i = 0; i < t.length; ++i) {
+              let unixTime = t[i];
               if (endingDate > unixTime) {
-                endIdx = index;
+                endIdx = i;
               }
-              if (latestDate !== 0 && latestDate > unixTime) {
-                latestStockIdx = index;
+              if (latestDate > unixTime) {
+                latestStockIdx = i;
               }
-              let dateInput = {
-                "close_price": value, 
-                "high_price": h[index], 
-                "low_price": l[index], 
-                "open_price": o[index], 
+              let stockObj = {
+                "close_price": c[i], 
+                "high_price": h[i], 
+                "low_price": l[i], 
+                "open_price": o[i], 
                 "date_number": unixTime,
-                "date": convertToRealTime(unixTime)
               };
-              return dateInput;
-            });
+              displayStocks.push(stockObj);
+            }
+
+            for (let i = latestStockIdx + 1; i < t.length; ++i) {
+              let close_price = c[i];
+              let high_price = h[i];
+              let low_price = l[i];
+              let open_price = o[i];
+              let date = convertToRealTime(t[i]);
+              let dateInput = new DateInput(
+                date,
+                open_price,
+                close_price,
+                high_price,
+                low_price
+              );
+              stocksMongoDB.push(dateInput);
+            }
             console.log("FINNHUB AND UPDATE");
-            setChartData(stock.slice(startIdx,endIdx+1))
-            updateMongoDb(ticker, stock.slice(latestStockIdx+1));
+            setChartData(displayStocks.slice(0, endIdx + 1 ));
+            updateMongoDb(ticker, stocksMongoDB);
           }
         })
         .catch((error) => {
