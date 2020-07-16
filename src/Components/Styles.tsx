@@ -215,31 +215,59 @@ export const Modal = styled.div`
     align-items: center;
     position: fixed;
     left: calc(50% - 250px);
+    border: solid 4px #3d99b6;
 
     @media screen and (max-width: 550px ){
         left: 10%;
         width: 80%;
     }
-   
 
-   > div {
+    button {
+        right: 5px;
+        top: 2px;
+        font-size: x-large;
+        position: absolute;
+        color: #4a4a4a;
+        border: solid 2px #4a4a4a;
+        border-radius: 50%;
+        background: transparent;
+        cursor: pointer;
+        width: 50px;
+        height: 50px;
+        transition: all 500ms ease-in-out;
+
+        @media screen and (max-width: ${maxWidth}){
+            width: auto;
+            border: none;
+        }
+
+        &:hover {
+            border: solid 2px ${palette.blue};
+            color: ${palette.blue};
+            transition: all 500ms ease-in-out;
+        }
+    }
+   
+    a {
+        color: ${palette.blue};
+    }
+
+    div {
        padding: .2em;
        width: 100%;
        box-sizing: border-box;
 
        &.article {
         background-color: #b9b9b9c9;
+        }
     }
-   }
 `
 
 export const ModalHeader = styled.header`
     display: flex;
-    // flex-direction: column;
     align-items: center;
     justify-content: left;
-    margin-left: 1em;
-   font-size: medium;
+    font-size: medium;
 `
 
 export const GraphBox2 = styled.div`

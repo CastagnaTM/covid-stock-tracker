@@ -138,12 +138,15 @@ export default class ZoomGraph extends PureComponent {
             <InfoIcon fontSize="large" style={{color: "#2c99b5"}}/> 
             <p>On This Date,&nbsp;</p> 
             {this.state.modalDate + ':'}
+            <button onClick={ () => {
+              this.setState({ modal: false })
+            }}>&#x2613;</button>
           </ModalHeader>
         </div>
         <div className="article">
           <article>{this.state.modalContent}</article>
         </div>
-        <a href={significantDates["source"]} target="_blank" rel="noopener noreferrer"> SOURCE</a> 
+        <a href={significantDates["source"]} target="_blank" rel="noopener noreferrer"> SOURCE </a> 
       </Modal>
     )
   }
@@ -204,13 +207,13 @@ export default class ZoomGraph extends PureComponent {
                 // pop up modal with the content 
               }
             }}
-            onMouseLeave={ () => {
-              this.state.modal &&
-              this.setState({
-                modal: false
-              })
-            }
-            }
+            // onMouseLeave={ () => {
+            //   this.state.modal &&
+            //   this.setState({
+            //     modal: false
+            //   })
+            // }
+            // }
             tick={props => {
               const { payload,x,y } = props;
               let something = convertToRealTime(payload.value,true)
