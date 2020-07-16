@@ -143,6 +143,7 @@ export default class ZoomGraph extends PureComponent {
         <div className="article">
           <article>{this.state.modalContent}</article>
         </div>
+        <a href={significantDates["source"]} target="_blank" rel="noopener noreferrer"> SOURCE</a> 
       </Modal>
     )
   }
