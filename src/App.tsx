@@ -353,7 +353,7 @@ const App: React.FC = () => {
             for (let i = 0; i < t.length; ++i) {
               let unixTime = t[i];
               if (endingDate > unixTime) {
-                endIdx = i;
+                endIdx = i + 1;
               }
               if (latestDate > unixTime) {
                 latestStockIdx = i;
@@ -384,6 +384,7 @@ const App: React.FC = () => {
               stocksMongoDB.push(dateInput);
             }
             console.log("FINNHUB AND UPDATE");
+            console.log(stockData)
             console.log(displayStocks.slice(0, endIdx + 1 ))
             setChartData(displayStocks.slice(0, endIdx + 1 ));
             updateMongoDb(ticker, stocksMongoDB);
