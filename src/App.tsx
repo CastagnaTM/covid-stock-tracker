@@ -327,6 +327,7 @@ const App: React.FC = () => {
         }
       })
       .catch((error) => {
+        console.log(error)
         handleAPILimit();
       });
   };
@@ -383,6 +384,7 @@ const App: React.FC = () => {
               stocksMongoDB.push(dateInput);
             }
             console.log("FINNHUB AND UPDATE");
+            console.log(displayStocks.slice(0, endIdx + 1 ))
             setChartData(displayStocks.slice(0, endIdx + 1 ));
             updateMongoDb(ticker, stocksMongoDB);
           }

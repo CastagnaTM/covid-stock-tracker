@@ -33,6 +33,7 @@ export const Filters: React.FC<Props> = (props) => {
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setStock(event.target.value as string);
     setSearch('');
+    setValidTicker('default');
   }
 
   const mapTickers = () => {
