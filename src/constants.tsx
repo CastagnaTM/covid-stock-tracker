@@ -106,6 +106,7 @@ export const tickers = [
 ]
 
 export const significantDates = {
+    "source": "https://www.nytimes.com/article/coronavirus-timeline.html",
      "12/31/19": "Chinese authorities treated dozens of cases of pneumonia of unknown cause.", 
      "1/11/20": "China reported its first death.",
      "1/21/20": "First confirmed case in Washington state.", 
