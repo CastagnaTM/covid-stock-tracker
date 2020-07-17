@@ -1,5 +1,4 @@
 import React from 'react';
-import Cees from './headshot.png';
 import {Introduction} from './Styles'
 
 function LandingPage() {

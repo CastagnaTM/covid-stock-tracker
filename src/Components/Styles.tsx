@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { datePickerDefaultProps } from "@material-ui/pickers/constants/prop-types";
 
 const palette = {
     grey: "#222",

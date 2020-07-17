@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { H4, FormContainer, FormDiv, ErrorMessage, FormSection } from './Styles';
+import { H4, FormContainer, ErrorMessage, FormSection } from './Styles';
 import { FormControl, InputLabel, FormHelperText, Select, MenuItem } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { tickers } from "../constants";
@@ -87,7 +87,7 @@ export const Filters: React.FC<Props> = (props) => {
 
   const validateSubmit = (stock, startDate, endDate) => {
     if(stock.length > 0){
-      if(startDate != 'Invalid Date' && endDate != 'Invalid Date'){
+      if(startDate !== 'Invalid Date' && endDate !== 'Invalid Date'){
         if (endDate <= startDate){
           setErrorMessage('The End Date must be greater than the Start Date')
         } else {

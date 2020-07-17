@@ -6,10 +6,7 @@ import { significantDates } from '../constants';
 import InfoIcon from '@material-ui/icons/Info';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 
-
-
 export default class ZoomGraph extends PureComponent {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -36,10 +33,7 @@ export default class ZoomGraph extends PureComponent {
     }
   }
   getAxisYDomain = (from, to, ref, offset) => {
-    // console.log("FROM", from, "TO", to);
-
     const refData = this.state.data.slice(from - 1, to);
-    
     let [bottom, top] = [refData[0][ref], refData[0][ref]];
     refData.forEach((d) => {
       if (d[ref] > top) top = d[ref];
@@ -51,24 +45,14 @@ export default class ZoomGraph extends PureComponent {
 
   zoom = (e) => {
     if(e){
-
-      // e.target.className = "sc-fzpans iwByBU"
       let { refAreaLeft, refAreaRight, data } = this.state;
-    
       if (refAreaLeft === refAreaRight || refAreaRight === '') {
         this.setState(() => ({
           refAreaLeft: '',
           refAreaRight: '',
         }));
       }
-    
-      // xAxis domain
-      // this line specifically allows the highlight to work right to left
       if (refAreaLeft > refAreaRight) [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
-    
-      // yAxis domain
-      // const [bottom, top] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'low_price', 1);
-      // const [bottom2, top2] = this.getAxisYDomain(refAreaLeft, refAreaRight, 'high_price', 50);
     
       this.setState(() => ({
         refAreaLeft: '',
@@ -130,9 +114,7 @@ export default class ZoomGraph extends PureComponent {
   
   displayModal = () => {
     return (
-      <Modal 
-      // style={{position: "fixed", top: 530, left: this.state.modalX > 375 ? this.state.modalX - 150 : this.state.modalX+ 480}}
-      >
+      <Modal>
         <div>
           <ModalHeader>
             <InfoIcon fontSize="large" style={{color: "#2c99b5"}}/> 
@@ -152,33 +134,25 @@ export default class ZoomGraph extends PureComponent {
   }
 
   render() {
-    // console.log(this.props.isMobile)
     const legendStyle = {
       color: '#FFFFFF',
       fontSize: this.props.isMobile ? '.8em' : '1em'
     }
-    
     return (
       <div className="highlight-bar-charts" style={{ userSelect: 'none' }}>
-        
         {this.state.modal ? this.displayModal() : null}
         {
           this.state.left === 'dataMin' && this.state.right === 'dataMax' 
         ? 
           <ZoomOutButton style={{opacity: '0'}}></ZoomOutButton>
         : 
-          <ZoomOutButton
-            onClick={this.zoomOut}
-          >
-          <ZoomOutIcon/>
-          Zoom Out
+          <ZoomOutButton onClick={this.zoomOut} >
+            <ZoomOutIcon/>
+            Zoom Out
           </ZoomOutButton> 
       }
-     
        <ResponsiveContainer aspect={2} width="100%">
         <LineChart
-          // width={900}
-          // height={400}
           margin={{right: 35, left: 25}}
           data={this.state.data}
           onMouseDown = { (e) => e && this.setState({refAreaLeft:e.activeLabel})}
@@ -195,8 +169,6 @@ export default class ZoomGraph extends PureComponent {
             onClick={(e)=> {
               let time = convertToRealTime(e.value, true);
               if(significantDates[time]){  
-                // also have to check if the content has multiple events
-                // console.log(significantDates[time]);
                 this.setState({
                   modal: true,
                   modalY: "327.6666717529297",
@@ -204,39 +176,27 @@ export default class ZoomGraph extends PureComponent {
                   modalContent: significantDates[time],
                   modalDate: time
                 })
-                // pop up modal with the content 
               }
             }}
-            // onMouseLeave={ () => {
-            //   this.state.modal &&
-            //   this.setState({
-            //     modal: false
-            //   })
-            // }
-            // }
             tick={props => {
               const { payload,x,y } = props;
               let something = convertToRealTime(payload.value,true)
-
               return (
                 <text 
-                    width="830"
-                    height="30" 
-                    x= {x} 
-                    y={y+15}
-                    stroke="none" 
-                    fill={significantDates[something] ? "yellow" : "white"} 
-                    fontSize="1rem"  
-                    textAnchor="middle"
-                    >
-                            {something}
-                    </text>
+                  width="830"
+                  height="30" 
+                  x= {x} 
+                  y={y+15}
+                  stroke="none" 
+                  fill={significantDates[something] ? "yellow" : "white"} 
+                  fontSize="1rem"  
+                  textAnchor="middle"
+                  >
+                    {something}
+                </text>
               )
             }}
-            tickCount={7}
-            
-
-            
+            tickCount={7}            
           />
           <YAxis 
             allowDataOverflow={true}
@@ -248,7 +208,6 @@ export default class ZoomGraph extends PureComponent {
             />
           <Tooltip 
             labelFormatter={(label) => convertToRealTime(label, true)}
-            
           />
           <Legend
             content ={(props)=> {
@@ -258,7 +217,7 @@ export default class ZoomGraph extends PureComponent {
                   {
                     payload.map((entry, index) => (
                       <SVGDiv key={index} onClick={() => this.toggleLine(index)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <svg width="24" height="24" viewBox="0 0 24 24">
                           <path fill={entry.color} d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"></path>
                         </svg>
                         <li key={`item-${index}`}>{entry.value}</li>
@@ -275,7 +234,7 @@ export default class ZoomGraph extends PureComponent {
           <Line yAxisId="1" type='natural' dataKey='low_price' name="Low Price" stroke= {this.state.low ? '#f45b5b' : 'transparent'} animationDuration={300} dot={false}/>   
           <Line yAxisId="1" type='natural' dataKey='high_price' name="High Price" stroke={this.state.high ? '#82ca9d' : 'transparent'} animationDuration={300} dot={false}/>     
           {
-              (this.state.refAreaLeft && this.state.refAreaRight) ? (
+            (this.state.refAreaLeft && this.state.refAreaRight) ? (
             <ReferenceArea yAxisId="1" x1={this.state.refAreaLeft} x2={this.state.refAreaRight}  strokeOpacity={0.3} /> ) : null
           }
         </LineChart>
