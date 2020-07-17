@@ -1,30 +1,25 @@
 import React, {useState, useEffect} from "react";
 import {
-    Navigation, Ul, NavButton,
     Main, ControlPanel, H1, MobileButton, MobileVirusButton, APIerror,
     GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, VirusDataColumn, CompanyName
 } from './Components/Styles';
 import Filters from './Components/Filters';
-import { finnhubKey, finnhubBase, tickers, GRAPHQL_API, VIRUS_API } from "./constants";
+import { finnhubKey, finnhubBase, GRAPHQL_API, VIRUS_API } from "./constants";
 import DateInput from './Input/DateInput';
-import CompanyInput from './Input/CompanyInput';
 import ZoomGraph from './Components/ZoomGraph';
 import LandingPage from './Components/LandingPage';
 import { convertToRealTime } from './functions';
 import CompanyData from './Components/CompanyData';
-import { createStockQuery, fetchAllStocksQuery, updateCompanyDataQuery, findCompanyDatesQuery, findDates, updateDates } from './queries';
+import {findCompanyDatesQuery, findDates, updateDates } from './queries';
 import { makeStyles } from '@material-ui/core/styles';
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AboutPage from './Components/AboutPage'
 import VirusData from "./Components/VirusData";
 import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
-
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,30 +70,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
-// let timer = setTimeout(callAPI, 2000);
-let counter = 0;
-// function callAPI () {
-//   fetchData(tickers[counter]);
-// }
-
-
-const fetchAllStock = (): void => {
-  const query = fetchAllStocksQuery();
-    fetch(GRAPHQL_API, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: `application/json`,
-      },
-      body: JSON.stringify({query}),
-    })
-    .then(resp => resp.json())
-    .then(data => {
-      console.log(data)
-    })
-  };
-
 const App: React.FC = () => {
   const classes = useStyles();
   const [chartData, setChartData] =  useState([]);
@@ -122,6 +93,7 @@ const App: React.FC = () => {
 
   useEffect( () => {
     setCurrentDate();
+    // callAPI();
     windowSizeCheck();
     getVirusData();
     window.addEventListener('resize', windowSizeCheck);
@@ -141,60 +113,6 @@ const App: React.FC = () => {
     return data;
   }   
 
-  const fetchData = (ticker: string, beginDate: number, endDate: number): any => {
-    fetch(
-      `${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${beginDate + 86400}&to=${endDate}&token=${finnhubKey}`
-    )
-      .then((resp) => resp.json())
-      .then(stockData => {
-        const {c, h, l, o, t} = stockData;
-        if (c) {
-          const stock = c.map((value: number, index: number) => {
-            let close_price = value;
-            let high_price = h[index];
-            let low_price = l[index];
-            let open_price = o[index];
-            let date = convertToRealTime(t[index]);
-            console.log(t[index], date);
-            let dateInput = new DateInput(
-              date,
-              open_price,
-              close_price,
-              high_price,
-              low_price
-            );
-            return dateInput;
-          });
-        // inputStock(ticker, stock);
-          updateMongoDb(ticker, stock);
-        }
-      })
-
-      .catch((error) => {
-        throw error;
-      });
-  };
-  // const inputStock = (ticker: string, stock: []): void => {
-  //   const query = createStockQuery()
-  //   fetch(GRAPHQL_API, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Accept: `application/json`,
-  //     },
-  //     body: JSON.stringify({query}),
-  //   })
-  //     .then((resp) => resp.json())
-  //     .then((data) => {f
-  //       if (tickers[counter]) {
-  //         setTimeout(() => fetchData(tickers[++counter].ticker),2000);
-  //       }
-  //       else {
-  //         clearTimeout();
-  //       }
-  //     });
-  // };
-
   const windowSizeCheck = () => {
     setMobile(window.innerWidth < 1024);
   }
@@ -209,27 +127,6 @@ const App: React.FC = () => {
         })
         .catch((error) => { 
           throw error;
-        });
-    }
-
-    const inputCompanyData = (ticker: string, companyInput: CompanyInput) => {
-      const query = updateCompanyDataQuery();
-      fetch(GRAPHQL_API, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: `application/json`,
-        },
-        body: JSON.stringify({query}),
-      })
-        .then((resp) => resp.json())
-        .then((data) => {
-          if (tickers[counter]) {
-            setTimeout(() => getCompanyData(tickers[++counter].ticker),2000);
-          }
-          else {
-            clearTimeout();
-          }
         });
     }
 
@@ -264,7 +161,6 @@ const App: React.FC = () => {
     }
 
     const fetchSingleStock = (ticker: string, startingDateUnix: number, endingDateUnix: number): void => {  // graphql not finnhub
-      console.log(ticker)
       if (ticker) {
         getLatestDate(ticker).then(latestDateUnix => {
           // endingDate <= latestDateUnix then we have it in our db and we fetch;
@@ -291,8 +187,6 @@ const App: React.FC = () => {
                 }
                   setChartData(arr);
                   setCompanyData(data.data.findDates.companyData);
-                  console.log("THIS IS FROM MONGODB BISHHHHHHH ")
-                  console.log(startingDateUnix, endingDateUnix)
               });
           }
         })
@@ -304,7 +198,6 @@ const App: React.FC = () => {
       fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${endingDate}&token=${finnhubKey}`)
       .then((response) => {
         if(!response.ok){
-          console.log(response); 
           throw response.statusText;
         }
         return response.json() 
@@ -322,12 +215,10 @@ const App: React.FC = () => {
             };
             return dateObj;
           });
-          console.log("FINNHUB ONLY");
           setChartData(stock)
         }
       })
       .catch((error) => {
-        console.log(error)
         handleAPILimit();
       });
   };
@@ -338,7 +229,6 @@ const App: React.FC = () => {
         fetch(`${finnhubBase}stock/candle?symbol=${ticker}&resolution=D&from=${startingDate}&to=${today}&token=${finnhubKey}`)
         .then((response) => {
           if(!response.ok){
-            console.log(response); 
             throw response.statusText;
           }
           return response.json() 
@@ -383,9 +273,6 @@ const App: React.FC = () => {
               );
               stocksMongoDB.push(dateInput);
             }
-            console.log("FINNHUB AND UPDATE");
-            console.log(stockData)
-            console.log(displayStocks.slice(0, endIdx + 1 ))
             setChartData(displayStocks.slice(0, endIdx + 1 ));
             updateMongoDb(ticker, stocksMongoDB);
           }
