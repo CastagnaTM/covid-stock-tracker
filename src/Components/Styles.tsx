@@ -431,7 +431,7 @@ export const Introduction = styled.div `
 
 `
 
-export const Footer = styled.footer`
+export const FooterStyle = styled.footer`
     background-color: #0c495b;
     bottom: 0;
     height: 40px;

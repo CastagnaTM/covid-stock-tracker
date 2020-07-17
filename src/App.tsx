@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {
     Main, ControlPanel, H1, MobileButton, MobileVirusButton, APIerror,
-    GraphContainer, GraphBox1, GraphBox2, Footer, DataColumn, VirusDataColumn, CompanyName
+    GraphContainer, GraphBox1, GraphBox2, DataColumn, VirusDataColumn, CompanyName
 } from './Components/Styles';
 import Filters from './Components/Filters';
 import { finnhubKey, finnhubBase, GRAPHQL_API, VIRUS_API } from "./constants";
@@ -18,9 +18,7 @@ import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import VirusData from "./Components/VirusData";
-import GitHubIcon from '@material-ui/icons/GitHub';
-import LinkedInIcon from '@material-ui/icons/LinkedIn';
-
+import Footer from './Components/Footer';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -333,13 +331,13 @@ return (
               content: classes.summary
             }}
           >
-            <Typography className={classes.heading} >Dashboard</Typography>
+          <Typography className={classes.heading} >Dashboard</Typography>
           </MuiAccordionSummary>
           <MuiAccordionDetails className={classes.filters}> 
             <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded} APIerrorMessage={APIerrorMessage}></Filters>
           </MuiAccordionDetails>
         </MuiAccordion>
-        </MobileButton>
+      </MobileButton>
       <ControlPanel>
         <H1>Dashboard</H1>
         <Filters findStock={findStock} getUserData={getUserData} setExpanded={setExpanded} APIerrorMessage={APIerrorMessage}></Filters>
@@ -388,25 +386,9 @@ return (
           ) 
           : 
           <LandingPage/>
-        )}   
+        )}
     </Main>
-    <Footer>
-      <div>
-        <p>Thomas Castagna</p> 
-        <a href="https://github.com/CastagnaTM" target="_blank" rel="noopener noreferrer"><GitHubIcon /></a> 
-        <a href="https://www.linkedin.com/in/castagnatm/" target="_blank" rel="noopener noreferrer"><LinkedInIcon/></a>
-      </div>
-      <div>
-        <p>Cees Wang</p> 
-        <a href="https://github.com/CeesWang" target="_blank" rel="noopener noreferrer"><GitHubIcon /></a> 
-        <a href="https://www.linkedin.com/in/cees-wang/" target="_blank" rel="noopener noreferrer"><LinkedInIcon/></a>
-      </div>
-      <div>
-        <p>Amber Ye</p> 
-        <a href="https://github.com/tingtingye24" target="_blank" rel="noopener noreferrer"><GitHubIcon /></a> 
-        <a href="https://www.linkedin.com/in/ting-ting-ye-73a6b0157/" target="_blank" rel="noopener noreferrer"><LinkedInIcon/></a>
-      </div>
-    </Footer>
+    <Footer/>   
   </>
   );
 };
