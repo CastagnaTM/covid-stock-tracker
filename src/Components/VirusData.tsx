@@ -12,8 +12,8 @@ interface Props {
 
 function VirusData({virusData, beginDate, endDate, virusMobile}: Props) {
   
-  const [beginData, setBeginData] = useState<any>({});
-  const [endData, setEndData] = useState<any>({});
+  const [beginData, setBeginData] = useState<any>({"positive": 0, "negative": 0});
+  const [endData, setEndData] = useState<any>({"positive": 0, "negative": 0});
   const [hasDates, setHasDates] = useState<boolean>(true);
 
   const formatDate = (date) => {
@@ -23,7 +23,7 @@ function VirusData({virusData, beginDate, endDate, virusMobile}: Props) {
   const setVirusDate = (): void => {
     const filteredVirusDates = virusData.filter(virusDate => virusDate.date.toString() === endDate ||virusDate.date.toString() === beginDate );
     if (filteredVirusDates.length === 1) {
-      setBeginData(virusData[virusData.length -1]);
+      setBeginData({positive: 0, negative: 0});
       setEndData(filteredVirusDates[0]);
       setHasDates(true);
     }
@@ -38,11 +38,11 @@ function VirusData({virusData, beginDate, endDate, virusMobile}: Props) {
   }
   useEffect( () => {    
     setVirusDate();
-  }, []) // eslint-disable-next-line
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect( () => {    
     setVirusDate();
-  }, [beginDate, endDate]) // eslint-disable-next-line
+  }, [beginDate, endDate]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (virusMobile) {
     return (

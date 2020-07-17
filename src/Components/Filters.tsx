@@ -14,10 +14,6 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-// import Select from "./Select"
-// import DatePicker from './DatePicker'
-
-
 interface Props {
   getUserData(ticker: string, beginDate: Date | null, endDate: Date | null, from: string): void;
   findStock(ticker: string): Promise<string>;
@@ -26,10 +22,6 @@ interface Props {
 }
 
 export const Filters: React.FC<Props> = (props) => {
-  // select functions
- 
-  
-
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setStock(event.target.value as string);
     setSearch('');
@@ -42,10 +34,8 @@ export const Filters: React.FC<Props> = (props) => {
     })
   }
 
-  //Date Picker Functions
-
-  const [startDate, setStartDate] = useState<Date | null>( new Date('2020-01-01'));
-  const [endDate, setEndDate] = useState<Date | null>( new Date('2020-01-02'));
+  const [startDate, setStartDate] = useState<Date | null>( new Date('2019-10-02'));
+  const [endDate, setEndDate] = useState<Date | null>( new Date('2019-10-03'));
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [validTicker, setValidTicker] = useState<string>('default');
   const [stock, setStock] = useState<string>(''); 
@@ -149,7 +139,7 @@ export const Filters: React.FC<Props> = (props) => {
               variant="inline"
               format="MM/dd/yyyy"
               margin="normal"
-              minDate="2020-01-01"
+              minDate="2019-10-02"
               maxDate={new Date()}
               // id="date-picker-start"
               label="Start Date"
@@ -165,7 +155,7 @@ export const Filters: React.FC<Props> = (props) => {
               autoOk={true}
               format="MM/dd/yyyy"
               margin="normal"
-              minDate="2020-01-02"
+              minDate="2019-10-03"
               maxDate={new Date()}
               // id="date-picker-end"
               label="End Date"
