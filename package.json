@@ -21,7 +21,8 @@
     "react-scripts": "3.4.1",
     "recharts": "^1.8.5",
     "styled-components": "^5.1.1",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "websocket-extensions": "^0.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

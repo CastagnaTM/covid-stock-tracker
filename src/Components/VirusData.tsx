@@ -12,8 +12,8 @@ interface Props {
 
 function VirusData({virusData, beginDate, endDate, virusMobile}: Props) {
   
-  const [beginData, setBeginData] = useState<any>({"positive": 0, "negative": 0});
-  const [endData, setEndData] = useState<any>({"positive": 0, "negative": 0});
+  const [beginData, setBeginData] = useState<any>({"positive": 0, "negative": 0, "recovered": 0});
+  const [endData, setEndData] = useState<any>({"positive": 0, "negative": 0, "recovered": 0});
   const [hasDates, setHasDates] = useState<boolean>(true);
 
   const formatDate = (date) => {
@@ -23,7 +23,7 @@ function VirusData({virusData, beginDate, endDate, virusMobile}: Props) {
   const setVirusDate = (): void => {
     const filteredVirusDates = virusData.filter(virusDate => virusDate.date.toString() === endDate ||virusDate.date.toString() === beginDate );
     if (filteredVirusDates.length === 1) {
-      setBeginData({positive: 0, negative: 0});
+      setBeginData({positive: 0, negative: 0, recovered: 0});
       setEndData(filteredVirusDates[0]);
       setHasDates(true);
     }
@@ -52,15 +52,15 @@ function VirusData({virusData, beginDate, endDate, virusMobile}: Props) {
             <p><span>Starting Date: </span>{formatDate(beginDate)}</p>
             <p className='positive'><span>Positive Cases: </span>{beginData.positive}</p>
             <p className='negative'><span>Negative Cases: </span>{beginData.negative}</p>
-            {beginData.recovered && <p className='recovered'><span>Recovered: </span>{beginData.recovered}</p>}
+            <p className='recovered'><span>Recovered: </span>{beginData.recovered}</p>
             <p><span>Ending Date: </span>{formatDate(endDate)}</p>
             <p className='positive'><span>Positive Cases: </span>{endData.positive}</p>
             <p className='negative'><span>Negative Cases: </span>{endData.negative}</p>
-            {endData.recovered && <p className='recovered'><span>Recovered: </span>{endData.recovered}</p>}
+            <p className='recovered'><span>Recovered: </span>{endData.recovered}</p>
             <p>Differences</p>
             <p className='positive'><span>Positive Cases: </span>{endData.positive - beginData.positive}</p>
             <p className='negative'><span>Negative Cases: </span>{endData.negative - beginData.negative}</p>
-            {endData.recovered && <p className='recovered'><span>Recovered:</span> {endData.recovered - beginData.recovered}</p>}
+            <p className='recovered'><span>Recovered:</span> {endData.recovered - beginData.recovered}</p>
           </MobileVirusStyle>
         </>
       )
@@ -82,25 +82,25 @@ function VirusData({virusData, beginDate, endDate, virusMobile}: Props) {
                 <p>&nbsp;</p>
                 <p>Positive Cases:</p>
                 <p>Negative Cases:</p>
-                {endData.recovered && <p>Recovered: </p>}
+                <p>Recovered: </p>
               </div>
               <div>
                 <p>{formatDate(beginDate)}</p>
                 <p className='positive'>{beginData.positive}</p>
                 <p className='negative'>{beginData.negative}</p>
-                {beginData.recovered && <p className='recovered'>{beginData.recovered}</p>}
+                <p className='recovered'>{beginData.recovered ? beginData.recovered : 0}</p>
               </div>
               <div>
                 <p>{formatDate(endDate)}</p>
                 <p className='positive'>{endData.positive}</p>
                 <p className='negative'>{endData.negative}</p>
-                {endData.recovered && <p className='recovered'>{endData.recovered}</p>}
+                <p className='recovered'>{endData.recovered ? endData.recovered : 0}</p>
               </div>
               <div>
-                <p>Differences</p>
+                <p>Difference</p>
                 <p className='positive'>{endData.positive - beginData.positive}</p>
                 <p className='negative'>{endData.negative - beginData.negative}</p>
-                {endData.recovered && <p className='recovered'>{endData.recovered - beginData.recovered}</p>}
+                <p className='recovered'>{endData.recovered - beginData.recovered}</p>
               </div>
             </div>
           </VirusStyle>
