@@ -215,6 +215,7 @@ export const Modal = styled.div`
     position: fixed;
     left: calc(50% - 250px);
     border: solid 4px #3d99b6;
+    border-radius: 10px;
 
     @media screen and (max-width: 550px ){
         left: 10%;
@@ -227,21 +228,21 @@ export const Modal = styled.div`
         font-size: x-large;
         position: absolute;
         color: #4a4a4a;
-        border: solid 2px #4a4a4a;
-        border-radius: 50%;
+        border: none;
+        // border-radius: 50%;
         background: transparent;
         cursor: pointer;
-        width: 50px;
-        height: 50px;
+        // width: 50px;
+        // height: 50px;
         transition: all 500ms ease-in-out;
 
-        @media screen and (max-width: ${maxWidth}){
-            width: auto;
-            border: none;
-        }
+        // @media screen and (max-width: ${maxWidth}){
+        //     width: auto;
+        //     border: none;
+        // }
 
         &:hover {
-            border: solid 2px ${palette.blue};
+            // border: solid 2px ${palette.blue};
             color: ${palette.blue};
             transition: all 500ms ease-in-out;
         }
