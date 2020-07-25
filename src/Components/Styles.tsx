@@ -11,17 +11,6 @@ const palette = {
 
 const maxWidth = '1024px';
 
-export const Navigation = styled.nav`
-    // top: 0;
-    box-sizing: border-box;
-    height: 80px;
-    padding: 1em;
-    // width: 100%;
-    background-color: ${palette.grey};
-    // display: flex;
-    align-items: center;
-`
-
 export const Ul = styled.ul `
     display: flex;
     flex-direction: row;
@@ -414,13 +403,17 @@ export const Introduction = styled.div `
     background-color: black;
     overflow: scroll;
 
-    h4 {
-        font-family: 'Roboto';
+    h2, h3 {
+        font-size: x-large;
         margin-bottom: 0;
     }
 
     section {
         padding: .5em;
+
+        a {
+            color: ${palette.blue};
+        }
     }
 
     ol {
