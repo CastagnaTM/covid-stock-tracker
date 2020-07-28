@@ -20,5 +20,5 @@ React app allows a user to search for a company using their stock ticker, and di
 ## Gif Walkthrough
 
 Here's a walkthrough of implemented user stories:  
-<img src='Demo.gif?raw=true' title='Video Walkthrough' width='400' alt='Video Walkthrough' />
+<img src='Demo.gif?raw=true' title='Video Walkthrough' alt='Video Walkthrough' />
 
